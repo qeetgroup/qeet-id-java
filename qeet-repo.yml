@@ -35,6 +35,7 @@ module:
   jpms: com.qeetgroup.qeetid
   package_root: com.qeetgroup.qeetid
   version: 0.1.0             # gradle.properties; version.yml bumps the patch on PRs into main
+  registry: https://maven.pkg.github.com/qeetgroup/qeet-id-java   # GitHub Packages; reading needs read:packages
 
 architecture:
   client: QeetID                     # builder; immutable; resources as accessors
@@ -71,9 +72,9 @@ commands:
   format: ./gradlew spotlessApply
 
 ci:
-  workflows: [ci.yml, codeql.yml, lint.yml, release.yml, security.yml, version.yml]
+  workflows: [ci.yml, codeql.yml, lint.yml, release.yml, rollback.yml, security.yml, version.yml]
   matrix: ["17", "21", "25"]
-  release: PR into main -> version.yml bumps gradle.properties; push main -> version not on Central -> gate -> publishAndReleaseToMavenCentral -> tag vX.Y.Z + GitHub release
+  release: PR into main -> version.yml bumps gradle.properties; push main -> version not in GitHub Packages -> gate -> publish (GITHUB_TOKEN) -> attest -> tag vX.Y.Z + GitHub release
 
 security:
   sensitive_paths:

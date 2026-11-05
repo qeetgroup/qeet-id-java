@@ -13,6 +13,8 @@ out/
 .classpath
 .project
 .settings/
+# VS Code's Java extension (Eclipse JDT) compiles into bin/
+bin/
 
 # Local configuration and secrets
 .env

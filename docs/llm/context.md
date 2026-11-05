@@ -63,4 +63,5 @@ method; `ModelsTest` round-trips every record and builder; webhook fixtures were
 
 - What the API offers beyond the Node SDK's coverage (ABAC, directory sync, OIDC enterprise connections, compliance,
   email delivery) is not wrapped yet.
-- Maven Central needs a licence in the POM before the first release.
+- The package is in GitHub Packages, which needs a GitHub token with `read:packages` to read, even for a public
+  repository.

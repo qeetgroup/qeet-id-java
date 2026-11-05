@@ -1,6 +1,3 @@
-import com.vanniktech.maven.publish.JavaLibrary
-import com.vanniktech.maven.publish.JavadocJar
-import com.vanniktech.maven.publish.SourcesJar
 import net.ltgt.gradle.errorprone.CheckSeverity
 import net.ltgt.gradle.errorprone.errorprone
 
@@ -9,7 +6,7 @@ plugins {
     jacoco
     alias(libs.plugins.spotless)
     alias(libs.plugins.errorprone)
-    alias(libs.plugins.maven.publish)
+    `maven-publish`
 }
 
 group = "com.qeetgroup"
@@ -25,6 +22,9 @@ val testJava = providers.gradleProperty("testJdk").map(String::toInt).getOrElse(
 
 java {
     toolchain { languageVersion = JavaLanguageVersion.of(buildJava) }
+    // Published beside the jar, so IDEs show the sources and the Javadoc.
+    withSourcesJar()
+    withJavadocJar()
 }
 
 dependencies {
@@ -126,36 +126,56 @@ spotless {
     }
 }
 
-mavenPublishing {
-    configure(JavaLibrary(javadocJar = JavadocJar.Javadoc(), sourcesJar = SourcesJar.Sources()))
-    publishToMavenCentral()
-    signAllPublications()
-    coordinates(group.toString(), "qeet-id", version.toString())
-    pom {
-        // Maven Central refuses a POM without <licenses>: add the licence here once it is chosen.
-        name = "Qeet ID for Java"
-        description = "The server-side Java SDK for Qeet ID: the management API, webhook and access-token verification, and OAuth."
-        inceptionYear = "2026"
-        url = "https://github.com/qeetgroup/qeet-id-java"
-        organization {
-            name = "Qeet Group"
-            url = "https://qeet.in"
-        }
-        developers {
-            developer {
-                id = "qeetgroup"
-                name = "Qeet Group"
-                url = "https://github.com/qeetgroup"
+// The Maven publication, com.qeetgroup:qeet-id, published to GitHub Packages like Qeetrix for Android. Its repository
+// is a local directory the Release workflow attaches to the GitHub Release. The registry below exists only in the
+// Release workflow (-Pqeetid.registry.url), which runs on merge to main, so a local build uploads nothing.
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            artifactId = "qeet-id"
+            from(components["java"])
+            pom {
+                name = "Qeet ID for Java"
+                description = "The server-side Java SDK for Qeet ID: the management API, webhook and access-token verification, and OAuth."
+                inceptionYear = "2026"
+                url = "https://github.com/qeetgroup/qeet-id-java"
+                organization {
+                    name = "Qeet Group"
+                    url = "https://qeet.in"
+                }
+                developers {
+                    developer {
+                        id = "qeetgroup"
+                        name = "Qeet Group"
+                        url = "https://github.com/qeetgroup"
+                    }
+                }
+                scm {
+                    url = "https://github.com/qeetgroup/qeet-id-java"
+                    connection = "scm:git:https://github.com/qeetgroup/qeet-id-java.git"
+                    developerConnection = "scm:git:ssh://git@github.com/qeetgroup/qeet-id-java.git"
+                }
+                issueManagement {
+                    system = "GitHub"
+                    url = "https://github.com/qeetgroup/qeet-id-java/issues"
+                }
             }
         }
-        scm {
-            url = "https://github.com/qeetgroup/qeet-id-java"
-            connection = "scm:git:https://github.com/qeetgroup/qeet-id-java.git"
-            developerConnection = "scm:git:ssh://git@github.com/qeetgroup/qeet-id-java.git"
+    }
+    repositories {
+        maven {
+            name = "releaseCandidate"
+            url = uri(layout.buildDirectory.dir("release-candidate/maven"))
         }
-        issueManagement {
-            system = "GitHub"
-            url = "https://github.com/qeetgroup/qeet-id-java/issues"
+        // The registry, only when the Release workflow names one. Its credentials are the Gradle properties
+        // registryUsername and registryPassword, which the workflow sets from its own short-lived token; they are never
+        // in this repository.
+        providers.gradleProperty("qeetid.registry.url").orNull?.let { registryUrl ->
+            maven {
+                name = "registry"
+                url = uri(registryUrl)
+                credentials(PasswordCredentials::class)
+            }
         }
     }
 }

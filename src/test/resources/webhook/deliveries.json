@@ -1,0 +1,48 @@
+{
+  "deliveries": [
+    {
+      "name": "user.created",
+      "signed_with": [
+        "q8J1mVxw3cT0yKp7ZsN4bR2hLd9uFeGa6iOtWnYjX5E"
+      ],
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Qeet-Delivery-Id": "0b6f5c2e-6f1a-4b8e-9c3d-2a7e5f1c9d40",
+        "X-Qeet-Event": "user.created",
+        "X-Qeet-Signature": "sha256=7361d2f10ce80e6a8ad87439cf54924c655ff4a82e4397f5f914444dda6ab7e5",
+        "X-Qeet-Timestamp": "1793870273"
+      },
+      "body": "{\"id\":\"5a6b7c8d-9e0f-4a1b-8c2d-3e4f5a6b7c8d\",\"type\":\"user.created\",\"tenant_id\":\"7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f\",\"occurred_at\":\"2026-11-05T09:30:00Z\",\"data\":{\"email\":\"meera@brightleaffoods.in\",\"source\":\"admin\",\"tenant_id\":\"7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f\",\"user_id\":\"c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f\"}}"
+    },
+    {
+      "name": "test.ping during a secret rotation",
+      "signed_with": [
+        "Nw8vQ2xL5kR9tB1mZ7cY3hJ6sD0fG4aP8eU2iO5nW1q",
+        "Od7wR3yM6lS0uC2nA8dZ4iK7tE1gH5bQ9fV3jP6oX2r"
+      ],
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Qeet-Delivery-Id": "1c7a6d3f-7a2b-4c9f-8d4e-3b8f6a2d0e51",
+        "X-Qeet-Event": "test.ping",
+        "X-Qeet-Signature": "sha256=731a098cb64e334c493d81eb7879d229012b91ddf2ea6dc184447d3d45c0ca51,sha256=5fea1959152a5a9fd6e736b9baea3eb178b1acde4ae30509055d84ff1ca1210b",
+        "X-Qeet-Timestamp": "1793870273"
+      },
+      "body": "{\"id\":\"6b7c8d9e-0f1a-4b2c-9d3e-4f5a6b7c8d9e\",\"type\":\"test.ping\",\"tenant_id\":\"7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f\",\"occurred_at\":\"2026-11-05T09:30:00Z\",\"data\":{\"subscription_id\":\"2d8b7e4a-8b3c-4d0a-9e5f-4c9a7b3e1f62\"}}"
+    },
+    {
+      "name": "session.revoked with escaped and non-ASCII text",
+      "signed_with": [
+        "q8J1mVxw3cT0yKp7ZsN4bR2hLd9uFeGa6iOtWnYjX5E"
+      ],
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Qeet-Delivery-Id": "2e9c8f5b-9c4d-4e1b-8f6a-5d0b8c4f2a73",
+        "X-Qeet-Event": "session.revoked",
+        "X-Qeet-Signature": "sha256=ae09e631eb8899c413113da877a22b6641b22b67f1271d4de60bfd8b48db46ed",
+        "X-Qeet-Timestamp": "1793870273"
+      },
+      "body": "{\"id\":\"7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f\",\"type\":\"session.revoked\",\"tenant_id\":\"7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f\",\"occurred_at\":\"2026-11-05T09:30:00Z\",\"data\":{\"display_name\":\"Aarav Shāh 🙂\",\"reason\":\"admin \\u003crevoked\\u003e \\u0026 signed out\",\"session_id\":\"3f0d9a6c-0d5e-4f2c-9a7b-6e1c9d5a3b84\",\"user_id\":\"c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f\"}}"
+    }
+  ],
+  "description": "Webhook deliveries made by qeet-id-server's own Service.deliver and sign (internal/developer/webhooks, copied verbatim) to a local receiver on 2026-11-05. Each body is the exact bytes received and each signature is the server's. Do not edit by hand: a changed byte must fail verification."
+}

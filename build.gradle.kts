@@ -48,7 +48,9 @@ dependencyLocking { lockAllConfigurations() }
 tasks.withType<JavaCompile>().configureEach {
     options.release = baselineJava
     options.encoding = "UTF-8"
-    options.compilerArgs.addAll(listOf("-Xlint:all", "-Werror"))
+    // "exports" is off: resource constructors take the internal Transport. They are public only so
+    // QeetID can build them across packages; callers get resources from QeetID.
+    options.compilerArgs.addAll(listOf("-Xlint:all,-exports", "-Werror"))
     options.errorprone {
         disableWarningsInGeneratedCode = true
         check("NullAway", CheckSeverity.ERROR)

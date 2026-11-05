@@ -1,6 +1,7 @@
 package com.qeetgroup.qeetid.internal;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.qeetgroup.qeetid.ListResult;
 import com.qeetgroup.qeetid.Page;
 import com.qeetgroup.qeetid.Params;
@@ -179,6 +180,11 @@ public final class Transport {
     } catch (UncheckedIOException e) {
       throw invalidResponse(response, "The API's answer could not be read.");
     }
+  }
+
+  /** Sends {@code request} and reads the answer as a JSON tree, for answers read field by field. */
+  public JsonNode tree(ApiRequest request, RequestOptions options) {
+    return read(request, options, Json.type(JsonNode.class));
   }
 
   /** Sends {@code request} and ignores the answer's body. */

@@ -87,6 +87,15 @@ public final class Json {
     }
   }
 
+  /** Converts a JSON tree to {@code type}. */
+  public static <T> T convert(com.fasterxml.jackson.databind.JsonNode node, Class<T> type) {
+    try {
+      return MAPPER.treeToValue(node, type);
+    } catch (JsonProcessingException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
   /** Converts a value already read (a map, say) to {@code type}. */
   public static <T> T convert(Object value, Class<T> type) {
     return MAPPER.convertValue(value, type);

@@ -132,6 +132,7 @@ mavenPublishing {
     signAllPublications()
     coordinates(group.toString(), "qeet-id", version.toString())
     pom {
+        // Maven Central refuses a POM without <licenses>: add the licence here once it is chosen.
         name = "Qeet ID for Java"
         description = "The server-side Java SDK for Qeet ID: the management API, webhook and access-token verification, and OAuth."
         inceptionYear = "2026"

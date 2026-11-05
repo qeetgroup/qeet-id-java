@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test (Java ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Every supported LTS. The library is compiled once for Java 17 by JDK 25
+        # (Error Prone needs 21 or later); the tests then run on each of these.
+        java: ["17", "21", "25"]
+    steps:
+      - uses: actions/checkout@v7
+
+      # The last version listed becomes JAVA_HOME, which runs Gradle and compiles.
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: |
+            ${{ matrix.java }}
+            25
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      # Error Prone and NullAway (compile), google-java-format (Spotless), the
+      # tests with the JaCoCo coverage floor, and Javadoc with doclint.
+      - name: Build and test
+        run: >-
+          ./gradlew build javadoc
+          -PtestJdk=${{ matrix.java }}
+          -Porg.gradle.java.installations.fromEnv=JAVA_HOME_${{ matrix.java }}_X64,JAVA_HOME_25_X64
+
+      - uses: actions/upload-artifact@v7
+        if: matrix.java == '17'
+        with:
+          name: coverage
+          path: build/reports/jacoco/test

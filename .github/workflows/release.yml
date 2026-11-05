@@ -1,0 +1,101 @@
+name: Release
+
+# Run by hand from main (Actions > Release > Run workflow), choosing the part of
+# the version to bump. Merging into main never publishes by itself: the version
+# is decided when a release is run, not by whichever merge came last.
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Which version part to increment
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write # push the tag and create the GitHub release after publishing
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://central.sonatype.com/artifact/com.qeetgroup/qeet-id
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # full history to find the latest tag
+
+      - name: Determine next version
+        id: version
+        env:
+          # `type: choice` constrains this server-side, but keep it out of the
+          # script body anyway so the run block never interpolates input.
+          BUMP: ${{ inputs.bump || 'patch' }}
+        run: |
+          latest=$(git tag --list 'v*' --sort=-version:refname | head -1)
+          latest=${latest:-v0.0.0}
+          IFS='.' read -r major minor patch <<< "${latest#v}"
+          case "$BUMP" in
+            major) new_tag="v$((major + 1)).0.0" ;;
+            minor) new_tag="v${major}.$((minor + 1)).0" ;;
+            *)     new_tag="v${major}.${minor}.$((patch + 1))" ;;
+          esac
+          echo "Latest: $latest  ->  new: $new_tag"
+          echo "tag=$new_tag" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            25
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      # The same gate as CI, on the baseline JDK, with the release's version
+      # written into the artifacts and the User-Agent.
+      - name: Check
+        env:
+          VERSION: ${{ steps.version.outputs.tag }}
+        run: >-
+          ./gradlew build javadoc
+          -Pversion="${VERSION#v}"
+          -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64,JAVA_HOME_25_X64
+
+      # Uploads the signed jar, sources, Javadoc and POM to the Sonatype Central
+      # Portal and releases them once Central has validated them.
+      - name: Publish to Maven Central
+        env:
+          VERSION: ${{ steps.version.outputs.tag }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: >-
+          ./gradlew publishAndReleaseToMavenCentral
+          -Pversion="${VERSION#v}"
+          --no-configuration-cache
+          -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64,JAVA_HOME_25_X64
+
+      # Tag only after a successful publish, so every tag is a version that is
+      # live on Maven Central. The push uses GITHUB_TOKEN, which by design does
+      # not trigger workflows.
+      - name: Tag and create the GitHub release
+        env:
+          VERSION: ${{ steps.version.outputs.tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$VERSION"
+          git push origin "$VERSION"
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --generate-notes \
+            --repo "${{ github.repository }}"

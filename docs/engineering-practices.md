@@ -85,7 +85,7 @@ change it here first and record why.
 | Dependency scanning | OSV-Scanner over `gradle.lockfile`, weekly and on every pull request; gitleaks over the history | [OSV-Scanner](https://google.github.io/osv-scanner/); [gitleaks](https://github.com/gitleaks/gitleaks) |
 | Maven Central through the Sonatype Central Portal | OSSRH was shut down on 30 June 2025. Sonatype has no first-party Gradle plugin and lists the vanniktech plugin, which the Gradle cookbook also suggests | [OSSRH sunset](https://central.sonatype.org/news/20250326_ossrh_sunset/); [Central: publishing with a Gradle plugin](https://central.sonatype.org/publish/publish-portal-gradle/); [vanniktech: Central Portal](https://vanniktech.github.io/gradle-maven-publish-plugin/central/) |
 | What Central requires | sources and Javadoc jars, PGP signatures (in-memory key from CI secrets), a POM with name, description, URL, licence, developers and SCM | [Central requirements](https://central.sonatype.org/publish/requirements/) |
-| Releases by hand | `release.yml` runs only on `workflow_dispatch` from `main`: the next `vX.Y.Z` from the bump chosen, the gate, publish, then tag | the Node and Go SDKs' release workflows |
+| Release on merge, version reviewed in the PR | `version.yml` bumps the patch in `gradle.properties` on the pull request into `main`; `release.yml` publishes on the push to `main` only when Maven Central does not have that version, and tags after a successful publish | the Qeetrix and Node SDK release workflows |
 | Versions and history | Semantic Versioning; a Keep a Changelog `CHANGELOG.md` | [semver.org](https://semver.org/spec/v2.0.0.html); [keepachangelog.com](https://keepachangelog.com/en/1.1.0/) |
 
 ## Spring Boot

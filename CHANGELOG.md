@@ -6,6 +6,8 @@ All notable changes to the Qeet ID Java SDK are documented here. The format foll
 
 ## [Unreleased]
 
+## [0.1.0] — 2026-11-05
+
 ### Added
 
 - **`QeetID`**, an immutable, thread-safe client built with a builder: an API key, or a service principal's client
@@ -32,3 +34,6 @@ All notable changes to the Qeet ID Java SDK are documented here. The format foll
   and backchannel authorization, introspection, revocation, `TokenGuard`, consent grants, device authorizations and
   signing keys.
 - A named module, `com.qeetgroup.qeetid`, with JSpecify nullness annotations throughout.
+
+[Unreleased]: https://github.com/qeetgroup/qeet-id-java/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/qeetgroup/qeet-id-java/releases/tag/v0.1.0

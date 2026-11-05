@@ -61,15 +61,16 @@ Decisions: `docs/design-decisions/` (ADR-0001 to ADR-0005), all binding.
 ## What CI enforces
 
 `ci.yml` on Java 17, 21 and 25: `./gradlew build javadoc`. `lint.yml`: `spotlessCheck`. `codeql.yml`: CodeQL for
-Java. `security.yml`: OSV-Scanner over `gradle.lockfile`, and gitleaks. `release.yml`: run by hand on `main` (patch,
-minor or major); publishes the signed artifacts to Maven Central through the Central Portal and tags the version.
-Merging into `main` never publishes.
+Java. `security.yml`: OSV-Scanner over `gradle.lockfile`, and gitleaks. `version.yml` bumps the patch in
+`gradle.properties` on every pull request into `main` (raise minor or major by hand). `release.yml` runs on every push
+to `main`: when Maven Central does not have that version yet, it runs the gate, publishes the signed artifacts through
+the Central Portal, then tags `vX.Y.Z` and opens a GitHub Release; otherwise it does nothing.
 
 ## Branches
 
 Two long-lived branches: `develop`, where work lands, and `main`, what is released. Changes reach `main` only by a pull
-request from `develop`. There are no release branches: a version is a `vX.Y.Z` tag, made when `release.yml` is run on
-`main`.
+request from `develop`. There are no release branches: a version is a `vX.Y.Z` tag, made by `release.yml` when a pull
+request is merged into `main`.
 
 ## Before you finish
 

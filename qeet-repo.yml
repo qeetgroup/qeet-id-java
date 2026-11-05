@@ -34,7 +34,7 @@ module:
   coordinates: com.qeetgroup:qeet-id
   jpms: com.qeetgroup.qeetid
   package_root: com.qeetgroup.qeetid
-  version: 0.1.0-SNAPSHOT    # releases take the vX.Y.Z tag
+  version: 0.1.0             # gradle.properties; version.yml bumps the patch on PRs into main
 
 architecture:
   client: QeetID                     # builder; immutable; resources as accessors
@@ -71,9 +71,9 @@ commands:
   format: ./gradlew spotlessApply
 
 ci:
-  workflows: [ci.yml, codeql.yml, lint.yml, release.yml, security.yml]
+  workflows: [ci.yml, codeql.yml, lint.yml, release.yml, security.yml, version.yml]
   matrix: ["17", "21", "25"]
-  release: workflow_dispatch on main -> next vX.Y.Z -> gate -> publishAndReleaseToMavenCentral -> tag
+  release: PR into main -> version.yml bumps gradle.properties; push main -> version not on Central -> gate -> publishAndReleaseToMavenCentral -> tag vX.Y.Z + GitHub release
 
 security:
   sensitive_paths:

@@ -59,10 +59,15 @@ Edit `gradle/libs.versions.toml`, then `./gradlew dependencies --write-locks` an
 
 ```text
 1  CHANGELOG.md: move [Unreleased] under the version being released
-2  merge develop into main by pull request
-3  Actions › Release › Run workflow on main, choosing patch, minor or major
-   → the gate, publishAndReleaseToMavenCentral, then the vX.Y.Z tag and GitHub release
+2  open a pull request from develop into main: version.yml bumps the patch in gradle.properties on the PR
+   branch (for a minor or major, set the version yourself)
+3  merge it: release.yml sees a version Maven Central does not have, runs the gate,
+   publishAndReleaseToMavenCentral, then the vX.Y.Z tag and a GitHub Release
 ```
 
+A push whose version is already on Maven Central releases nothing, so re-running is safe. Central never
+replaces a version: a bad release is followed by a fixed one.
+
 Secrets the workflow needs: `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD` (a Central Portal user token),
-`SIGNING_KEY` (an ASCII-armoured PGP private key), `SIGNING_KEY_PASSWORD`; a `production` environment.
+`SIGNING_KEY` (an ASCII-armoured PGP private key), `SIGNING_KEY_PASSWORD`. The publish job runs in the
+`maven-central` environment.

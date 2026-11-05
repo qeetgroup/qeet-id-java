@@ -53,9 +53,23 @@ flowchart LR
 
 Java 17 or later; tested on 17, 21 and 25. Jackson 2.15 or later, which most JVM services already have.
 
+Install from **GitHub Packages**. Reading it needs a GitHub token with `read:packages`: for Gradle, kept in
+`~/.gradle/gradle.properties` as `gpr.user` and `gpr.key`; for Maven, in `~/.m2/settings.xml`. Versions are listed on
+the [releases page](https://github.com/qeetgroup/qeet-id-java/releases).
+
 **Gradle**
 
 ```kotlin
+// settings.gradle.kts, inside dependencyResolutionManagement { repositories { … } }
+maven {
+    url = uri("https://maven.pkg.github.com/qeetgroup/qeet-id-java")
+    credentials {
+        username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
+        password = providers.gradleProperty("gpr.key").orNull ?: System.getenv("GITHUB_TOKEN")
+    }
+}
+
+// build.gradle.kts
 dependencies {
     implementation("com.qeetgroup:qeet-id:<version>")
 }
@@ -64,11 +78,32 @@ dependencies {
 **Maven**
 
 ```xml
-<dependency>
-  <groupId>com.qeetgroup</groupId>
-  <artifactId>qeet-id</artifactId>
-  <version><!-- version --></version>
-</dependency>
+<!-- pom.xml -->
+<repositories>
+  <repository>
+    <id>github-qeet-id</id>
+    <url>https://maven.pkg.github.com/qeetgroup/qeet-id-java</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>com.qeetgroup</groupId>
+    <artifactId>qeet-id</artifactId>
+    <version><!-- version --></version>
+  </dependency>
+</dependencies>
+```
+
+```xml
+<!-- ~/.m2/settings.xml: the server id matches the repository id above -->
+<servers>
+  <server>
+    <id>github-qeet-id</id>
+    <username>YOUR_GITHUB_USERNAME</username>
+    <password>${env.GITHUB_TOKEN}</password>
+  </server>
+</servers>
 ```
 
 ## 🚀 Quick start

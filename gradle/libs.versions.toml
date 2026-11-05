@@ -19,4 +19,3 @@ nullaway = { module = "com.uber.nullaway:nullaway", version.ref = "nullaway" }
 [plugins]
 spotless = { id = "com.diffplug.spotless", version = "8.11.0" }
 errorprone = { id = "net.ltgt.errorprone", version = "5.2.0" }
-maven-publish = { id = "com.vanniktech.maven.publish", version = "0.37.0" }

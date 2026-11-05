@@ -63,8 +63,9 @@ Decisions: `docs/design-decisions/` (ADR-0001 to ADR-0005), all binding.
 `ci.yml` on Java 17, 21 and 25: `./gradlew build javadoc`. `lint.yml`: `spotlessCheck`. `codeql.yml`: CodeQL for
 Java. `security.yml`: OSV-Scanner over `gradle.lockfile`, and gitleaks. `version.yml` bumps the patch in
 `gradle.properties` on every pull request into `main` (raise minor or major by hand). `release.yml` runs on every push
-to `main`: when Maven Central does not have that version yet, it runs the gate, publishes the signed artifacts through
-the Central Portal, then tags `vX.Y.Z` and opens a GitHub Release; otherwise it does nothing.
+to `main`: when GitHub Packages does not have that version yet, it runs the gate, publishes with the run's own token
+(no stored secret), attests the build provenance, then tags `vX.Y.Z` and opens a GitHub Release with the jars;
+otherwise it does nothing. `rollback.yml` marks a bad release withdrawn and makes a good one the latest.
 
 ## Branches
 

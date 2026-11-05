@@ -1,13 +1,17 @@
 name: Version
 
-# Bumps the patch version of com.qeetgroup:qeet-id on the PR branch, so the version you are releasing is visible
-# in the PR diff and reviewable like any other change.
+# Raises the patch of `version` in gradle.properties on a pull request into main, so the version a merge releases is in
+# the pull request's diff and reviewed like any other change: the Qeetrix release flow, as in Qeetrix for Android.
 #
-# Want a minor or major bump instead? Edit the version in gradle.properties yourself. This workflow only
-# acts when the PR's version still equals the base branch's and that version has already been
-# released, so a manual bump, or a first release of the base's version, is left alone.
+# Want a minor or major release instead? Edit `version` yourself. This workflow only acts while the pull request's
+# version still equals main's, main's is already released (tagged), and the pull request changes something that ships
+# in the library; a version raised by hand, one not yet released, or a docs-only change is left alone.
+#
+# It never checks out the pull request's code: it reads and writes the one file through the GitHub API, so a token
+# that can push never sits beside untrusted code.
 on:
   pull_request:
+    branches: [main]
     types: [opened, synchronize, reopened]
 
 concurrency:
@@ -19,70 +23,81 @@ permissions:
 
 jobs:
   bump:
+    name: Raise the version unless it is raised
     runs-on: ubuntu-latest
-    # A fork PR gets a read-only token and cannot be pushed to, and a bot's own commit must not
-    # trigger another bump.
+    timeout-minutes: 5
+    # A fork's pull request gets a read-only token and can't be pushed to, and the bot's own commit must not bump again.
     if: >
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.actor != 'github-actions[bot]'
     permissions:
       contents: write
-      actions: write # start CI on the bumped commit (see the last step)
+      actions: write # start CI on the bumped commit (the last step)
     steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-
-      - name: bump the patch version unless it is already raised
-        id: bump
+      - id: bump
+        name: Raise the patch unless the version is already raised
         env:
+          GH_TOKEN: ${{ github.token }}
           BASE: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
+          PR: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
+          repo="$GITHUB_REPOSITORY"
+          version_at() {
+            gh api "repos/$repo/contents/gradle.properties?ref=$1" --jq .content 2>/dev/null | base64 -d \
+              | sed -n 's/^version=//p'
+          }
+          tag_exists() { gh api "repos/$repo/git/ref/tags/v$1" > /dev/null 2>&1; }
 
-          # A PR can be merged before this job runs; its head is then already in the base branch.
-          if git merge-base --is-ancestor HEAD "origin/$BASE"; then
-            echo "This PR's head is already in $BASE (merged or empty). Nothing to bump."
-            exit 0
+          # A pull request can be merged before this runs; its head is then already in the base branch.
+          status=$(gh api "repos/$repo/compare/$BASE...$HEAD_REF" --jq .status)
+          if [ "$status" = "identical" ] || [ "$status" = "behind" ]; then
+            echo "This pull request's head is already in $BASE. Nothing to raise."; exit 0
           fi
 
-          read_version() { sed -nE 's/^version=([0-9]+\.[0-9]+\.[0-9]+)$/\1/p'; }
-          current=$(read_version < gradle.properties)
-          if ! base_file=$(git show "origin/$BASE:gradle.properties" 2>/dev/null); then
-            echo "$BASE has no gradle.properties yet — first release of $current. Leaving it alone."
-            exit 0
+          current=$(version_at "$HEAD_REF")
+          base=$(version_at "$BASE" || true)
+          echo "This pull request: $current"
+          echo "$BASE: ${base:-none}"
+          if [ -z "$base" ]; then
+            echo "$BASE has no version yet: $current is the first release. Leaving it alone."; exit 0
           fi
-          base=$(printf '%s\n' "$base_file" | read_version)
-          echo "PR version: $current"
-          echo "$BASE version: $base"
-
           if [ "$current" != "$base" ]; then
-            echo "Version already raised in this PR. Leaving it alone."
-            exit 0
+            echo "Version already raised in this pull request. Leaving it alone."; exit 0
           fi
-          # The base's version was never released (no tag, not published): merging releases it as is.
-          if ! git rev-parse -q --verify "refs/tags/v$base" >/dev/null && ! curl -sf -o /dev/null "https://repo1.maven.org/maven2/com/qeetgroup/qeet-id/$base/qeet-id-$base.pom"; then
-            echo "$base has not been released yet. Leaving it alone."
-            exit 0
+          # main's version may not be released yet: this pull request then releases that same version.
+          if ! tag_exists "$base"; then
+            echo "$BASE's $base isn't released yet (no tag v$base): this pull request releases $base. Leaving it alone."; exit 0
+          fi
+          # Only a change to what services download needs a new version: the library's code and resources, its build
+          # and locked dependencies, or the version catalog. Docs, tests and CI don't ship, so merging them releases
+          # nothing.
+          if ! gh api "repos/$repo/pulls/$PR/files" --paginate --jq '.[].filename' \
+            | grep -q -E '^(src/main/|build\.gradle\.kts$|gradle\.lockfile$|gradle/libs\.versions\.toml$)'; then
+            echo "This pull request changes nothing that ships in the library: no new version, and nothing to publish."; exit 0
           fi
 
-          IFS='.' read -r major minor patch <<< "$base"
-          next="$major.$minor.$((patch + 1))"
-          echo "Bumping $current -> $next"
-          sed -i -E "s/^version=[0-9]+\.[0-9]+\.[0-9]+$/version=$next/" gradle.properties
+          # The next patch that has no tag yet.
+          next="$base"
+          while tag_exists "$next" || [ "$next" = "$base" ]; do
+            IFS=. read -r major minor patch <<< "$next"
+            next="$major.$minor.$((patch + 1))"
+          done
+          echo "Raising $current -> $next"
 
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gradle.properties
-          git commit -m "chore: bump version to $next"
-          git push origin "HEAD:$HEAD_REF"
+          # Commit the one-line change on the pull request's branch. The file's blob SHA makes it fail, rather than
+          # overwrite, if the branch moved meanwhile; the next push runs this again.
+          file=$(gh api "repos/$repo/contents/gradle.properties?ref=$HEAD_REF")
+          sha=$(jq -r .sha <<< "$file")
+          content=$(jq -r .content <<< "$file" | base64 -d | sed "s/^version=.*/version=$next/" | base64 -w0)
+          gh api -X PUT "repos/$repo/contents/gradle.properties" \
+            -f message="chore: bump version to $next" -f content="$content" -f sha="$sha" -f branch="$HEAD_REF" > /dev/null
           echo "bumped=true" >> "$GITHUB_OUTPUT"
 
-      # GitHub holds pull_request runs on a commit pushed by this workflow ("action required"). A run
-      # started explicitly is not held, so start CI on the bumped commit.
-      - name: run CI on the bumped commit
+      # A commit made with this workflow's token starts no other workflow, so start CI on it explicitly: its result is
+      # what branch protection checks.
+      - name: Run CI on the bumped commit
         if: steps.bump.outputs.bumped == 'true'
         env:
           GH_TOKEN: ${{ github.token }}

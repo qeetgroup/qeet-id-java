@@ -63,12 +63,14 @@ class PathsAndJsonTest {
   }
 
   @Test
-  void writesInstantsAsRfc3339AndLeavesNullsOut() {
+  void writesInstantsAsRfc3339AndLeavesNullsOut() throws Exception {
     Sample sample =
         new Sample("u1", null, List.of("a"), Map.of(), Instant.parse("2026-11-05T10:00:00Z"), null);
     assertEquals(
-        "{\"id\":\"u1\",\"roles\":[\"a\"],\"metadata\":{},\"created_at\":\"2026-11-05T10:00:00Z\"}",
-        new String(Json.write(sample), StandardCharsets.UTF_8));
+        Json.mapper()
+            .readTree(
+                "{\"id\":\"u1\",\"roles\":[\"a\"],\"metadata\":{},\"created_at\":\"2026-11-05T10:00:00Z\"}"),
+        Json.mapper().readTree(Json.write(sample)));
   }
 
   @Test

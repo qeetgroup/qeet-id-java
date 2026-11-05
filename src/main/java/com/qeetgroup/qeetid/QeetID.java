@@ -1,8 +1,46 @@
 package com.qeetgroup.qeetid;
 
+import com.qeetgroup.qeetid.access.AuthPolicies;
+import com.qeetgroup.qeetid.access.Decisions;
+import com.qeetgroup.qeetid.access.IpRules;
+import com.qeetgroup.qeetid.access.Permissions;
+import com.qeetgroup.qeetid.access.Relationships;
+import com.qeetgroup.qeetid.access.Roles;
+import com.qeetgroup.qeetid.access.SecurityPolicies;
+import com.qeetgroup.qeetid.access.ThreatDetection;
+import com.qeetgroup.qeetid.developer.Agents;
+import com.qeetgroup.qeetid.developer.ApiKeys;
+import com.qeetgroup.qeetid.developer.AuthHooks;
+import com.qeetgroup.qeetid.developer.Secrets;
+import com.qeetgroup.qeetid.developer.TokenVault;
+import com.qeetgroup.qeetid.developer.VerifiableCredentials;
+import com.qeetgroup.qeetid.developer.Webhooks;
+import com.qeetgroup.qeetid.federation.AdminPortalLinks;
+import com.qeetgroup.qeetid.federation.Applications;
+import com.qeetgroup.qeetid.federation.LdapConnections;
+import com.qeetgroup.qeetid.federation.OAuth;
+import com.qeetgroup.qeetid.federation.SamlConnections;
+import com.qeetgroup.qeetid.federation.SamlServiceProviders;
+import com.qeetgroup.qeetid.federation.Scim;
+import com.qeetgroup.qeetid.federation.ServicePrincipals;
+import com.qeetgroup.qeetid.federation.SocialProviders;
+import com.qeetgroup.qeetid.identity.Branding;
+import com.qeetgroup.qeetid.identity.Domains;
+import com.qeetgroup.qeetid.identity.Groups;
+import com.qeetgroup.qeetid.identity.Invitations;
+import com.qeetgroup.qeetid.identity.Tenants;
+import com.qeetgroup.qeetid.identity.Users;
 import com.qeetgroup.qeetid.internal.Headers;
 import com.qeetgroup.qeetid.internal.Transport;
 import com.qeetgroup.qeetid.internal.UserAgent;
+import com.qeetgroup.qeetid.operations.Analytics;
+import com.qeetgroup.qeetid.operations.AuditLogs;
+import com.qeetgroup.qeetid.operations.Billing;
+import com.qeetgroup.qeetid.operations.EmailTemplates;
+import com.qeetgroup.qeetid.operations.Gdpr;
+import com.qeetgroup.qeetid.operations.LogSinks;
+import com.qeetgroup.qeetid.operations.RateLimits;
+import com.qeetgroup.qeetid.operations.Retention;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -39,7 +77,53 @@ public final class QeetID {
   private final Transport transport;
   private final String description;
 
-  // RESOURCE FIELDS
+  // Identity: the organisation, its people and groups.
+  private final Tenants tenants;
+  private final Domains domains;
+  private final Users users;
+  private final Groups groups;
+  private final Invitations invitations;
+  private final Branding branding;
+
+  // Access: who may do what, and how people sign in.
+  private final Roles roles;
+  private final Permissions permissions;
+  private final Relationships relationships;
+  private final Decisions decisions;
+  private final AuthPolicies authPolicies;
+  private final SecurityPolicies securityPolicies;
+  private final IpRules ipRules;
+  private final ThreatDetection threatDetection;
+
+  // Federation: OAuth/OpenID Connect, SAML, directories, SCIM, social sign-in.
+  private final OAuth oauth;
+  private final Applications applications;
+  private final ServicePrincipals servicePrincipals;
+  private final SamlConnections samlConnections;
+  private final SamlServiceProviders samlServiceProviders;
+  private final LdapConnections ldapConnections;
+  private final Scim scim;
+  private final SocialProviders socialProviders;
+  private final AdminPortalLinks adminPortalLinks;
+
+  // Developer: API keys, agents, credentials, hooks, webhooks, secrets.
+  private final ApiKeys apiKeys;
+  private final Agents agents;
+  private final VerifiableCredentials verifiableCredentials;
+  private final AuthHooks authHooks;
+  private final Webhooks webhooks;
+  private final Secrets secrets;
+  private final TokenVault tokenVault;
+
+  // Operations: audit, analytics, billing, compliance and limits.
+  private final AuditLogs auditLogs;
+  private final Analytics analytics;
+  private final Billing billing;
+  private final Gdpr gdpr;
+  private final EmailTemplates emailTemplates;
+  private final Retention retention;
+  private final LogSinks logSinks;
+  private final RateLimits rateLimits;
 
   private QeetID(Builder builder, String baseUrl) {
     Map<String, String> headers = Map.copyOf(builder.headers);
@@ -73,7 +157,44 @@ public final class QeetID {
                 ? "clientId=" + builder.clientId + ", clientSecret=[redacted]"
                 : "no credentials";
     this.description = "QeetID[baseUrl=" + baseUrl + ", " + credential + "]";
-    // RESOURCE INIT
+    this.tenants = new Tenants(transport);
+    this.domains = new Domains(transport);
+    this.users = new Users(transport);
+    this.groups = new Groups(transport);
+    this.invitations = new Invitations(transport);
+    this.branding = new Branding(transport);
+    this.roles = new Roles(transport);
+    this.permissions = new Permissions(transport);
+    this.relationships = new Relationships(transport);
+    this.decisions = new Decisions(transport);
+    this.authPolicies = new AuthPolicies(transport);
+    this.securityPolicies = new SecurityPolicies(transport);
+    this.ipRules = new IpRules(transport);
+    this.threatDetection = new ThreatDetection(transport);
+    this.oauth = new OAuth(transport);
+    this.applications = new Applications(transport);
+    this.servicePrincipals = new ServicePrincipals(transport);
+    this.samlConnections = new SamlConnections(transport);
+    this.samlServiceProviders = new SamlServiceProviders(transport);
+    this.ldapConnections = new LdapConnections(transport);
+    this.scim = new Scim(transport);
+    this.socialProviders = new SocialProviders(transport);
+    this.adminPortalLinks = new AdminPortalLinks(transport);
+    this.apiKeys = new ApiKeys(transport);
+    this.agents = new Agents(transport);
+    this.verifiableCredentials = new VerifiableCredentials(transport);
+    this.authHooks = new AuthHooks(transport);
+    this.webhooks = new Webhooks(transport);
+    this.secrets = new Secrets(transport);
+    this.tokenVault = new TokenVault(transport);
+    this.auditLogs = new AuditLogs(transport);
+    this.analytics = new Analytics(transport);
+    this.billing = new Billing(transport);
+    this.gdpr = new Gdpr(transport);
+    this.emailTemplates = new EmailTemplates(transport);
+    this.retention = new Retention(transport);
+    this.logSinks = new LogSinks(transport);
+    this.rateLimits = new RateLimits(transport);
   }
 
   /**
@@ -94,7 +215,361 @@ public final class QeetID {
     return transport.baseUrl();
   }
 
-  // RESOURCE ACCESSORS
+  // Identity: the organisation, its people and groups.
+
+  /**
+   * Reads and manages the API key's organisation.
+   *
+   * @return the tenants
+   */
+  public Tenants tenants() {
+    return tenants;
+  }
+
+  /**
+   * Manages the organisation's domains: claim, verify by DNS, and route sign-in.
+   *
+   * @return the domains
+   */
+  public Domains domains() {
+    return domains;
+  }
+
+  /**
+   * Manages the organisation's users.
+   *
+   * @return the users
+   */
+  public Users users() {
+    return users;
+  }
+
+  /**
+   * Manages groups, their members and the roles they grant.
+   *
+   * @return the groups
+   */
+  public Groups groups() {
+    return groups;
+  }
+
+  /**
+   * Manages invitations.
+   *
+   * @return the invitations
+   */
+  public Invitations invitations() {
+    return invitations;
+  }
+
+  /**
+   * Manages the organisation's branding.
+   *
+   * @return the branding
+   */
+  public Branding branding() {
+    return branding;
+  }
+
+  // Access: who may do what, and how people sign in.
+
+  /**
+   * Manages roles, the permissions they grant, and who holds them.
+   *
+   * @return the roles
+   */
+  public Roles roles() {
+    return roles;
+  }
+
+  /**
+   * Checks permissions and reads the permission catalogue.
+   *
+   * @return the permissions
+   */
+  public Permissions permissions() {
+    return permissions;
+  }
+
+  /**
+   * Manages relationship tuples (ReBAC) and answers relationship checks.
+   *
+   * @return the relationships
+   */
+  public Relationships relationships() {
+    return relationships;
+  }
+
+  /**
+   * OpenID AuthZEN evaluations over every authorization model, and the log of decisions made.
+   *
+   * @return the decisions
+   */
+  public Decisions decisions() {
+    return decisions;
+  }
+
+  /**
+   * Manages the organisation's sign-in policy: methods, password rules and lockout.
+   *
+   * @return the authPolicies
+   */
+  public AuthPolicies authPolicies() {
+    return authPolicies;
+  }
+
+  /**
+   * Manages the organisation's security policy.
+   *
+   * @return the securityPolicies
+   */
+  public SecurityPolicies securityPolicies() {
+    return securityPolicies;
+  }
+
+  /**
+   * Manages the organisation's address rules: which networks may sign in.
+   *
+   * @return the ipRules
+   */
+  public IpRules ipRules() {
+    return ipRules;
+  }
+
+  /**
+   * Bot detection, adaptive-risk settings and sign-in anomalies.
+   *
+   * @return the threatDetection
+   */
+  public ThreatDetection threatDetection() {
+    return threatDetection;
+  }
+
+  // Federation: OAuth/OpenID Connect, SAML, directories, SCIM, social sign-in.
+
+  /**
+   * The OAuth 2.0 and OpenID endpoints, with Qeet ID as the authorization server: the token grants,
+   * introspection, revocation, the device and backchannel (CIBA) flows, and the administration of
+   * grants and devices.
+   *
+   * @return the oauth
+   */
+  public OAuth oauth() {
+    return oauth;
+  }
+
+  /**
+   * Manages applications (OAuth / OpenID Connect clients) and the resources they may ask tokens
+   * for.
+   *
+   * @return the applications
+   */
+  public Applications applications() {
+    return applications;
+  }
+
+  /**
+   * Manages service principals: machine identities for machine-to-machine access.
+   *
+   * @return the servicePrincipals
+   */
+  public ServicePrincipals servicePrincipals() {
+    return servicePrincipals;
+  }
+
+  /**
+   * Manages inbound SAML connections (Qeet ID as the service provider).
+   *
+   * @return the samlConnections
+   */
+  public SamlConnections samlConnections() {
+    return samlConnections;
+  }
+
+  /**
+   * Manages the service providers that use Qeet ID as their SAML identity provider.
+   *
+   * @return the samlServiceProviders
+   */
+  public SamlServiceProviders samlServiceProviders() {
+    return samlServiceProviders;
+  }
+
+  /**
+   * Manages directory connections, and signs people in with their directory password.
+   *
+   * @return the ldapConnections
+   */
+  public LdapConnections ldapConnections() {
+    return ldapConnections;
+  }
+
+  /**
+   * Administers SCIM provisioning: tokens, and what was provisioned.
+   *
+   * @return the scim
+   */
+  public Scim scim() {
+    return scim;
+  }
+
+  /**
+   * Manages the API key's organisation's social sign-in providers, and linked social accounts.
+   *
+   * @return the socialProviders
+   */
+  public SocialProviders socialProviders() {
+    return socialProviders;
+  }
+
+  /**
+   * Manages admin portal links.
+   *
+   * @return the adminPortalLinks
+   */
+  public AdminPortalLinks adminPortalLinks() {
+    return adminPortalLinks;
+  }
+
+  // Developer: API keys, agents, credentials, hooks, webhooks, secrets.
+
+  /**
+   * Manages API keys.
+   *
+   * @return the apiKeys
+   */
+  public ApiKeys apiKeys() {
+    return apiKeys;
+  }
+
+  /**
+   * Manages AI agent identities: their tokens, secrets and lifecycle.
+   *
+   * @return the agents
+   */
+  public Agents agents() {
+    return agents;
+  }
+
+  /**
+   * Issues, lists, revokes and verifies W3C verifiable credentials (JWT-VC).
+   *
+   * @return the verifiableCredentials
+   */
+  public VerifiableCredentials verifiableCredentials() {
+    return verifiableCredentials;
+  }
+
+  /**
+   * Manages authentication hooks.
+   *
+   * @return the authHooks
+   */
+  public AuthHooks authHooks() {
+    return authHooks;
+  }
+
+  /**
+   * Manages webhook subscriptions.
+   *
+   * @return the webhooks
+   */
+  public Webhooks webhooks() {
+    return webhooks;
+  }
+
+  /**
+   * The organisation's encrypted secrets store.
+   *
+   * @return the secrets
+   */
+  public Secrets secrets() {
+    return secrets;
+  }
+
+  /**
+   * Third-party OAuth tokens held for your users (Slack, GitHub, Google, or any OAuth 2.0 provider
+   * an administrator registers).
+   *
+   * @return the tokenVault
+   */
+  public TokenVault tokenVault() {
+    return tokenVault;
+  }
+
+  // Operations: audit, analytics, billing, compliance and limits.
+
+  /**
+   * Reads the hash-chained audit log and verifies its integrity.
+   *
+   * @return the auditLogs
+   */
+  public AuditLogs auditLogs() {
+    return auditLogs;
+  }
+
+  /**
+   * Sign-in analytics.
+   *
+   * @return the analytics
+   */
+  public Analytics analytics() {
+    return analytics;
+  }
+
+  /**
+   * The organisation's Qeet ID billing: subscription, invoices and plan.
+   *
+   * @return the billing
+   */
+  public Billing billing() {
+    return billing;
+  }
+
+  /**
+   * Data-subject requests: erasure and export.
+   *
+   * @return the gdpr
+   */
+  public Gdpr gdpr() {
+    return gdpr;
+  }
+
+  /**
+   * Manages the organisation's email templates.
+   *
+   * @return the emailTemplates
+   */
+  public EmailTemplates emailTemplates() {
+    return emailTemplates;
+  }
+
+  /**
+   * Manages the organisation's data-retention policy.
+   *
+   * @return the retention
+   */
+  public Retention retention() {
+    return retention;
+  }
+
+  /**
+   * Manages audit-log streaming to SIEMs.
+   *
+   * @return the logSinks
+   */
+  public LogSinks logSinks() {
+    return logSinks;
+  }
+
+  /**
+   * Manages the organisation's rate limits.
+   *
+   * @return the rateLimits
+   */
+  public RateLimits rateLimits() {
+    return rateLimits;
+  }
 
   /** The base URL and which credential the client uses; never the credential itself. */
   @Override

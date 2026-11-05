@@ -11,6 +11,11 @@ module com.qeetgroup.qeetid {
   exports com.qeetgroup.qeetid.exception;
   exports com.qeetgroup.qeetid.webhook;
   exports com.qeetgroup.qeetid.jwt;
+  exports com.qeetgroup.qeetid.identity;
+  exports com.qeetgroup.qeetid.access;
+  exports com.qeetgroup.qeetid.federation;
+  exports com.qeetgroup.qeetid.developer;
+  exports com.qeetgroup.qeetid.operations;
 
   opens com.qeetgroup.qeetid.internal to
       com.fasterxml.jackson.databind;

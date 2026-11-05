@@ -1,0 +1,93 @@
+# qeet-id-java — repository context metadata (Level 2).
+# Inherits qeetgroup/qeet-context (L0) and qeetgroup/qeet-id-context (L1).
+
+schema_version: 1
+
+context: {type: repository, level: L2, canonical: true, last_verified: "2026-11-05"}
+
+inheritance:
+  organization: {repository: qeetgroup/qeet-context, level: L0}
+  product:      {repository: qeetgroup/qeet-id-context, level: L1}
+
+repository:
+  name: qeet-id-java
+  product: qeet-id
+  type: sdk
+  role: sdk
+  status: development
+  visibility: public
+  default_branch: develop
+
+runtime:
+  language: Java
+  release: "17"              # --release 17; compiled by JDK 25 (Error Prone needs 21+)
+  tested_on: ["17", "21", "25"]
+  build: gradle 9.8 (Kotlin DSL, wrapper, toolchains, dependency locking)
+  format: google-java-format 2.0 (Spotless)
+  static_analysis: [error-prone, nullaway (JSpecify mode), "javac -Xlint:all -Werror"]
+  runtime_deps: [com.fasterxml.jackson.core:jackson-databind 2.21]   # works with 2.15+
+  compile_deps: [org.jspecify:jspecify 1.0]
+  http: java.net.http.HttpClient
+  logging: System.Logger
+
+module:
+  coordinates: com.qeetgroup:qeet-id
+  jpms: com.qeetgroup.qeetid
+  package_root: com.qeetgroup.qeetid
+  version: 0.1.0             # gradle.properties; version.yml bumps the patch on PRs into main
+
+architecture:
+  client: QeetID                     # builder; immutable; resources as accessors
+  layout: api-area-packages          # identity, access, federation, developer, operations
+  models: records-and-builders       # ADR-0003
+  error_style: unchecked-exceptions  # ADR-0005
+  retries: retry-safe-only           # ADR-0004
+  json: jackson-2-private            # ADR-0002
+  shared: [internal, exception, webhook, jwt]
+
+contracts:
+  consumes:
+    api: qeet-id-server
+    documents: [api/openapi/auth.yaml, api/openapi/management.yaml, api/openapi/federation.yaml, api/openapi/developer.yaml, api/openapi/operations.yaml]
+    tiebreaker: internal/ handlers and route policy
+    base_url: https://api.id.qeet.in
+  auth_scheme: "Authorization: ApiKey <qk_...>, or Bearer <client-credentials token>"
+  oauth_client_auth: client_secret_post
+  webhook_signature: "X-Qeet-Signature: sha256=HMAC(secret, X-Qeet-Timestamp + '.' + body); two values during a rotation"
+
+defaults:
+  timeout: 30s
+  max_retries: 2
+  retry_backoff: 500ms doubling to 8s, equal jitter; Retry-After honoured up to 60s
+  webhook_tolerance: 5m
+  jwks_cache_ttl: 5m
+  jwks_refresh_cooldown: 30s
+  clock_skew: 30s
+  client_credentials_refresh_margin: 60s
+
+commands:
+  check: ./gradlew build javadoc     # the gate
+  test:  ./gradlew test -PtestJdk=<17|21|25>
+  format: ./gradlew spotlessApply
+
+ci:
+  workflows: [ci.yml, codeql.yml, lint.yml, release.yml, security.yml, version.yml]
+  matrix: ["17", "21", "25"]
+  release: PR into main -> version.yml bumps gradle.properties; push main -> version not on Central -> gate -> publishAndReleaseToMavenCentral -> tag vX.Y.Z + GitHub release
+
+security:
+  sensitive_paths:
+    - src/main/java/com/qeetgroup/qeetid/internal/Transport.java     # credentials, retries
+    - src/main/java/com/qeetgroup/qeetid/internal/Credential.java    # API key, client-credentials token cache
+    - src/main/java/com/qeetgroup/qeetid/webhook/WebhookVerifier.java
+    - src/main/java/com/qeetgroup/qeetid/jwt/TokenVerifier.java
+  never: [add a runtime dependency, expose a Jackson type, log a credential, retry a non-idempotent write, retry auth.session_revoked]
+
+llm_context:
+  primary_instructions: AGENTS.md
+  canonical: docs/llm/context.md
+  boundaries: docs/llm/boundaries.md
+  workflows: docs/llm/workflows.md
+  architecture_map: docs/llm/architecture-map.md
+  practices: docs/engineering-practices.md
+  adapters: [CLAUDE.md, GEMINI.md, .github/copilot-instructions.md]

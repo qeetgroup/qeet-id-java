@@ -1,0 +1,26 @@
+# Build output
+build/
+target/
+out/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+.classpath
+.project
+.settings/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.jks
+*.p12
+gradle-local.properties
+
+# OS
+.DS_Store

@@ -9,6 +9,7 @@ module com.qeetgroup.qeetid {
 
   exports com.qeetgroup.qeetid;
   exports com.qeetgroup.qeetid.exception;
+  exports com.qeetgroup.qeetid.webhook;
 
   opens com.qeetgroup.qeetid.internal to
       com.fasterxml.jackson.databind;

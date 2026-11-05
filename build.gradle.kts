@@ -58,8 +58,8 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.compileTestJava {
-    // Tests poke at nulls on purpose.
-    options.errorprone.disable("NullAway")
+    // Tests poke at nulls on purpose, and hold raw bytes in records they never compare.
+    options.errorprone.disable("NullAway", "ArrayRecordComponent")
 }
 
 tasks.processResources {

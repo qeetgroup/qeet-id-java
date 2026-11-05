@@ -12,8 +12,6 @@ public class WebhookVerificationException extends QeetIDException {
 
   /** Why a delivery was refused. */
   public enum Reason {
-    /** No signing secret was given to verify with. */
-    MISSING_SECRET,
     /** The delivery has no {@code X-Qeet-Signature} header. */
     MISSING_SIGNATURE,
     /** The delivery has no {@code X-Qeet-Timestamp} header. */

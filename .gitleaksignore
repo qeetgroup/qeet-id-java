@@ -1,0 +1,6 @@
+# Test fixtures gitleaks flags as generic API keys: dummy keys, secrets and a sample
+# token in tests and in the script that captures webhook fixtures. Each entry is one
+# finding's fingerprint (commit:file:rule:line), so a new secret anywhere is still caught.
+
+9cb8870595c48eb3c1bd1148037edbe4c1d065c2:src/test/java/com/qeetgroup/qeetid/internal/Transports.java:generic-api-key:10
+9cb8870595c48eb3c1bd1148037edbe4c1d065c2:src/test/java/com/qeetgroup/qeetid/testing/TestClients.java:generic-api-key:9

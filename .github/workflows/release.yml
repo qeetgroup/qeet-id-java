@@ -3,13 +3,13 @@ name: Release
 # Publishes com.qeetgroup:qeet-id to GitHub Packages on merge to main, then tags the commit: the Qeetrix release flow,
 # the same as Qeetrix for Android.
 #
-#   1. Open a pull request into main. version.yml raises the patch of `version` in gradle.properties on the pull
-#      request's branch; raise the minor or major by hand.
-#   2. Merge to main. The gate job checks the version is new, then runs every check again.
+#   1. Raise `version` in gradle.properties (patch, minor or major) on develop, then open a pull request from develop
+#      into main; Verify runs on it.
+#   2. Merge to main. The gate job checks the version is new.
 #   3. The publish job runs in the `maven-publish` environment (give it a required reviewer to approve each release). It
 #      publishes with the run's own short-lived token (no stored secret), attests the build provenance, then pushes the
 #      vX.Y.Z tag and opens a GitHub Release with the jars and the POM.
-#   4. Bad release? Run rollback.yml. A published Maven version is never replaced: a fix is a new version.
+#   4. Bad release? A published Maven version is never replaced: a fix is a new version.
 #
 # Re-running is safe: if the version is already in GitHub Packages, nothing is published.
 on:
@@ -65,25 +65,6 @@ jobs:
             echo "com.qeetgroup:qeet-id:$version is new — releasing."
             echo "release=true" >> "$GITHUB_OUTPUT"
           fi
-
-      # The same checks as CI, on the baseline JDK. Nothing below runs when the version is unchanged.
-      - if: steps.version.outputs.release == 'true'
-        name: Validate the Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v6
-      - if: steps.version.outputs.release == 'true'
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: |
-            17
-            25
-      - if: steps.version.outputs.release == 'true'
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-read-only: true
-      - if: steps.version.outputs.release == 'true'
-        name: Every check
-        run: ./gradlew build javadoc -Porg.gradle.java.installations.fromEnv=JAVA_HOME_17_X64,JAVA_HOME_25_X64
 
       - if: steps.version.outputs.release == 'false'
         name: Report that the version is unchanged

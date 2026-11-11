@@ -34,7 +34,7 @@ module:
   coordinates: com.qeetgroup:qeet-id
   jpms: com.qeetgroup.qeetid
   package_root: com.qeetgroup.qeetid
-  version: 0.1.0             # gradle.properties; version.yml bumps the patch on PRs into main
+  version: 0.1.0             # gradle.properties; raised by hand in the PR into main
   registry: https://maven.pkg.github.com/qeetgroup/qeet-id-java   # GitHub Packages; reading needs read:packages
 
 architecture:
@@ -72,9 +72,9 @@ commands:
   format: ./gradlew spotlessApply
 
 ci:
-  workflows: [ci.yml, codeql.yml, lint.yml, release.yml, rollback.yml, security.yml, version.yml]
-  matrix: ["17", "21", "25"]
-  release: PR into main -> version.yml bumps gradle.properties; push main -> version not in GitHub Packages -> gate -> publish (GITHUB_TOKEN) -> attest -> tag vX.Y.Z + GitHub release
+  workflows: [ci.yml, release.yml]
+  verify: "ci.yml Verify on PRs into develop and main: wrapper validation, compileJava + compileTestJava (JDK 25), spotlessCheck, OSV-Scanner, gitleaks; tests on 17/21/25 and javadoc run locally"
+  release: PR develop -> main raises gradle.properties by hand; push main -> version not in GitHub Packages -> publish (GITHUB_TOKEN) -> attest -> tag vX.Y.Z + GitHub release
 
 security:
   sensitive_paths:

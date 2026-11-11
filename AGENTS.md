@@ -60,12 +60,14 @@ Decisions: `docs/design-decisions/` (ADR-0001 to ADR-0005), all binding.
 
 ## What CI enforces
 
-`ci.yml` on Java 17, 21 and 25: `./gradlew build javadoc`. `lint.yml`: `spotlessCheck`. `codeql.yml`: CodeQL for
-Java. `security.yml`: OSV-Scanner over `gradle.lockfile`, and gitleaks. `version.yml` bumps the patch in
-`gradle.properties` on every pull request into `main` (raise minor or major by hand). `release.yml` runs on every push
-to `main`: when GitHub Packages does not have that version yet, it runs the gate, publishes with the run's own token
-(no stored secret), attests the build provenance, then tags `vX.Y.Z` and opens a GitHub Release with the jars;
-otherwise it does nothing. `rollback.yml` marks a bad release withdrawn and makes a good one the latest.
+`ci.yml`, **Verify**, on pull requests into `develop` and `main`: Gradle wrapper validation, `compileJava` and
+`compileTestJava` on JDK 25 (Error Prone, NullAway, `-Werror`), `spotlessCheck`, OSV-Scanner over `gradle.lockfile`
+and gitleaks over the pull request's commits. The tests on Java 17, 21 and 25 and Javadoc run locally before every
+push (`./gradlew build javadoc`, with `-PtestJdk=21` and `25` for the other LTSs). `release.yml` runs on every push to
+`main`: when GitHub Packages does not have the version in `gradle.properties` yet, it publishes with the run's own
+token (no stored secret), attests the build provenance, then tags `vX.Y.Z` and opens a GitHub Release with the jars;
+otherwise it does nothing. Raise the version by hand in the pull request into `main`; a bad release is fixed by a new
+version. Dependabot proposes updates monthly into `develop`.
 
 ## Branches
 

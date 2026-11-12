@@ -59,14 +59,14 @@ Edit `gradle/libs.versions.toml`, then `./gradlew dependencies --write-locks` an
 
 ```text
 1  CHANGELOG.md: move [Unreleased] under the version being released
-2  open a pull request from develop into main: version.yml bumps the patch in gradle.properties on the PR
-   branch (for a minor or major, set the version yourself)
-3  merge it: release.yml sees a version GitHub Packages does not have, runs the gate, publishes
+2  raise `version` in gradle.properties (patch, minor or major) on develop, then open a pull request from
+   develop into main; Verify runs on it
+3  merge it: release.yml sees a version GitHub Packages does not have, publishes
    (publishReleasePublicationToRegistryRepository), attests the files, then the vX.Y.Z tag and a GitHub Release
 ```
 
 A push whose version is already in GitHub Packages releases nothing, so re-running is safe. A published version is
-never replaced: run `rollback.yml` (good and bad version) to mark a bad release withdrawn, then release a fix.
+never replaced: a bad release is followed by a fixed version.
 
 No secret is needed: the publish job uses the run's own `GITHUB_TOKEN`, in the `maven-publish` environment. To try
 the publication locally, `./gradlew publishReleasePublicationToReleaseCandidateRepository` writes it to

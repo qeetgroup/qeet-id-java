@@ -2,7 +2,7 @@
 
 # ☕ Qeet ID for Java
 
-**The server-side SDK for Qeet ID: manage an organisation's people and access, verify webhooks and access tokens, and run OAuth flows from the JVM.**
+**The server-side SDK for Qeet ID: manage an organization's people and access, verify webhooks and access tokens, and run OAuth flows from the JVM.**
 
 [![Java](https://img.shields.io/badge/Java-17%20%C2%B7%2021%20%C2%B7%2025-ED8B00?logo=openjdk&logoColor=white)](#-install)
 [![Jackson](https://img.shields.io/badge/runtime%20dependency-Jackson%202-2EA043)](#-install)
@@ -117,18 +117,18 @@ import com.qeetgroup.qeetid.identity.User;
 import com.qeetgroup.qeetid.identity.UserCreateParams;
 
 QeetID qeetId = QeetID.builder().apiKey(System.getenv("QEET_ID_API_KEY")).build();
-String tenantId = System.getenv("QEET_ID_TENANT_ID");
+String organizationId = System.getenv("QEET_ID_ORGANIZATION_ID");
 
 User user = qeetId.users().create(UserCreateParams.builder()
-    .tenantId(tenantId)
+    .organizationId(organizationId)
     .email("meera@brightleaffoods.in")
     .displayName("Meera Iyer")
     .build());
 
-qeetId.roles().assign(tenantId, user.id(), financeRoleId);
+qeetId.roles().assign(organizationId, user.id(), financeRoleId);
 
 boolean allowed = qeetId.permissions().check(PermissionCheckParams.builder()
-    .userId(user.id()).tenantId(tenantId).permission("invoice.approve").build());
+    .userId(user.id()).organizationId(organizationId).permission("invoice.approve").build());
 ```
 
 Build one client per process and share it: it is immutable, safe for concurrent use, and reuses connections.
@@ -174,22 +174,22 @@ fields, camel-cased (`displayName()`, `createdAt()` as an `Instant`); parameters
 
 | Area | Accessors |
 |:--|:--|
-| 👥 **Identity** | `tenants()` (the organisation) · `domains()` · `users()` · `groups()` · `invitations()` · `branding()` |
+| 👥 **Identity** | `organizations()` (the organization) · `domains()` · `users()` · `groups()` · `invitations()` · `branding()` |
 | 🛡️ **Access** | `roles()` · `permissions()` · `relationships()` (ReBAC tuples) · `decisions()` (OpenID AuthZEN) · `authPolicies()` · `securityPolicies()` · `ipRules()` · `threatDetection()` (bots, risk, anomalies) |
 | 🌐 **Federation** | `oauth()` · `applications()` (OAuth/OpenID clients and RFC 8707 resources) · `servicePrincipals()` · `samlConnections()` · `samlServiceProviders()` · `ldapConnections()` · `scim()` · `socialProviders()` · `adminPortalLinks()` |
 | 🛠️ **Developer** | `apiKeys()` · `agents()` · `verifiableCredentials()` · `authHooks()` · `webhooks()` · `secrets()` · `tokenVault()` |
 | 📊 **Operations** | `auditLogs()` · `analytics()` · `billing()` · `gdpr()` · `emailTemplates()` · `retention()` · `logSinks()` · `rateLimits()` |
 
 ```java
-Page<AuditLogEntry> page = qeetId.auditLogs().list(tenantId, AuditLogListParams.builder()
+Page<AuditLogEntry> page = qeetId.auditLogs().list(organizationId, AuditLogListParams.builder()
     .action("user.deleted").from("2026-11-01T00:00:00Z").build());
 
-qeetId.webhooks().update(tenantId, webhookId, WebhookUpdateParams.builder()
+qeetId.webhooks().update(organizationId, webhookId, WebhookUpdateParams.builder()
     .events(List.of("user.created", "user.deleted")).build());
 
-WebhookSecret rotated = qeetId.webhooks().rotateSecret(tenantId, webhookId);
+WebhookSecret rotated = qeetId.webhooks().rotateSecret(organizationId, webhookId);
 
-ListResult<Secret> secrets = qeetId.secrets().list(tenantId);   // secrets.truncated() when capped
+ListResult<Secret> secrets = qeetId.secrets().list(organizationId);   // secrets.truncated() when capped
 
 // On an update, null is sent as an explicit null, which clears the field.
 qeetId.users().update(userId, UserUpdateParams.builder().phone(null).build());
@@ -229,7 +229,7 @@ try {
 } catch (ValidationException e) {
   e.fields().forEach(f -> log.warn("{} {}: {}", f.field(), f.code(), f.message()));
 } catch (ConflictException e) {
-  if (!e.code().equals("user.domain_managed_elsewhere")) throw e;   // another organisation manages that domain
+  if (!e.code().equals("user.domain_managed_elsewhere")) throw e;   // another organization manages that domain
 } catch (RateLimitException e) {
   log.info("retry in {}, request {}", e.retryAfter(), e.requestId());
 }
@@ -292,7 +292,7 @@ Other lists come whole as a `ListResult`: `data()` and `truncated()`, which is `
 Each delivery is a signed POST whose body is an event:
 
 ```json
-{ "id": "…", "type": "user.created", "tenant_id": "…", "occurred_at": "2026-11-05T09:30:00Z", "data": { … } }
+{ "id": "…", "type": "user.created", "organization_id": "…", "occurred_at": "2026-11-05T09:30:00Z", "data": { … } }
 ```
 
 `WebhookVerifier` checks `X-Qeet-Signature` (`sha256=` and the HMAC-SHA256 of `X-Qeet-Timestamp`, `.` and the raw body)
@@ -352,7 +352,7 @@ TokenVerifier verifier = TokenVerifier.builder()
     .build();
 
 AccessTokenClaims claims = verifier.verify(bearerToken);      // throws TokenVerificationException
-claims.subject(); claims.tenantId(); claims.hasScope("invoices:read");
+claims.subject(); claims.organizationId(); claims.hasScope("invoices:read");
 ```
 
 Or configure it directly with `.issuer(…)` and `.jwksUri(…)`. Both the issuer and an audience are required. The verifier
@@ -393,11 +393,14 @@ Introspection token = guard.verify(bearerToken, "files:read");   // Authenticati
 ## 🤝 OAuth
 
 ```java
-// Machine-to-machine: a service principal's token (POST /v1/oauth/token).
+// Every grant goes to the one token endpoint, POST /v1/oauth/token; grant_type chooses it.
+
+// Machine-to-machine: a service principal's or an AI agent's own token.
 ClientCredentialsToken token = qeetId.oauth().clientCredentialsGrant(clientId, clientSecret);
 token.accessToken(); token.expiresIn(); token.expiresAt();
+String agentToken = qeetId.agents().createToken(agentId, agentSecret).accessToken();   // the same grant, for an agent
 
-// The other grants (POST /v1/oauth/token-code).
+// The application grants.
 qeetId.oauth().authorizationCodeGrant(AuthorizationCodeGrantParams.builder()
     .clientId(clientId).clientSecret(clientSecret)
     .code(code).redirectUri(redirectUri).codeVerifier(codeVerifier).build());

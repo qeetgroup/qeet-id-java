@@ -52,7 +52,7 @@ public final class UserListParams extends Params {
     }
 
     /**
-     * A role name in the organisation.
+     * A role name in the organization.
      *
      * @param role the value
      * @return this builder

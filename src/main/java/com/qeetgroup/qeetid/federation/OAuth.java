@@ -16,11 +16,12 @@ import org.jspecify.annotations.Nullable;
  * introspection, revocation, the device and backchannel (CIBA) flows, and the administration of
  * consent grants, device authorizations and signing keys.
  *
- * <p>The token endpoints answer errors in the RFC 6749 shape; they throw an {@link
- * com.qeetgroup.qeetid.exception.OAuthException} whose code is the RFC {@code error} ({@code
- * invalid_grant}, {@code invalid_client}, ...). Grants are never retried: a grant is single-use, so
- * a retry after a lost answer would be refused. Client credentials travel in the form body ({@code
- * client_secret_post}) and are never logged.
+ * <p>Every grant goes to the one token endpoint, {@code POST /v1/oauth/token} (RFC 6749 section
+ * 3.2), and {@code grant_type} chooses it. The token endpoints answer errors in the RFC 6749 shape;
+ * they throw an {@link com.qeetgroup.qeetid.exception.OAuthException} whose code is the RFC {@code
+ * error} ({@code invalid_grant}, {@code invalid_client}, ...). Grants are never retried: a grant is
+ * single-use, so a retry after a lost answer would be refused. Client credentials travel in the
+ * form body ({@code client_secret_post}) and are never logged.
  *
  * <p>Get it from {@code qeetId.oauth()}. Safe for concurrent use.
  */
@@ -76,11 +77,12 @@ public final class OAuth {
   }
 
   /**
-   * Gets a machine-to-machine token for a service principal: the {@code client_credentials} grant,
-   * at {@code POST /v1/oauth/token}. The token carries every scope the principal holds. A client
-   * built with {@code clientCredentials(...)} does this, and caches the token, by itself.
+   * Gets a machine-to-machine token for a service principal or an AI agent: the {@code
+   * client_credentials} grant, at {@code POST /v1/oauth/token}. The token carries every scope the
+   * identity holds. A client built with {@code clientCredentials(...)} does this, and caches the
+   * token, by itself.
    *
-   * @param clientId the principal's client ID
+   * @param clientId the principal's or the agent's id
    * @param clientSecret its secret
    * @return the token, with {@code expiresIn} and {@code expiresAt}
    */
@@ -92,7 +94,7 @@ public final class OAuth {
    * The {@code client_credentials} grant, with per-call settings. See {@link
    * #clientCredentialsGrant(String, String)}.
    *
-   * @param clientId the principal's client ID
+   * @param clientId the principal's or the agent's id
    * @param clientSecret its secret
    * @param options per-call settings
    * @return the token
@@ -127,7 +129,7 @@ public final class OAuth {
   public TokenResponse authorizationCodeGrant(
       AuthorizationCodeGrantParams params, RequestOptions options) {
     return grant(
-        "/v1/oauth/token-code", form("authorization_code", params), TokenResponse.class, options);
+        "/v1/oauth/token", form("authorization_code", params), TokenResponse.class, options);
   }
 
   /**
@@ -149,8 +151,7 @@ public final class OAuth {
    * @return the tokens
    */
   public TokenResponse refreshTokenGrant(RefreshTokenGrantParams params, RequestOptions options) {
-    return grant(
-        "/v1/oauth/token-code", form("refresh_token", params), TokenResponse.class, options);
+    return grant("/v1/oauth/token", form("refresh_token", params), TokenResponse.class, options);
   }
 
   /**
@@ -178,7 +179,7 @@ public final class OAuth {
     if (form.get("actor_token") != null) {
       form.putIfAbsent("actor_token_type", ACCESS_TOKEN_TYPE);
     }
-    return grant("/v1/oauth/token-code", form, TokenResponse.class, options);
+    return grant("/v1/oauth/token", form, TokenResponse.class, options);
   }
 
   /**
@@ -202,8 +203,7 @@ public final class OAuth {
    * @return the tokens, once the person approved
    */
   public TokenResponse deviceCodeGrant(DeviceCodeGrantParams params, RequestOptions options) {
-    return grant(
-        "/v1/oauth/token-code", form(GRANT_DEVICE_CODE, params), TokenResponse.class, options);
+    return grant("/v1/oauth/token", form(GRANT_DEVICE_CODE, params), TokenResponse.class, options);
   }
 
   /**
@@ -226,7 +226,7 @@ public final class OAuth {
    * @return the tokens, once the person approved
    */
   public TokenResponse cibaGrant(CibaGrantParams params, RequestOptions options) {
-    return grant("/v1/oauth/token-code", form(GRANT_CIBA, params), TokenResponse.class, options);
+    return grant("/v1/oauth/token", form(GRANT_CIBA, params), TokenResponse.class, options);
   }
 
   /**

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jspecify.annotations.Nullable;
 
 /**
- * How people may sign in to the organisation.
+ * How people may sign in to the organization.
  *
  * @param passwordEnabled whether password enabled
  * @param passwordMinLength 8 to 128; clamped.

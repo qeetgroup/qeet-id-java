@@ -95,35 +95,37 @@ public final class Groups {
   /**
    * Lists the groups.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<Group> list(String tenantId) {
-    return list(tenantId, GroupListParams.builder().build(), RequestOptions.none());
+  public ListResult<Group> list(String organizationId) {
+    return list(organizationId, GroupListParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * Lists the groups.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the list
    */
-  public ListResult<Group> list(String tenantId, GroupListParams params) {
-    return list(tenantId, params, RequestOptions.none());
+  public ListResult<Group> list(String organizationId, GroupListParams params) {
+    return list(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Lists the groups. With per-call settings: see {@link #list(String, GroupListParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<Group> list(String tenantId, GroupListParams params, RequestOptions options) {
+  public ListResult<Group> list(
+      String organizationId, GroupListParams params, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/groups", tenantId)).query(params),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/groups", organizationId))
+            .query(params),
         Group.class,
         options);
   }
@@ -202,27 +204,31 @@ public final class Groups {
   /**
    * Lists the roles granted to the group.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param groupId the group's id
    * @return the list
    */
-  public ListResult<GroupRole> listRoles(String tenantId, String groupId) {
-    return listRoles(tenantId, groupId, RequestOptions.none());
+  public ListResult<GroupRole> listRoles(String organizationId, String groupId) {
+    return listRoles(organizationId, groupId, RequestOptions.none());
   }
 
   /**
    * Lists the roles granted to the group. With per-call settings: see {@link #listRoles(String,
    * String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param groupId the group's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<GroupRole> listRoles(String tenantId, String groupId, RequestOptions options) {
+  public ListResult<GroupRole> listRoles(
+      String organizationId, String groupId, RequestOptions options) {
     return http.list(
         ApiRequest.get(
-            Paths.of("/v1/tenants/{tenantId}/groups/{groupId}/roles", tenantId, groupId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/groups/{groupId}/roles",
+                organizationId,
+                groupId)),
         GroupRole.class,
         options);
   }
@@ -230,29 +236,30 @@ public final class Groups {
   /**
    * Grants a role to the group; every member inherits it.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param groupId the group's id
    * @param roleId the role's id
    */
-  public void grantRole(String tenantId, String groupId, String roleId) {
-    grantRole(tenantId, groupId, roleId, RequestOptions.none());
+  public void grantRole(String organizationId, String groupId, String roleId) {
+    grantRole(organizationId, groupId, roleId, RequestOptions.none());
   }
 
   /**
    * Grants a role to the group; every member inherits it. With per-call settings: see {@link
    * #grantRole(String, String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param groupId the group's id
    * @param roleId the role's id
    * @param options per-call settings
    */
-  public void grantRole(String tenantId, String groupId, String roleId, RequestOptions options) {
+  public void grantRole(
+      String organizationId, String groupId, String roleId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.post(
             Paths.of(
-                "/v1/tenants/{tenantId}/groups/{groupId}/roles/{roleId}",
-                tenantId,
+                "/v1/organizations/{organizationId}/groups/{groupId}/roles/{roleId}",
+                organizationId,
                 groupId,
                 roleId)),
         options);
@@ -261,29 +268,30 @@ public final class Groups {
   /**
    * Revoke role.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param groupId the group's id
    * @param roleId the role's id
    */
-  public void revokeRole(String tenantId, String groupId, String roleId) {
-    revokeRole(tenantId, groupId, roleId, RequestOptions.none());
+  public void revokeRole(String organizationId, String groupId, String roleId) {
+    revokeRole(organizationId, groupId, roleId, RequestOptions.none());
   }
 
   /**
    * Revoke role. With per-call settings: see {@link #revokeRole(String, String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param groupId the group's id
    * @param roleId the role's id
    * @param options per-call settings
    */
-  public void revokeRole(String tenantId, String groupId, String roleId, RequestOptions options) {
+  public void revokeRole(
+      String organizationId, String groupId, String roleId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/groups/{groupId}/roles/{roleId}",
-                tenantId,
+                "/v1/organizations/{organizationId}/groups/{groupId}/roles/{roleId}",
+                organizationId,
                 groupId,
                 roleId)),
         options);

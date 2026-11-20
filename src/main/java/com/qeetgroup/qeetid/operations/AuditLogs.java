@@ -37,60 +37,63 @@ public final class AuditLogs {
   /**
    * Lists entries, newest first.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the first page; iterate it for every item, page by page
    */
-  public Page<AuditLogEntry> list(String tenantId) {
-    return list(tenantId, AuditLogListParams.builder().build(), RequestOptions.none());
+  public Page<AuditLogEntry> list(String organizationId) {
+    return list(organizationId, AuditLogListParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * Lists entries, newest first.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the first page; iterate it for every item, page by page
    */
-  public Page<AuditLogEntry> list(String tenantId, AuditLogListParams params) {
-    return list(tenantId, params, RequestOptions.none());
+  public Page<AuditLogEntry> list(String organizationId, AuditLogListParams params) {
+    return list(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Lists entries, newest first. With per-call settings: see {@link #list(String,
    * AuditLogListParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the first page; iterate it for every item, page by page
    */
   public Page<AuditLogEntry> list(
-      String tenantId, AuditLogListParams params, RequestOptions options) {
+      String organizationId, AuditLogListParams params, RequestOptions options) {
     return http.page(
-        Paths.of("/v1/tenants/{tenantId}/audit", tenantId), params, AuditLogEntry.class, options);
+        Paths.of("/v1/organizations/{organizationId}/audit", organizationId),
+        params,
+        AuditLogEntry.class,
+        options);
   }
 
   /**
    * Walks the whole chain now and recomputes every row's hash. Changes nothing.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the audit chain verification
    */
-  public AuditChainVerification verify(String tenantId) {
-    return verify(tenantId, RequestOptions.none());
+  public AuditChainVerification verify(String organizationId) {
+    return verify(organizationId, RequestOptions.none());
   }
 
   /**
    * Walks the whole chain now and recomputes every row's hash. With per-call settings: see {@link
    * #verify(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the audit chain verification
    */
-  public AuditChainVerification verify(String tenantId, RequestOptions options) {
+  public AuditChainVerification verify(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/audit/verify", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/audit/verify", organizationId)),
         options,
         AuditChainVerification.class);
   }
@@ -98,24 +101,26 @@ public final class AuditLogs {
   /**
    * The latest scheduled verification's outcome.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the audit verification status
    */
-  public AuditVerificationStatus getVerificationStatus(String tenantId) {
-    return getVerificationStatus(tenantId, RequestOptions.none());
+  public AuditVerificationStatus getVerificationStatus(String organizationId) {
+    return getVerificationStatus(organizationId, RequestOptions.none());
   }
 
   /**
    * The latest scheduled verification's outcome. With per-call settings: see {@link
    * #getVerificationStatus(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the audit verification status
    */
-  public AuditVerificationStatus getVerificationStatus(String tenantId, RequestOptions options) {
+  public AuditVerificationStatus getVerificationStatus(
+      String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/audit/verification", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/audit/verification", organizationId)),
         options,
         AuditVerificationStatus.class);
   }

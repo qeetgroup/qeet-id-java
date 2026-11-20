@@ -6,7 +6,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * Manages the organisation's branding. Shown only while the plan includes custom branding.
+ * Manages the organization's branding. Shown only while the plan includes custom branding.
  *
  * <p>Get it from {@code qeetId.branding()}. Safe for concurrent use.
  */
@@ -25,52 +25,54 @@ public final class Branding {
   /**
    * Fetches a branding.
    *
-   * @param tenantId the organisation's id
-   * @return the tenant branding
+   * @param organizationId the organization's id
+   * @return the organization branding
    */
-  public TenantBranding get(String tenantId) {
-    return get(tenantId, RequestOptions.none());
+  public OrganizationBranding get(String organizationId) {
+    return get(organizationId, RequestOptions.none());
   }
 
   /**
    * Fetches a branding. With per-call settings: see {@link #get(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
-   * @return the tenant branding
+   * @return the organization branding
    */
-  public TenantBranding get(String tenantId, RequestOptions options) {
+  public OrganizationBranding get(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/branding", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/branding", organizationId)),
         options,
-        TenantBranding.class);
+        OrganizationBranding.class);
   }
 
   /**
    * Replaces the branding.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
-   * @return the tenant branding
+   * @return the organization branding
    */
-  public TenantBranding update(String tenantId, BrandingUpdateParams params) {
-    return update(tenantId, params, RequestOptions.none());
+  public OrganizationBranding update(String organizationId, BrandingUpdateParams params) {
+    return update(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Replaces the branding. With per-call settings: see {@link #update(String,
    * BrandingUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
-   * @return the tenant branding
+   * @return the organization branding
    */
-  public TenantBranding update(
-      String tenantId, BrandingUpdateParams params, RequestOptions options) {
+  public OrganizationBranding update(
+      String organizationId, BrandingUpdateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.of("PUT", Paths.of("/v1/tenants/{tenantId}/branding", tenantId)).json(params),
+        ApiRequest.of(
+                "PUT", Paths.of("/v1/organizations/{organizationId}/branding", organizationId))
+            .json(params),
         options,
-        TenantBranding.class);
+        OrganizationBranding.class);
   }
 }

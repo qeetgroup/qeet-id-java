@@ -6,7 +6,7 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A user's access in the organisation: roles, groups and permission counts.
+ * A user's access in the organization: roles, groups and permission counts.
  *
  * @param organization the organization
  * @param roles the roles

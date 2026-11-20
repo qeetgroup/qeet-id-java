@@ -43,13 +43,13 @@ public final class WebhookCreateParams extends Params {
     }
 
     /**
-     * The organisation's id.
+     * The organization's id.
      *
-     * @param tenantId the value
+     * @param organizationId the value
      * @return this builder
      */
-    public Builder tenantId(String tenantId) {
-      return set("tenant_id", nonNull(tenantId, "tenantId"));
+    public Builder organizationId(String organizationId) {
+      return set("organization_id", nonNull(organizationId, "organizationId"));
     }
 
     @Override

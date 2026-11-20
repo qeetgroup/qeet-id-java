@@ -10,12 +10,12 @@ import java.util.Map;
  *
  * @param id the event's id
  * @param type the event, such as {@code user.created}; see {@link WebhookEventTypes}
- * @param tenantId the organisation it happened in
+ * @param organizationId the organization it happened in
  * @param occurredAt when the change happened
  * @param data what changed; its fields depend on {@code type}
  */
 public record WebhookEvent(
-    String id, String type, String tenantId, Instant occurredAt, Map<String, Object> data) {
+    String id, String type, String organizationId, Instant occurredAt, Map<String, Object> data) {
 
   /** Copies the data. */
   public WebhookEvent {

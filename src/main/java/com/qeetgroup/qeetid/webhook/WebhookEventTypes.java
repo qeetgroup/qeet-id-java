@@ -9,7 +9,7 @@ import java.util.List;
  * an event newer than this SDK; handle unknown types gracefully.
  */
 public final class WebhookEventTypes {
-  /** A person was added to the organisation, by an administrator or over SCIM. */
+  /** A person was added to the organization, by an administrator or over SCIM. */
   public static final String USER_CREATED = "user.created";
 
   /** SCIM changed a person's profile or status. */
@@ -21,7 +21,7 @@ public final class WebhookEventTypes {
   /** A suspended account was reactivated. */
   public static final String USER_REACTIVATED = "user.reactivated";
 
-  /** A person was deleted from the organisation. */
+  /** A person was deleted from the organization. */
   public static final String USER_DELETED = "user.deleted";
 
   /** An administrator set a person's password, ending their sessions. */
@@ -84,10 +84,10 @@ public final class WebhookEventTypes {
   /** A person's AI agents were given to another sponsor. */
   public static final String AGENT_SPONSOR_TRANSFERRED = "agent.sponsor_transferred";
 
-  /** Every active AI agent of the organisation was suspended at once. */
+  /** Every active AI agent of the organization was suspended at once. */
   public static final String AGENT_KILL_SWITCH = "agent.kill_switch";
 
-  /** Every suspended AI agent of the organisation was made active again at once. */
+  /** Every suspended AI agent of the organization was made active again at once. */
   public static final String AGENT_RESUME_ALL = "agent.resume_all";
 
   /** A relationship was written. */
@@ -123,10 +123,10 @@ public final class WebhookEventTypes {
   /** A log stream to a SIEM was deleted. */
   public static final String SIEM_SINK_DELETED = "siem.sink_deleted";
 
-  /** The organisation's rate limits were changed. */
+  /** The organization's rate limits were changed. */
   public static final String RATE_LIMITS_UPDATED = "rate_limits.updated";
 
-  /** The organisation's rate limits were reset to the defaults. */
+  /** The organization's rate limits were reset to the defaults. */
   public static final String RATE_LIMITS_DELETED = "rate_limits.deleted";
 
   /** A verifiable credential was issued. */
@@ -138,14 +138,14 @@ public final class WebhookEventTypes {
   /** An application was locked out after too many wrong secrets. */
   public static final String OIDC_CLIENT_LOCKED_OUT = "oidc.client_locked_out";
 
-  /** The organisation was suspended, ending its sessions. */
-  public static final String TENANT_SUSPENDED = "tenant.suspended";
+  /** The organization was suspended, ending its sessions. */
+  public static final String ORGANIZATION_SUSPENDED = "organization.suspended";
 
-  /** The organisation was reactivated. */
-  public static final String TENANT_REACTIVATED = "tenant.reactivated";
+  /** The organization was reactivated. */
+  public static final String ORGANIZATION_REACTIVATED = "organization.reactivated";
 
-  /** The organisation was deleted, ending its sessions. */
-  public static final String TENANT_DELETED = "tenant.deleted";
+  /** The organization was deleted, ending its sessions. */
+  public static final String ORGANIZATION_DELETED = "organization.deleted";
 
   /** The event the test call sends. No subscription names it. */
   public static final String TEST_PING = "test.ping";
@@ -196,9 +196,9 @@ public final class WebhookEventTypes {
           CREDENTIAL_ISSUED,
           CREDENTIAL_REVOKED,
           OIDC_CLIENT_LOCKED_OUT,
-          TENANT_SUSPENDED,
-          TENANT_REACTIVATED,
-          TENANT_DELETED);
+          ORGANIZATION_SUSPENDED,
+          ORGANIZATION_REACTIVATED,
+          ORGANIZATION_DELETED);
 
   private WebhookEventTypes() {}
 }

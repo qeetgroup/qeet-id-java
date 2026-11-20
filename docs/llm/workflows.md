@@ -49,7 +49,8 @@ write retryable without an idempotency key, never retry `auth.session_revoked`. 
 
 **Security review required.** `webhook/WebhookVerifier.java` or `jwt/TokenVerifier.java`. Cite the RFC or the server
 code; constant-time comparisons; negative tests. Webhook fixtures (`src/test/resources/webhook/deliveries.json`) are
-regenerated from the server's own `deliver` and `sign`, never written by hand.
+regenerated from the server's own `deliver` (`internal/developer/webhook`) and request signing
+(`internal/platform/crypto/requestsig`), never written by hand.
 
 ## Change a dependency
 

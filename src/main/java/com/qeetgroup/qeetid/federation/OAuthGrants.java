@@ -28,37 +28,37 @@ public final class OAuthGrants {
   /**
    * Lists the grants, latest used first.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the first page; iterate it for every item, page by page
    */
-  public Page<OAuthGrant> list(String tenantId) {
-    return list(tenantId, OAuthGrantListParams.builder().build(), RequestOptions.none());
+  public Page<OAuthGrant> list(String organizationId) {
+    return list(organizationId, OAuthGrantListParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * Lists the grants, latest used first.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the first page; iterate it for every item, page by page
    */
-  public Page<OAuthGrant> list(String tenantId, OAuthGrantListParams params) {
-    return list(tenantId, params, RequestOptions.none());
+  public Page<OAuthGrant> list(String organizationId, OAuthGrantListParams params) {
+    return list(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Lists the grants, latest used first. With per-call settings: see {@link #list(String,
    * OAuthGrantListParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the first page; iterate it for every item, page by page
    */
   public Page<OAuthGrant> list(
-      String tenantId, OAuthGrantListParams params, RequestOptions options) {
+      String organizationId, OAuthGrantListParams params, RequestOptions options) {
     return http.page(
-        Paths.of("/v1/tenants/{tenantId}/oauth/grants", tenantId),
+        Paths.of("/v1/organizations/{organizationId}/oauth/grants", organizationId),
         params,
         OAuthGrant.class,
         options);
@@ -67,78 +67,83 @@ public final class OAuthGrants {
   /**
    * Revokes one grant; the application must ask for consent again.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param grantId the grant's id
    */
-  public void revoke(String tenantId, String grantId) {
-    revoke(tenantId, grantId, RequestOptions.none());
+  public void revoke(String organizationId, String grantId) {
+    revoke(organizationId, grantId, RequestOptions.none());
   }
 
   /**
    * Revokes one grant; the application must ask for consent again. With per-call settings: see
    * {@link #revoke(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param grantId the grant's id
    * @param options per-call settings
    */
-  public void revoke(String tenantId, String grantId, RequestOptions options) {
+  public void revoke(String organizationId, String grantId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
-            "DELETE", Paths.of("/v1/tenants/{tenantId}/oauth/grants/{grantId}", tenantId, grantId)),
+            "DELETE",
+            Paths.of(
+                "/v1/organizations/{organizationId}/oauth/grants/{grantId}",
+                organizationId,
+                grantId)),
         options);
   }
 
   /**
    * Revokes several grants by id (up to 100) in one step.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param grantIds the grants
    * @return how many grants were revoked
    */
-  public int revokeMany(String tenantId, List<String> grantIds) {
-    return revokeMany(tenantId, grantIds, RequestOptions.none());
+  public int revokeMany(String organizationId, List<String> grantIds) {
+    return revokeMany(organizationId, grantIds, RequestOptions.none());
   }
 
   /**
    * Revokes several grants, with per-call settings. See {@link #revokeMany(String, List)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param grantIds the grants
    * @param options per-call settings
    * @return how many grants were revoked
    */
-  public int revokeMany(String tenantId, List<String> grantIds, RequestOptions options) {
-    return revoke(tenantId, Bodies.of("ids", List.copyOf(grantIds)), options);
+  public int revokeMany(String organizationId, List<String> grantIds, RequestOptions options) {
+    return revoke(organizationId, Bodies.of("ids", List.copyOf(grantIds)), options);
   }
 
   /**
    * Revokes every grant to one application, so it must ask for consent again.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param clientId the application's client ID
    * @return how many grants were revoked
    */
-  public int revokeForApplication(String tenantId, String clientId) {
-    return revokeForApplication(tenantId, clientId, RequestOptions.none());
+  public int revokeForApplication(String organizationId, String clientId) {
+    return revokeForApplication(organizationId, clientId, RequestOptions.none());
   }
 
   /**
    * Revokes every grant to one application, with per-call settings. See {@link
    * #revokeForApplication(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param clientId the application's client ID
    * @param options per-call settings
    * @return how many grants were revoked
    */
-  public int revokeForApplication(String tenantId, String clientId, RequestOptions options) {
-    return revoke(tenantId, Bodies.of("client_id", clientId), options);
+  public int revokeForApplication(String organizationId, String clientId, RequestOptions options) {
+    return revoke(organizationId, Bodies.of("client_id", clientId), options);
   }
 
-  private int revoke(String tenantId, Object body, RequestOptions options) {
+  private int revoke(String organizationId, Object body, RequestOptions options) {
     ApiRequest request =
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/oauth/grants/revoke", tenantId))
+        ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/oauth/grants/revoke", organizationId))
             .json(body);
     return http.tree(request, options).path("revoked").asInt();
   }

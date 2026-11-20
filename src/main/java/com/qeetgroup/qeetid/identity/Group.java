@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
  * A group of users, optionally nested under a parent. Members inherit the group's roles.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param parentId the parent's id
  * @param name its name
  * @param description its description
@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record Group(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     @JsonProperty("parent_id") @Nullable String parentId,
     String name,
     String description,

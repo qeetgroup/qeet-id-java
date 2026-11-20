@@ -26,23 +26,23 @@ public final class AuthHooks {
   /**
    * Lists the auth hooks.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<AuthHook> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<AuthHook> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the auth hooks. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<AuthHook> list(String tenantId, RequestOptions options) {
+  public ListResult<AuthHook> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/auth-hooks", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/auth-hooks", organizationId)),
         AuthHook.class,
         options);
   }
@@ -50,26 +50,28 @@ public final class AuthHooks {
   /**
    * Creates an auth hook.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the auth hook
    */
-  public AuthHook create(String tenantId, AuthHookCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public AuthHook create(String organizationId, AuthHookCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates an auth hook. With per-call settings: see {@link #create(String,
    * AuthHookCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the auth hook
    */
-  public AuthHook create(String tenantId, AuthHookCreateParams params, RequestOptions options) {
+  public AuthHook create(
+      String organizationId, AuthHookCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/auth-hooks", tenantId)).json(params),
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/auth-hooks", organizationId))
+            .json(params),
         options,
         AuthHook.class);
   }
@@ -77,30 +79,34 @@ public final class AuthHooks {
   /**
    * Changes only the fields given.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param hookId the hook's id
    * @param params the parameters
    * @return the auth hook state
    */
-  public AuthHookState update(String tenantId, String hookId, AuthHookUpdateParams params) {
-    return update(tenantId, hookId, params, RequestOptions.none());
+  public AuthHookState update(String organizationId, String hookId, AuthHookUpdateParams params) {
+    return update(organizationId, hookId, params, RequestOptions.none());
   }
 
   /**
    * Changes only the fields given. With per-call settings: see {@link #update(String, String,
    * AuthHookUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param hookId the hook's id
    * @param params the parameters
    * @param options per-call settings
    * @return the auth hook state
    */
   public AuthHookState update(
-      String tenantId, String hookId, AuthHookUpdateParams params, RequestOptions options) {
+      String organizationId, String hookId, AuthHookUpdateParams params, RequestOptions options) {
     return http.execute(
         ApiRequest.of(
-                "PATCH", Paths.of("/v1/tenants/{tenantId}/auth-hooks/{hookId}", tenantId, hookId))
+                "PATCH",
+                Paths.of(
+                    "/v1/organizations/{organizationId}/auth-hooks/{hookId}",
+                    organizationId,
+                    hookId))
             .json(params),
         options,
         AuthHookState.class);
@@ -109,51 +115,56 @@ public final class AuthHooks {
   /**
    * Deletes an auth hook.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param hookId the hook's id
    */
-  public void delete(String tenantId, String hookId) {
-    delete(tenantId, hookId, RequestOptions.none());
+  public void delete(String organizationId, String hookId) {
+    delete(organizationId, hookId, RequestOptions.none());
   }
 
   /**
    * Deletes an auth hook. With per-call settings: see {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param hookId the hook's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String hookId, RequestOptions options) {
+  public void delete(String organizationId, String hookId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
-            "DELETE", Paths.of("/v1/tenants/{tenantId}/auth-hooks/{hookId}", tenantId, hookId)),
+            "DELETE",
+            Paths.of(
+                "/v1/organizations/{organizationId}/auth-hooks/{hookId}", organizationId, hookId)),
         options);
   }
 
   /**
    * Calls the hook with a sample payload and reports what it answered.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param hookId the hook's id
    * @return the auth hook test result
    */
-  public AuthHookTestResult test(String tenantId, String hookId) {
-    return test(tenantId, hookId, RequestOptions.none());
+  public AuthHookTestResult test(String organizationId, String hookId) {
+    return test(organizationId, hookId, RequestOptions.none());
   }
 
   /**
    * Calls the hook with a sample payload and reports what it answered. With per-call settings: see
    * {@link #test(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param hookId the hook's id
    * @param options per-call settings
    * @return the auth hook test result
    */
-  public AuthHookTestResult test(String tenantId, String hookId, RequestOptions options) {
+  public AuthHookTestResult test(String organizationId, String hookId, RequestOptions options) {
     return http.execute(
         ApiRequest.post(
-            Paths.of("/v1/tenants/{tenantId}/auth-hooks/{hookId}/test", tenantId, hookId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/auth-hooks/{hookId}/test",
+                organizationId,
+                hookId)),
         options,
         AuthHookTestResult.class);
   }

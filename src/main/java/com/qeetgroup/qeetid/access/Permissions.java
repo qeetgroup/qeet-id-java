@@ -90,30 +90,33 @@ public final class Permissions {
   }
 
   /**
-   * Every permission the user holds in the organisation, directly or through groups.
+   * Every permission the user holds in the organization, directly or through groups.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @return the effective permissions
    */
-  public EffectivePermissions listEffective(String tenantId, String userId) {
-    return listEffective(tenantId, userId, RequestOptions.none());
+  public EffectivePermissions listEffective(String organizationId, String userId) {
+    return listEffective(organizationId, userId, RequestOptions.none());
   }
 
   /**
-   * Every permission the user holds in the organisation, directly or through groups. With per-call
+   * Every permission the user holds in the organization, directly or through groups. With per-call
    * settings: see {@link #listEffective(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param options per-call settings
    * @return the effective permissions
    */
   public EffectivePermissions listEffective(
-      String tenantId, String userId, RequestOptions options) {
+      String organizationId, String userId, RequestOptions options) {
     return http.execute(
         ApiRequest.get(
-            Paths.of("/v1/users/{userId}/tenants/{tenantId}/permissions", userId, tenantId)),
+            Paths.of(
+                "/v1/users/{userId}/organizations/{organizationId}/permissions",
+                userId,
+                organizationId)),
         options,
         EffectivePermissions.class);
   }

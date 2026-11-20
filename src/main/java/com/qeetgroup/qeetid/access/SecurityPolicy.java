@@ -7,10 +7,10 @@ import java.util.Map;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Session bounds, MFA enforcement and step-up rules for the organisation. Durations are Go-style
+ * Session bounds, MFA enforcement and step-up rules for the organization. Durations are Go-style
  * strings such as {@code "720h"}.
  *
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param passwordMinLength the password min length
  * @param passwordComplexity the password complexity
  * @param sessionMaxAge the session max age
@@ -27,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  * @param settings the settings
  */
 public record SecurityPolicy(
-    @JsonProperty("tenant_id") @Nullable String tenantId,
+    @JsonProperty("organization_id") @Nullable String organizationId,
     @JsonProperty("password_min_length") @Nullable Integer passwordMinLength,
     @JsonProperty("password_complexity") @Nullable String passwordComplexity,
     @JsonProperty("session_max_age") @Nullable String sessionMaxAge,

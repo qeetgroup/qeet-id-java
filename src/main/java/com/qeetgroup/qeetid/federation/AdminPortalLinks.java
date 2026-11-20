@@ -26,27 +26,28 @@ public final class AdminPortalLinks {
   /**
    * Creates an admin portal link.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the admin portal link created
    */
-  public AdminPortalLinkCreated create(String tenantId, AdminPortalLinkCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public AdminPortalLinkCreated create(String organizationId, AdminPortalLinkCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates an admin portal link. With per-call settings: see {@link #create(String,
    * AdminPortalLinkCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the admin portal link created
    */
   public AdminPortalLinkCreated create(
-      String tenantId, AdminPortalLinkCreateParams params, RequestOptions options) {
+      String organizationId, AdminPortalLinkCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/admin-portal/links", tenantId))
+        ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/admin-portal/links", organizationId))
             .json(params),
         options,
         AdminPortalLinkCreated.class);
@@ -55,23 +56,24 @@ public final class AdminPortalLinks {
   /**
    * Lists the admin portal links.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<AdminPortalLink> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<AdminPortalLink> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the admin portal links. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<AdminPortalLink> list(String tenantId, RequestOptions options) {
+  public ListResult<AdminPortalLink> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/admin-portal/links", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/admin-portal/links", organizationId)),
         AdminPortalLink.class,
         options);
   }
@@ -79,25 +81,28 @@ public final class AdminPortalLinks {
   /**
    * Revokes an admin portal link.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param linkId the link's id
    */
-  public void revoke(String tenantId, String linkId) {
-    revoke(tenantId, linkId, RequestOptions.none());
+  public void revoke(String organizationId, String linkId) {
+    revoke(organizationId, linkId, RequestOptions.none());
   }
 
   /**
    * Revokes an admin portal link. With per-call settings: see {@link #revoke(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param linkId the link's id
    * @param options per-call settings
    */
-  public void revoke(String tenantId, String linkId, RequestOptions options) {
+  public void revoke(String organizationId, String linkId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
-            Paths.of("/v1/tenants/{tenantId}/admin-portal/links/{linkId}", tenantId, linkId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/admin-portal/links/{linkId}",
+                organizationId,
+                linkId)),
         options);
   }
 }

@@ -34,7 +34,7 @@ module:
   coordinates: com.qeetgroup:qeet-id
   jpms: com.qeetgroup.qeetid
   package_root: com.qeetgroup.qeetid
-  version: 0.1.0             # gradle.properties; raised by hand in the PR into main
+  version: 0.2.0             # gradle.properties; raised by hand in the PR into main
   registry: https://maven.pkg.github.com/qeetgroup/qeet-id-java   # GitHub Packages; reading needs read:packages
 
 architecture:
@@ -49,7 +49,7 @@ architecture:
 contracts:
   consumes:
     api: qeet-id-server
-    documents: [api/openapi/auth.yaml, api/openapi/management.yaml, api/openapi/federation.yaml, api/openapi/developer.yaml, api/openapi/operations.yaml]
+    documents: [api/openapi/identity.yaml, api/openapi/access.yaml, api/openapi/federation.yaml, api/openapi/developer.yaml, api/openapi/operations.yaml]
     tiebreaker: internal/ handlers and route policy
     base_url: https://api.id.qeet.in
   auth_scheme: "Authorization: ApiKey <qk_...>, or Bearer <client-credentials token>"

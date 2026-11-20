@@ -9,7 +9,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * Manages the organisation's users.
+ * Manages the organization's users.
  *
  * <p>Get it from {@code qeetId.users()}. Safe for concurrent use.
  */
@@ -26,7 +26,7 @@ public final class Users {
   }
 
   /**
-   * Creates a user in the API key's organisation. The API makes it idempotent: an {@code
+   * Creates a user in the API key's organization. The API makes it idempotent: an {@code
    * Idempotency-Key} is sent with it, generated per call unless you give one in {@link
    * RequestOptions}, so a retry never acts twice.
    *
@@ -38,7 +38,7 @@ public final class Users {
   }
 
   /**
-   * Creates a user in the API key's organisation. With per-call settings: see {@link
+   * Creates a user in the API key's organization. With per-call settings: see {@link
    * #create(UserCreateParams)}.
    *
    * @param params the parameters
@@ -100,7 +100,7 @@ public final class Users {
   }
 
   /**
-   * Lists the API key's organisation's users, newest first. The answer is the first page; iterate
+   * Lists the API key's organization's users, newest first. The answer is the first page; iterate
    * it, or {@code stream()} it, to walk them all, page by page.
    *
    * @return the first page; iterate it for every item, page by page
@@ -110,7 +110,7 @@ public final class Users {
   }
 
   /**
-   * Lists the API key's organisation's users, newest first. The answer is the first page; iterate
+   * Lists the API key's organization's users, newest first. The answer is the first page; iterate
    * it, or {@code stream()} it, to walk them all, page by page.
    *
    * @param params the parameters
@@ -121,7 +121,7 @@ public final class Users {
   }
 
   /**
-   * Lists the API key's organisation's users, newest first. With per-call settings: see {@link
+   * Lists the API key's organization's users, newest first. With per-call settings: see {@link
    * #list(UserListParams)}.
    *
    * @param params the parameters
@@ -400,7 +400,7 @@ public final class Users {
   }
 
   /**
-   * Lists the user's live sessions in the organisation, most recently seen first.
+   * Lists the user's live sessions in the organization, most recently seen first.
    *
    * @param userId the user's id
    * @return the list
@@ -410,7 +410,7 @@ public final class Users {
   }
 
   /**
-   * Lists the user's live sessions in the organisation, most recently seen first. With per-call
+   * Lists the user's live sessions in the organization, most recently seen first. With per-call
    * settings: see {@link #listSessions(String)}.
    *
    * @param userId the user's id
@@ -427,31 +427,31 @@ public final class Users {
   /**
    * Ends one of the user's sessions.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param sessionId the session's id
    */
-  public void revokeSession(String tenantId, String userId, String sessionId) {
-    revokeSession(tenantId, userId, sessionId, RequestOptions.none());
+  public void revokeSession(String organizationId, String userId, String sessionId) {
+    revokeSession(organizationId, userId, sessionId, RequestOptions.none());
   }
 
   /**
    * Ends one of the user's sessions. With per-call settings: see {@link #revokeSession(String,
    * String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param sessionId the session's id
    * @param options per-call settings
    */
   public void revokeSession(
-      String tenantId, String userId, String sessionId, RequestOptions options) {
+      String organizationId, String userId, String sessionId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/users/{userId}/sessions/{sessionId}",
-                tenantId,
+                "/v1/organizations/{organizationId}/users/{userId}/sessions/{sessionId}",
+                organizationId,
                 userId,
                 sessionId)),
         options);
@@ -509,7 +509,7 @@ public final class Users {
   }
 
   /**
-   * The user's roles, groups and permission counts in the organisation.
+   * The user's roles, groups and permission counts in the organization.
    *
    * @param userId the user's id
    * @return the user access
@@ -519,7 +519,7 @@ public final class Users {
   }
 
   /**
-   * The user's roles, groups and permission counts in the organisation. With per-call settings: see
+   * The user's roles, groups and permission counts in the organization. With per-call settings: see
    * {@link #getAccess(String)}.
    *
    * @param userId the user's id
@@ -532,7 +532,7 @@ public final class Users {
   }
 
   /**
-   * Removes a member whose account belongs to another organisation from this one. Their account is
+   * Removes a member whose account belongs to another organization from this one. Their account is
    * left alone.
    *
    * @param userId the user's id
@@ -543,7 +543,7 @@ public final class Users {
   }
 
   /**
-   * Removes a member whose account belongs to another organisation from this one. With per-call
+   * Removes a member whose account belongs to another organization from this one. With per-call
    * settings: see {@link #removeMembership(String)}.
    *
    * @param userId the user's id

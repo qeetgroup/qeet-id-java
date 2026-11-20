@@ -15,7 +15,7 @@ import org.jspecify.annotations.Nullable;
  * @param idleExpiresAt When the session ends unless renewed before then.
  * @param sessionId the session's id
  * @param userId the user's id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  */
 public record TokenPair(
     @JsonProperty("access_token") String accessToken,
@@ -26,7 +26,7 @@ public record TokenPair(
     @JsonProperty("idle_expires_at") Instant idleExpiresAt,
     @JsonProperty("session_id") String sessionId,
     @JsonProperty("user_id") String userId,
-    @JsonProperty("tenant_id") @Nullable String tenantId) {
+    @JsonProperty("organization_id") @Nullable String organizationId) {
 
   /** Every component, with secrets shown as {@code [redacted]}. */
   @Override
@@ -43,8 +43,8 @@ public record TokenPair(
         + sessionId
         + ", userId="
         + userId
-        + ", tenantId="
-        + tenantId
+        + ", organizationId="
+        + organizationId
         + "]";
   }
 }

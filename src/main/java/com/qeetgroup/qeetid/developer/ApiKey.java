@@ -9,8 +9,8 @@ import org.jspecify.annotations.Nullable;
  * An API key's record. The key itself is shown only when it is created or rotated.
  *
  * @param id its id
- * @param tenantId the organisation's id
- * @param userId The user a personal key acts for; null for an organisation key.
+ * @param organizationId the organization's id
+ * @param userId The user a personal key acts for; null for an organization key.
  * @param name its name
  * @param prefix The key's first characters, to recognise it by.
  * @param scopes the scopes
@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record ApiKey(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     @JsonProperty("user_id") @Nullable String userId,
     String name,
     String prefix,

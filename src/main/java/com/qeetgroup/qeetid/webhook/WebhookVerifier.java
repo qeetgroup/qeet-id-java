@@ -242,12 +242,12 @@ public final class WebhookVerifier {
         || !root.isObject()
         || !root.path("id").isTextual()
         || !root.path("type").isTextual()
-        || !root.path("tenant_id").isTextual()
+        || !root.path("organization_id").isTextual()
         || !root.path("occurred_at").isTextual()
         || !root.path("data").isObject()) {
       throw new WebhookVerificationException(
           Reason.INVALID_PAYLOAD,
-          "The delivery's body is not a Qeet ID event (id, type, tenant_id, occurred_at, data).");
+          "The delivery's body is not a Qeet ID event (id, type, organization_id, occurred_at, data).");
     }
     Instant occurredAt;
     try {
@@ -261,7 +261,7 @@ public final class WebhookVerifier {
     return new WebhookEvent(
         root.get("id").asText(),
         root.get("type").asText(),
-        root.get("tenant_id").asText(),
+        root.get("organization_id").asText(),
         occurredAt,
         data);
   }

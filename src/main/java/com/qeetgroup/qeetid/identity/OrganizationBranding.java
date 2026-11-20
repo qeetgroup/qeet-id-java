@@ -5,9 +5,9 @@ import java.util.Map;
 import org.jspecify.annotations.Nullable;
 
 /**
- * How the hosted sign-in pages and emails look for the organisation.
+ * How the hosted sign-in pages and emails look for the organization.
  *
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param logoUrl A URL or a base64 {@code data:} image (PNG, JPEG, WEBP or SVG, at most 2 MiB).
  * @param primaryColor the primary color
  * @param secondaryColor the secondary color
@@ -17,8 +17,8 @@ import org.jspecify.annotations.Nullable;
  * @param settings {@code background_color} (six-digit hex) and {@code email_reply_to}; keep unknown
  *     keys when writing back.
  */
-public record TenantBranding(
-    @JsonProperty("tenant_id") String tenantId,
+public record OrganizationBranding(
+    @JsonProperty("organization_id") String organizationId,
     @JsonProperty("logo_url") @Nullable String logoUrl,
     @JsonProperty("primary_color") @Nullable String primaryColor,
     @JsonProperty("secondary_color") @Nullable String secondaryColor,

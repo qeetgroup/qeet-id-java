@@ -28,7 +28,7 @@ import com.qeetgroup.qeetid.identity.Branding;
 import com.qeetgroup.qeetid.identity.Domains;
 import com.qeetgroup.qeetid.identity.Groups;
 import com.qeetgroup.qeetid.identity.Invitations;
-import com.qeetgroup.qeetid.identity.Tenants;
+import com.qeetgroup.qeetid.identity.Organizations;
 import com.qeetgroup.qeetid.identity.Users;
 import com.qeetgroup.qeetid.internal.Headers;
 import com.qeetgroup.qeetid.internal.Transport;
@@ -77,8 +77,8 @@ public final class QeetID {
   private final Transport transport;
   private final String description;
 
-  // Identity: the organisation, its people and groups.
-  private final Tenants tenants;
+  // Identity: the organization, its people and groups.
+  private final Organizations organizations;
   private final Domains domains;
   private final Users users;
   private final Groups groups;
@@ -157,7 +157,7 @@ public final class QeetID {
                 ? "clientId=" + builder.clientId + ", clientSecret=[redacted]"
                 : "no credentials";
     this.description = "QeetID[baseUrl=" + baseUrl + ", " + credential + "]";
-    this.tenants = new Tenants(transport);
+    this.organizations = new Organizations(transport);
     this.domains = new Domains(transport);
     this.users = new Users(transport);
     this.groups = new Groups(transport);
@@ -215,19 +215,19 @@ public final class QeetID {
     return transport.baseUrl();
   }
 
-  // Identity: the organisation, its people and groups.
+  // Identity: the organization, its people and groups.
 
   /**
-   * Reads and manages the API key's organisation.
+   * Reads and manages the API key's organization.
    *
-   * @return the tenants
+   * @return the organizations
    */
-  public Tenants tenants() {
-    return tenants;
+  public Organizations organizations() {
+    return organizations;
   }
 
   /**
-   * Manages the organisation's domains: claim, verify by DNS, and route sign-in.
+   * Manages the organization's domains: claim, verify by DNS, and route sign-in.
    *
    * @return the domains
    */
@@ -236,7 +236,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's users.
+   * Manages the organization's users.
    *
    * @return the users
    */
@@ -263,7 +263,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's branding.
+   * Manages the organization's branding.
    *
    * @return the branding
    */
@@ -310,7 +310,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's sign-in policy: methods, password rules and lockout.
+   * Manages the organization's sign-in policy: methods, password rules and lockout.
    *
    * @return the authPolicies
    */
@@ -319,7 +319,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's security policy.
+   * Manages the organization's security policy.
    *
    * @return the securityPolicies
    */
@@ -328,7 +328,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's address rules: which networks may sign in.
+   * Manages the organization's address rules: which networks may sign in.
    *
    * @return the ipRules
    */
@@ -414,7 +414,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the API key's organisation's social sign-in providers, and linked social accounts.
+   * Manages the API key's organization's social sign-in providers, and linked social accounts.
    *
    * @return the socialProviders
    */
@@ -479,7 +479,7 @@ public final class QeetID {
   }
 
   /**
-   * The organisation's encrypted secrets store.
+   * The organization's encrypted secrets store.
    *
    * @return the secrets
    */
@@ -518,7 +518,7 @@ public final class QeetID {
   }
 
   /**
-   * The organisation's Qeet ID billing: subscription, invoices and plan.
+   * The organization's Qeet ID billing: subscription, invoices and plan.
    *
    * @return the billing
    */
@@ -536,7 +536,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's email templates.
+   * Manages the organization's email templates.
    *
    * @return the emailTemplates
    */
@@ -545,7 +545,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's data-retention policy.
+   * Manages the organization's data-retention policy.
    *
    * @return the retention
    */
@@ -563,7 +563,7 @@ public final class QeetID {
   }
 
   /**
-   * Manages the organisation's rate limits.
+   * Manages the organization's rate limits.
    *
    * @return the rateLimits
    */

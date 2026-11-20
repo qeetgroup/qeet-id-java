@@ -89,7 +89,7 @@ class WebhookVerifierTest {
     WebhookEvent event =
         verifier(delivery, delivery.secrets()).verify(delivery.body(), delivery.lookup());
     assertEquals(delivery.headers().get("X-Qeet-Event"), event.type());
-    assertEquals("7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f", event.tenantId());
+    assertEquals("7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f", event.organizationId());
     assertEquals(Instant.parse("2026-11-05T09:30:00Z"), event.occurredAt());
   }
 
@@ -251,8 +251,8 @@ class WebhookVerifierTest {
         new String[] {
           "not json",
           "[1,2]",
-          "{\"id\":\"e\",\"type\":\"user.created\",\"tenant_id\":\"t\",\"occurred_at\":\"2026-11-05T10:00:00Z\"}",
-          "{\"id\":\"e\",\"type\":\"user.created\",\"tenant_id\":\"t\",\"occurred_at\":\"yesterday\",\"data\":{}}"
+          "{\"id\":\"e\",\"type\":\"user.created\",\"organization_id\":\"t\",\"occurred_at\":\"2026-11-05T10:00:00Z\"}",
+          "{\"id\":\"e\",\"type\":\"user.created\",\"organization_id\":\"t\",\"occurred_at\":\"yesterday\",\"data\":{}}"
         }) {
       byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
       WebhookVerifier.Signature signature = WebhookVerifier.sign(bytes, "s3cret", now);

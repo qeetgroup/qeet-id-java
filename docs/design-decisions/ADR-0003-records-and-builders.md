@@ -8,7 +8,7 @@
   Times are `Instant`; a field that may be absent is `@Nullable` and boxed; a list or map is never null (empty when
   absent). Values the API may extend (statuses, kinds) are `String`, with the known values in the Javadoc. A record
   holding a secret overrides `toString` to redact it.
-- **Requests are builders.** `UserCreateParams.builder().tenantId(…).email(…).build()`. A builder sends only the fields
+- **Requests are builders.** `UserCreateParams.builder().organizationId(…).email(…).build()`. A builder sends only the fields
   set; setting a nullable field to `null` sends an explicit `null`, which clears it on an update. Required fields are
   checked in `build()`. Secret fields are set with `setSecret` and never printed.
 - A few small value types used on both sides (`RateLimitBucket`, `SamlAttributeMapping`, `AuthzenEntity`,

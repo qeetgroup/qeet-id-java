@@ -96,7 +96,9 @@ class TransportTest {
   void unauthenticatedRequestsSendNoCredential() {
     server.enqueue(200, "{\"id\":\"x\"}");
     transport.execute(
-        ApiRequest.post("/v1/agents/token").unauthenticated(), RequestOptions.none(), Thing.class);
+        ApiRequest.post("/v1/credentials/verify").unauthenticated(),
+        RequestOptions.none(),
+        Thing.class);
     assertNull(server.onlyRequest().header("authorization"));
   }
 

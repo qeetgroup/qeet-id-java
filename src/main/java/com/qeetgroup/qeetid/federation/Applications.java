@@ -29,7 +29,7 @@ public final class Applications {
   }
 
   /**
-   * The organisation's registered RFC 8707 resources.
+   * The organization's registered RFC 8707 resources.
    *
    * @return the resources
    */
@@ -40,30 +40,30 @@ public final class Applications {
   /**
    * Registers an application. A confidential one's secret is in the result, once.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the application
    * @return the application and, for a confidential one, its secret
    */
-  public ApplicationCreated create(String tenantId, ApplicationCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public ApplicationCreated create(String organizationId, ApplicationCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Registers an application, with per-call settings. See {@link #create(String,
    * ApplicationCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the application
    * @param options per-call settings
    * @return the application and, for a confidential one, its secret
    */
   public ApplicationCreated create(
-      String tenantId, ApplicationCreateParams params, RequestOptions options) {
+      String organizationId, ApplicationCreateParams params, RequestOptions options) {
     Map<String, @Nullable Object> body = new LinkedHashMap<>(params.toMap());
-    body.put("tenant_id", tenantId);
+    body.put("organization_id", organizationId);
     return http.send(
         "POST",
-        Paths.of("/v1/tenants/{tenantId}/oidc/clients", tenantId),
+        Paths.of("/v1/organizations/{organizationId}/oidc/clients", organizationId),
         body,
         ApplicationCreated.class,
         options);
@@ -72,27 +72,29 @@ public final class Applications {
   /**
    * Fetches an application.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @return the application
    */
-  public Application get(String tenantId, String applicationId) {
-    return get(tenantId, applicationId, RequestOptions.none());
+  public Application get(String organizationId, String applicationId) {
+    return get(organizationId, applicationId, RequestOptions.none());
   }
 
   /**
    * Fetches an application. With per-call settings: see {@link #get(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @param options per-call settings
    * @return the application
    */
-  public Application get(String tenantId, String applicationId, RequestOptions options) {
+  public Application get(String organizationId, String applicationId, RequestOptions options) {
     return http.execute(
         ApiRequest.get(
             Paths.of(
-                "/v1/tenants/{tenantId}/oidc/clients/{applicationId}", tenantId, applicationId)),
+                "/v1/organizations/{organizationId}/oidc/clients/{applicationId}",
+                organizationId,
+                applicationId)),
         options,
         Application.class);
   }
@@ -100,23 +102,23 @@ public final class Applications {
   /**
    * Lists the applications.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<Application> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<Application> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the applications. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<Application> list(String tenantId, RequestOptions options) {
+  public ListResult<Application> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/oidc/clients", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/oidc/clients", organizationId)),
         Application.class,
         options);
   }
@@ -124,27 +126,28 @@ public final class Applications {
   /**
    * Changes only the fields given.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @param params the parameters
    * @return the application
    */
-  public Application update(String tenantId, String applicationId, ApplicationUpdateParams params) {
-    return update(tenantId, applicationId, params, RequestOptions.none());
+  public Application update(
+      String organizationId, String applicationId, ApplicationUpdateParams params) {
+    return update(organizationId, applicationId, params, RequestOptions.none());
   }
 
   /**
    * Changes only the fields given. With per-call settings: see {@link #update(String, String,
    * ApplicationUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @param params the parameters
    * @param options per-call settings
    * @return the application
    */
   public Application update(
-      String tenantId,
+      String organizationId,
       String applicationId,
       ApplicationUpdateParams params,
       RequestOptions options) {
@@ -152,7 +155,9 @@ public final class Applications {
         ApiRequest.of(
                 "PATCH",
                 Paths.of(
-                    "/v1/tenants/{tenantId}/oidc/clients/{applicationId}", tenantId, applicationId))
+                    "/v1/organizations/{organizationId}/oidc/clients/{applicationId}",
+                    organizationId,
+                    applicationId))
             .json(params),
         options,
         Application.class);
@@ -161,27 +166,29 @@ public final class Applications {
   /**
    * Deletes the application; its tokens and grants stop being honoured.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    */
-  public void delete(String tenantId, String applicationId) {
-    delete(tenantId, applicationId, RequestOptions.none());
+  public void delete(String organizationId, String applicationId) {
+    delete(organizationId, applicationId, RequestOptions.none());
   }
 
   /**
    * Deletes the application; its tokens and grants stop being honoured. With per-call settings: see
    * {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String applicationId, RequestOptions options) {
+  public void delete(String organizationId, String applicationId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/oidc/clients/{applicationId}", tenantId, applicationId)),
+                "/v1/organizations/{organizationId}/oidc/clients/{applicationId}",
+                organizationId,
+                applicationId)),
         options);
   }
 
@@ -189,30 +196,30 @@ public final class Applications {
    * Issues a new secret for a confidential application, shown once. The old one stops working at
    * once.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @return the application secret
    */
-  public ApplicationSecret rotateSecret(String tenantId, String applicationId) {
-    return rotateSecret(tenantId, applicationId, RequestOptions.none());
+  public ApplicationSecret rotateSecret(String organizationId, String applicationId) {
+    return rotateSecret(organizationId, applicationId, RequestOptions.none());
   }
 
   /**
    * Issues a new secret for a confidential application, shown once. With per-call settings: see
    * {@link #rotateSecret(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @param options per-call settings
    * @return the application secret
    */
   public ApplicationSecret rotateSecret(
-      String tenantId, String applicationId, RequestOptions options) {
+      String organizationId, String applicationId, RequestOptions options) {
     return http.execute(
         ApiRequest.post(
             Paths.of(
-                "/v1/tenants/{tenantId}/oidc/clients/{applicationId}/rotate-secret",
-                tenantId,
+                "/v1/organizations/{organizationId}/oidc/clients/{applicationId}/rotate-secret",
+                organizationId,
                 applicationId)),
         options,
         ApplicationSecret.class);
@@ -221,30 +228,30 @@ public final class Applications {
   /**
    * The application's wrong-secret lockout and its last 20 failed authentications.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @return the application auth failures
    */
-  public ApplicationAuthFailures getAuthFailures(String tenantId, String applicationId) {
-    return getAuthFailures(tenantId, applicationId, RequestOptions.none());
+  public ApplicationAuthFailures getAuthFailures(String organizationId, String applicationId) {
+    return getAuthFailures(organizationId, applicationId, RequestOptions.none());
   }
 
   /**
    * The application's wrong-secret lockout and its last 20 failed authentications. With per-call
    * settings: see {@link #getAuthFailures(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @param options per-call settings
    * @return the application auth failures
    */
   public ApplicationAuthFailures getAuthFailures(
-      String tenantId, String applicationId, RequestOptions options) {
+      String organizationId, String applicationId, RequestOptions options) {
     return http.execute(
         ApiRequest.get(
             Paths.of(
-                "/v1/tenants/{tenantId}/oidc/clients/{applicationId}/auth-failures",
-                tenantId,
+                "/v1/organizations/{organizationId}/oidc/clients/{applicationId}/auth-failures",
+                organizationId,
                 applicationId)),
         options,
         ApplicationAuthFailures.class);
@@ -253,24 +260,26 @@ public final class Applications {
   /**
    * Applications holding a machine grant that nobody has reviewed.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<ShadowAiApplication> listShadowAi(String tenantId) {
-    return listShadowAi(tenantId, RequestOptions.none());
+  public ListResult<ShadowAiApplication> listShadowAi(String organizationId) {
+    return listShadowAi(organizationId, RequestOptions.none());
   }
 
   /**
    * Applications holding a machine grant that nobody has reviewed. With per-call settings: see
    * {@link #listShadowAi(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<ShadowAiApplication> listShadowAi(String tenantId, RequestOptions options) {
+  public ListResult<ShadowAiApplication> listShadowAi(
+      String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/oidc/clients/shadow-ai", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/oidc/clients/shadow-ai", organizationId)),
         ShadowAiApplication.class,
         options);
   }
@@ -278,27 +287,27 @@ public final class Applications {
   /**
    * Marks the application reviewed: it leaves the shadow-AI list until its grant types change.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    */
-  public void markReviewed(String tenantId, String applicationId) {
-    markReviewed(tenantId, applicationId, RequestOptions.none());
+  public void markReviewed(String organizationId, String applicationId) {
+    markReviewed(organizationId, applicationId, RequestOptions.none());
   }
 
   /**
    * Marks the application reviewed: it leaves the shadow-AI list until its grant types change. With
    * per-call settings: see {@link #markReviewed(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param applicationId the application's id
    * @param options per-call settings
    */
-  public void markReviewed(String tenantId, String applicationId, RequestOptions options) {
+  public void markReviewed(String organizationId, String applicationId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.post(
             Paths.of(
-                "/v1/tenants/{tenantId}/oidc/clients/{applicationId}/review",
-                tenantId,
+                "/v1/organizations/{organizationId}/oidc/clients/{applicationId}/review",
+                organizationId,
                 applicationId)),
         options);
   }

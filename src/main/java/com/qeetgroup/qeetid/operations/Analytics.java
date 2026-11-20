@@ -25,37 +25,39 @@ public final class Analytics {
   /**
    * Get overview.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the analytics overview
    */
-  public AnalyticsOverview getOverview(String tenantId) {
-    return getOverview(tenantId, AnalyticsOverviewParams.builder().build(), RequestOptions.none());
+  public AnalyticsOverview getOverview(String organizationId) {
+    return getOverview(
+        organizationId, AnalyticsOverviewParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * Get overview.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the analytics overview
    */
-  public AnalyticsOverview getOverview(String tenantId, AnalyticsOverviewParams params) {
-    return getOverview(tenantId, params, RequestOptions.none());
+  public AnalyticsOverview getOverview(String organizationId, AnalyticsOverviewParams params) {
+    return getOverview(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Get overview. With per-call settings: see {@link #getOverview(String,
    * AnalyticsOverviewParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the analytics overview
    */
   public AnalyticsOverview getOverview(
-      String tenantId, AnalyticsOverviewParams params, RequestOptions options) {
+      String organizationId, AnalyticsOverviewParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/analytics/overview", tenantId))
+        ApiRequest.get(
+                Paths.of("/v1/organizations/{organizationId}/analytics/overview", organizationId))
             .query(params),
         options,
         AnalyticsOverview.class);

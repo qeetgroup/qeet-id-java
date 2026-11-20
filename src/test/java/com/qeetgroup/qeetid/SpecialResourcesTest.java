@@ -12,8 +12,10 @@ import com.qeetgroup.qeetid.access.PermissionCheckParams;
 import com.qeetgroup.qeetid.access.PermissionDecision;
 import com.qeetgroup.qeetid.access.RelationCheckParams;
 import com.qeetgroup.qeetid.access.RelationDecision;
+import com.qeetgroup.qeetid.developer.AgentToken;
 import com.qeetgroup.qeetid.exception.ApiException;
 import com.qeetgroup.qeetid.exception.NotFoundException;
+import com.qeetgroup.qeetid.exception.OAuthException;
 import com.qeetgroup.qeetid.exception.ValidationException;
 import com.qeetgroup.qeetid.federation.ApplicationCreateParams;
 import com.qeetgroup.qeetid.federation.LdapAuthenticationResult;
@@ -35,7 +37,7 @@ import org.junit.jupiter.api.Test;
 /** The resource methods written by hand, and how answers decode. */
 class SpecialResourcesTest {
   private static final String USER =
-      "{\"id\":\"u_1\",\"tenant_id\":\"t_1\",\"email\":\"meera@brightleaffoods.in\",\"email_verified_at\":\"2026-11-01T09:00:00Z\","
+      "{\"id\":\"u_1\",\"organization_id\":\"t_1\",\"email\":\"meera@brightleaffoods.in\",\"email_verified_at\":\"2026-11-01T09:00:00Z\","
           + "\"phone\":null,\"phone_verified_at\":null,\"display_name\":\"Meera Iyer\",\"avatar_url\":null,\"status\":\"active\","
           + "\"metadata\":{\"department\":\"finance\"},\"created_at\":\"2026-11-01T09:00:00Z\",\"updated_at\":\"2026-11-02T09:00:00Z\","
           + "\"roles\":[\"admin\"],\"assigned_roles\":[{\"id\":\"r_1\",\"name\":\"admin\"}],\"some_new_field\":true}";
@@ -91,7 +93,7 @@ class SpecialResourcesTest {
                     .users()
                     .create(
                         UserCreateParams.builder()
-                            .tenantId("t_1")
+                            .organizationId("t_1")
                             .email("not-an-email")
                             .password("hunter2")
                             .build(),
@@ -132,7 +134,7 @@ class SpecialResourcesTest {
     PermissionCheckParams params =
         PermissionCheckParams.builder()
             .userId("u_1")
-            .tenantId("t_1")
+            .organizationId("t_1")
             .permission("invoice.approve")
             .build();
     server.enqueue(200, "{\"allowed\":true}");
@@ -143,7 +145,7 @@ class SpecialResourcesTest {
         Map.of(
             "user_id",
             List.of("u_1"),
-            "tenant_id",
+            "organization_id",
             List.of("t_1"),
             "permission",
             List.of("invoice.approve")),
@@ -197,12 +199,12 @@ class SpecialResourcesTest {
         qeetId.roles().setPermissions("t_1", "r_1", List.of("p_1"));
     assertEquals("invoice.approve", permissions.data().get(0).key());
     assertEquals("PUT", server.lastRequest().method());
-    assertEquals("/v1/tenants/t_1/roles/r_1/permissions", server.lastRequest().path());
+    assertEquals("/v1/organizations/t_1/roles/r_1/permissions", server.lastRequest().path());
     assertEquals("{\"permission_ids\":[\"p_1\"]}", server.lastRequest().bodyText());
   }
 
   @Test
-  void createsAnApplicationInTheTenantOfThePath() {
+  void createsAnApplicationInTheOrganizationOfThePath() {
     server.enqueue(
         200,
         "{\"client\":{\"id\":\"a_1\",\"client_id\":\"app_1\",\"type\":\"confidential\"},\"client_secret\":\"cs_shown_once\"}");
@@ -215,7 +217,7 @@ class SpecialResourcesTest {
     assertEquals("app_1", created.client().clientId());
     assertFalse(created.toString().contains("cs_shown_once"));
     assertEquals(
-        "{\"name\":\"Payroll\",\"type\":\"confidential\",\"tenant_id\":\"t_1\"}",
+        "{\"name\":\"Payroll\",\"type\":\"confidential\",\"organization_id\":\"t_1\"}",
         server.lastRequest().bodyText());
   }
 
@@ -253,6 +255,47 @@ class SpecialResourcesTest {
         ApiException.class, () -> qeetId.ldapConnections().authenticate("c_1", "meera", "pw"));
     assertEquals(
         3, server.requests().size(), "each attempt counts towards the lockout: never retried");
+  }
+
+  @Test
+  void getsAnAgentTokenWithTheClientCredentialsGrant() {
+    server.enqueue(
+        200,
+        "{\"access_token\":\"at_agent_1\",\"token_type\":\"Bearer\",\"expires_in\":300,"
+            + "\"expires_at\":\"2026-11-05T10:05:00Z\",\"scope\":\"files:read\"}");
+    AgentToken token = qeetId.agents().createToken("ag_1", "agent-secret-1");
+    assertEquals("at_agent_1", token.accessToken());
+    assertEquals(300, token.expiresIn());
+    assertEquals(Instant.parse("2026-11-05T10:05:00Z"), token.expiresAt());
+    assertEquals("files:read", token.scope());
+    assertFalse(token.toString().contains("at_agent_1"));
+    MockServer.Recorded request = server.lastRequest();
+    assertEquals("POST", request.method());
+    assertEquals("/v1/oauth/token", request.path());
+    assertEquals("application/x-www-form-urlencoded", request.header("content-type"));
+    assertNull(
+        request.header("authorization"), "an agent's token is asked for without the API key");
+    assertEquals(
+        Map.of(
+            "grant_type",
+            List.of("client_credentials"),
+            "client_id",
+            List.of("ag_1"),
+            "client_secret",
+            List.of("agent-secret-1")),
+        request.form());
+
+    server.enqueue(401, "{\"error\":\"invalid_client\",\"error_description\":\"No.\"}");
+    OAuthException refused =
+        assertThrows(OAuthException.class, () -> qeetId.agents().createToken("ag_1", "wrong"));
+    assertEquals("invalid_client", refused.code());
+    server.enqueue(400, "{\"error\":\"unauthorized_client\"}");
+    assertEquals(
+        "unauthorized_client",
+        assertThrows(OAuthException.class, () -> qeetId.agents().createToken("ag_1", "s")).code());
+    server.enqueue(503, "{}");
+    assertThrows(ApiException.class, () -> qeetId.agents().createToken("ag_1", "s"));
+    assertEquals(4, server.requests().size(), "a grant is never retried");
   }
 
   @Test

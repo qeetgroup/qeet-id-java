@@ -4,7 +4,7 @@ import com.qeetgroup.qeetid.Params;
 import java.util.Map;
 import org.jspecify.annotations.Nullable;
 
-/** The organisation's branding, replaced: what isn't set is cleared. */
+/** The organization's branding, replaced: what isn't set is cleared. */
 public final class BrandingUpdateParams extends Params {
   private BrandingUpdateParams(Builder builder) {
     super(builder);

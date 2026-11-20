@@ -2,7 +2,7 @@ package com.qeetgroup.qeetid.federation;
 
 import com.qeetgroup.qeetid.Params;
 
-/** A new mapping from an identity provider's group to one of the organisation's groups. */
+/** A new mapping from an identity provider's group to one of the organization's groups. */
 public final class SsoGroupMappingCreateParams extends Params {
   private SsoGroupMappingCreateParams(Builder builder) {
     super(builder);

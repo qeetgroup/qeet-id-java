@@ -91,29 +91,29 @@ public final class WebhookDeliveries {
   /**
    * Sends again, each with fresh attempts, up to 1,000 of the subscription's given-up deliveries.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @return how many deliveries were queued again
    */
-  public int retryFailed(String tenantId, String webhookId) {
-    return retryFailed(tenantId, webhookId, RequestOptions.none());
+  public int retryFailed(String organizationId, String webhookId) {
+    return retryFailed(organizationId, webhookId, RequestOptions.none());
   }
 
   /**
    * Sends again, each with fresh attempts, up to 1,000 of the subscription's given-up deliveries.
    * With per-call settings: see {@link #retryFailed(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @param options per-call settings
    * @return how many deliveries were queued again
    */
-  public int retryFailed(String tenantId, String webhookId, RequestOptions options) {
+  public int retryFailed(String organizationId, String webhookId, RequestOptions options) {
     return http.tree(
             ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/webhooks/{webhookId}/deliveries/retry",
-                    tenantId,
+                    "/v1/organizations/{organizationId}/webhooks/{webhookId}/deliveries/retry",
+                    organizationId,
                     webhookId)),
             options)
         .path("requeued")
@@ -123,33 +123,33 @@ public final class WebhookDeliveries {
   /**
    * Every attempt to send a delivery, oldest first.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @param deliveryId the delivery's id
    * @return the list
    */
   public ListResult<WebhookDeliveryAttempt> listAttempts(
-      String tenantId, String webhookId, String deliveryId) {
-    return listAttempts(tenantId, webhookId, deliveryId, RequestOptions.none());
+      String organizationId, String webhookId, String deliveryId) {
+    return listAttempts(organizationId, webhookId, deliveryId, RequestOptions.none());
   }
 
   /**
    * Every attempt to send a delivery, oldest first. With per-call settings: see {@link
    * #listAttempts(String, String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @param deliveryId the delivery's id
    * @param options per-call settings
    * @return the list
    */
   public ListResult<WebhookDeliveryAttempt> listAttempts(
-      String tenantId, String webhookId, String deliveryId, RequestOptions options) {
+      String organizationId, String webhookId, String deliveryId, RequestOptions options) {
     return http.list(
         ApiRequest.get(
             Paths.of(
-                "/v1/tenants/{tenantId}/webhooks/{webhookId}/deliveries/{deliveryId}/attempts",
-                tenantId,
+                "/v1/organizations/{organizationId}/webhooks/{webhookId}/deliveries/{deliveryId}/attempts",
+                organizationId,
                 webhookId,
                 deliveryId)),
         WebhookDeliveryAttempt.class,

@@ -5,9 +5,9 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 
 /**
- * The organisation's rate limits per scope, with the defaults and ceilings they sit within.
+ * The organization's rate limits per scope, with the defaults and ceilings they sit within.
  *
- * @param tenant the tenant
+ * @param organization the organization
  * @param user the user
  * @param apiKey the API key
  * @param defaults Read-only.
@@ -15,8 +15,8 @@ import org.jspecify.annotations.Nullable;
  * @param minRate the min rate
  * @param builtIn Read-only: the platform's fixed limits, such as sign-in attempts per address.
  */
-public record TenantRateLimits(
-    @Nullable RateLimitBucket tenant,
+public record OrganizationRateLimits(
+    @Nullable RateLimitBucket organization,
     @Nullable RateLimitBucket user,
     @JsonProperty("api_key") @Nullable RateLimitBucket apiKey,
     @Nullable Defaults defaults,
@@ -27,24 +27,24 @@ public record TenantRateLimits(
   /**
    * Read-only.
    *
-   * @param tenant the tenant
+   * @param organization the organization
    * @param user the user
    * @param apiKey the API key
    */
   public record Defaults(
-      RateLimitBucket tenant,
+      RateLimitBucket organization,
       RateLimitBucket user,
       @JsonProperty("api_key") RateLimitBucket apiKey) {}
 
   /**
    * Ceiling.
    *
-   * @param tenant the tenant
+   * @param organization the organization
    * @param user the user
    * @param apiKey the API key
    */
   public record Ceiling(
-      RateLimitBucket tenant,
+      RateLimitBucket organization,
       RateLimitBucket user,
       @JsonProperty("api_key") RateLimitBucket apiKey) {}
 

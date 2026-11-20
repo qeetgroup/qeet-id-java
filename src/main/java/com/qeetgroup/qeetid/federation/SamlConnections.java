@@ -27,27 +27,28 @@ public final class SamlConnections {
   /**
    * Creates a SAML connection.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the SAML connection
    */
-  public SamlConnection create(String tenantId, SamlConnectionCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public SamlConnection create(String organizationId, SamlConnectionCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates a SAML connection. With per-call settings: see {@link #create(String,
    * SamlConnectionCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the SAML connection
    */
   public SamlConnection create(
-      String tenantId, SamlConnectionCreateParams params, RequestOptions options) {
+      String organizationId, SamlConnectionCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/saml", tenantId)).json(params),
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/saml", organizationId))
+            .json(params),
         options,
         SamlConnection.class);
   }
@@ -55,27 +56,29 @@ public final class SamlConnections {
   /**
    * Creates a connection from the identity provider's metadata.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the SAML connection
    */
-  public SamlConnection createFromMetadata(String tenantId, SamlConnectionImportParams params) {
-    return createFromMetadata(tenantId, params, RequestOptions.none());
+  public SamlConnection createFromMetadata(
+      String organizationId, SamlConnectionImportParams params) {
+    return createFromMetadata(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates a connection from the identity provider's metadata. With per-call settings: see {@link
    * #createFromMetadata(String, SamlConnectionImportParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the SAML connection
    */
   public SamlConnection createFromMetadata(
-      String tenantId, SamlConnectionImportParams params, RequestOptions options) {
+      String organizationId, SamlConnectionImportParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/saml/import", tenantId)).json(params),
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/saml/import", organizationId))
+            .json(params),
         options,
         SamlConnection.class);
   }
@@ -83,26 +86,29 @@ public final class SamlConnections {
   /**
    * Fetches a SAML connection.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @return the SAML connection
    */
-  public SamlConnection get(String tenantId, String connectionId) {
-    return get(tenantId, connectionId, RequestOptions.none());
+  public SamlConnection get(String organizationId, String connectionId) {
+    return get(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * Fetches a SAML connection. With per-call settings: see {@link #get(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    * @return the SAML connection
    */
-  public SamlConnection get(String tenantId, String connectionId, RequestOptions options) {
+  public SamlConnection get(String organizationId, String connectionId, RequestOptions options) {
     return http.execute(
         ApiRequest.get(
-            Paths.of("/v1/tenants/{tenantId}/saml/{connectionId}", tenantId, connectionId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/saml/{connectionId}",
+                organizationId,
+                connectionId)),
         options,
         SamlConnection.class);
   }
@@ -110,23 +116,23 @@ public final class SamlConnections {
   /**
    * Lists the SAML connections.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<SamlConnection> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<SamlConnection> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the SAML connections. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<SamlConnection> list(String tenantId, RequestOptions options) {
+  public ListResult<SamlConnection> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/saml", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/saml", organizationId)),
         SamlConnection.class,
         options);
   }
@@ -134,35 +140,38 @@ public final class SamlConnections {
   /**
    * Changes only the fields given.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @return the SAML connection
    */
   public SamlConnection update(
-      String tenantId, String connectionId, SamlConnectionUpdateParams params) {
-    return update(tenantId, connectionId, params, RequestOptions.none());
+      String organizationId, String connectionId, SamlConnectionUpdateParams params) {
+    return update(organizationId, connectionId, params, RequestOptions.none());
   }
 
   /**
    * Changes only the fields given. With per-call settings: see {@link #update(String, String,
    * SamlConnectionUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @param options per-call settings
    * @return the SAML connection
    */
   public SamlConnection update(
-      String tenantId,
+      String organizationId,
       String connectionId,
       SamlConnectionUpdateParams params,
       RequestOptions options) {
     return http.execute(
         ApiRequest.of(
                 "PATCH",
-                Paths.of("/v1/tenants/{tenantId}/saml/{connectionId}", tenantId, connectionId))
+                Paths.of(
+                    "/v1/organizations/{organizationId}/saml/{connectionId}",
+                    organizationId,
+                    connectionId))
             .json(params),
         options,
         SamlConnection.class);
@@ -171,57 +180,65 @@ public final class SamlConnections {
   /**
    * Deletes a SAML connection.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    */
-  public void delete(String tenantId, String connectionId) {
-    delete(tenantId, connectionId, RequestOptions.none());
+  public void delete(String organizationId, String connectionId) {
+    delete(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * Deletes a SAML connection. With per-call settings: see {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String connectionId, RequestOptions options) {
+  public void delete(String organizationId, String connectionId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
-            Paths.of("/v1/tenants/{tenantId}/saml/{connectionId}", tenantId, connectionId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/saml/{connectionId}",
+                organizationId,
+                connectionId)),
         options);
   }
 
   /**
    * Updates the connection from the identity provider's metadata.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @return the SAML connection
    */
   public SamlConnection updateMetadata(
-      String tenantId, String connectionId, SamlMetadataParams params) {
-    return updateMetadata(tenantId, connectionId, params, RequestOptions.none());
+      String organizationId, String connectionId, SamlMetadataParams params) {
+    return updateMetadata(organizationId, connectionId, params, RequestOptions.none());
   }
 
   /**
    * Updates the connection from the identity provider's metadata. With per-call settings: see
    * {@link #updateMetadata(String, String, SamlMetadataParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @param options per-call settings
    * @return the SAML connection
    */
   public SamlConnection updateMetadata(
-      String tenantId, String connectionId, SamlMetadataParams params, RequestOptions options) {
+      String organizationId,
+      String connectionId,
+      SamlMetadataParams params,
+      RequestOptions options) {
     return http.execute(
         ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/saml/{connectionId}/metadata", tenantId, connectionId))
+                    "/v1/organizations/{organizationId}/saml/{connectionId}/metadata",
+                    organizationId,
+                    connectionId))
             .json(params),
         options,
         SamlConnection.class);
@@ -230,32 +247,33 @@ public final class SamlConnections {
   /**
    * Adds a signing certificate, for a rotation without downtime.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param certificate the certificate
    * @return the SAML certificate
    */
-  public SamlCertificate addCertificate(String tenantId, String connectionId, String certificate) {
-    return addCertificate(tenantId, connectionId, certificate, RequestOptions.none());
+  public SamlCertificate addCertificate(
+      String organizationId, String connectionId, String certificate) {
+    return addCertificate(organizationId, connectionId, certificate, RequestOptions.none());
   }
 
   /**
    * Adds a signing certificate, for a rotation without downtime. With per-call settings: see {@link
    * #addCertificate(String, String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param certificate the certificate
    * @param options per-call settings
    * @return the SAML certificate
    */
   public SamlCertificate addCertificate(
-      String tenantId, String connectionId, String certificate, RequestOptions options) {
+      String organizationId, String connectionId, String certificate, RequestOptions options) {
     return http.execute(
         ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/saml/{connectionId}/certificates",
-                    tenantId,
+                    "/v1/organizations/{organizationId}/saml/{connectionId}/certificates",
+                    organizationId,
                     connectionId))
             .json(Bodies.of("certificate", certificate)),
         options,
@@ -265,31 +283,31 @@ public final class SamlConnections {
   /**
    * Remove certificate.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param certificateId the certificate's id
    */
-  public void removeCertificate(String tenantId, String connectionId, String certificateId) {
-    removeCertificate(tenantId, connectionId, certificateId, RequestOptions.none());
+  public void removeCertificate(String organizationId, String connectionId, String certificateId) {
+    removeCertificate(organizationId, connectionId, certificateId, RequestOptions.none());
   }
 
   /**
    * Remove certificate. With per-call settings: see {@link #removeCertificate(String, String,
    * String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param certificateId the certificate's id
    * @param options per-call settings
    */
   public void removeCertificate(
-      String tenantId, String connectionId, String certificateId, RequestOptions options) {
+      String organizationId, String connectionId, String certificateId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/saml/{connectionId}/certificates/{certificateId}",
-                tenantId,
+                "/v1/organizations/{organizationId}/saml/{connectionId}/certificates/{certificateId}",
+                organizationId,
                 connectionId,
                 certificateId)),
         options);
@@ -298,26 +316,30 @@ public final class SamlConnections {
   /**
    * Checks the configuration.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @return the connection test result
    */
-  public ConnectionTestResult test(String tenantId, String connectionId) {
-    return test(tenantId, connectionId, RequestOptions.none());
+  public ConnectionTestResult test(String organizationId, String connectionId) {
+    return test(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * Checks the configuration. With per-call settings: see {@link #test(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    * @return the connection test result
    */
-  public ConnectionTestResult test(String tenantId, String connectionId, RequestOptions options) {
+  public ConnectionTestResult test(
+      String organizationId, String connectionId, RequestOptions options) {
     return http.execute(
         ApiRequest.post(
-                Paths.of("/v1/tenants/{tenantId}/saml/{connectionId}/test", tenantId, connectionId))
+                Paths.of(
+                    "/v1/organizations/{organizationId}/saml/{connectionId}/test",
+                    organizationId,
+                    connectionId))
             .retrySafe(),
         options,
         ConnectionTestResult.class);
@@ -326,29 +348,29 @@ public final class SamlConnections {
   /**
    * List group mappings.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @return the list
    */
-  public ListResult<SsoGroupMapping> listGroupMappings(String tenantId, String connectionId) {
-    return listGroupMappings(tenantId, connectionId, RequestOptions.none());
+  public ListResult<SsoGroupMapping> listGroupMappings(String organizationId, String connectionId) {
+    return listGroupMappings(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * List group mappings. With per-call settings: see {@link #listGroupMappings(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    * @return the list
    */
   public ListResult<SsoGroupMapping> listGroupMappings(
-      String tenantId, String connectionId, RequestOptions options) {
+      String organizationId, String connectionId, RequestOptions options) {
     return http.list(
         ApiRequest.get(
             Paths.of(
-                "/v1/tenants/{tenantId}/saml/{connectionId}/group-mappings",
-                tenantId,
+                "/v1/organizations/{organizationId}/saml/{connectionId}/group-mappings",
+                organizationId,
                 connectionId)),
         SsoGroupMapping.class,
         options);
@@ -357,36 +379,36 @@ public final class SamlConnections {
   /**
    * Create group mapping.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @return the SSO group mapping
    */
   public SsoGroupMapping createGroupMapping(
-      String tenantId, String connectionId, SsoGroupMappingCreateParams params) {
-    return createGroupMapping(tenantId, connectionId, params, RequestOptions.none());
+      String organizationId, String connectionId, SsoGroupMappingCreateParams params) {
+    return createGroupMapping(organizationId, connectionId, params, RequestOptions.none());
   }
 
   /**
    * Create group mapping. With per-call settings: see {@link #createGroupMapping(String, String,
    * SsoGroupMappingCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @param options per-call settings
    * @return the SSO group mapping
    */
   public SsoGroupMapping createGroupMapping(
-      String tenantId,
+      String organizationId,
       String connectionId,
       SsoGroupMappingCreateParams params,
       RequestOptions options) {
     return http.execute(
         ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/saml/{connectionId}/group-mappings",
-                    tenantId,
+                    "/v1/organizations/{organizationId}/saml/{connectionId}/group-mappings",
+                    organizationId,
                     connectionId))
             .json(params),
         options,
@@ -396,31 +418,31 @@ public final class SamlConnections {
   /**
    * Delete group mapping.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param mappingId the mapping's id
    */
-  public void deleteGroupMapping(String tenantId, String connectionId, String mappingId) {
-    deleteGroupMapping(tenantId, connectionId, mappingId, RequestOptions.none());
+  public void deleteGroupMapping(String organizationId, String connectionId, String mappingId) {
+    deleteGroupMapping(organizationId, connectionId, mappingId, RequestOptions.none());
   }
 
   /**
    * Delete group mapping. With per-call settings: see {@link #deleteGroupMapping(String, String,
    * String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param mappingId the mapping's id
    * @param options per-call settings
    */
   public void deleteGroupMapping(
-      String tenantId, String connectionId, String mappingId, RequestOptions options) {
+      String organizationId, String connectionId, String mappingId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/saml/{connectionId}/group-mappings/{mappingId}",
-                tenantId,
+                "/v1/organizations/{organizationId}/saml/{connectionId}/group-mappings/{mappingId}",
+                organizationId,
                 connectionId,
                 mappingId)),
         options);

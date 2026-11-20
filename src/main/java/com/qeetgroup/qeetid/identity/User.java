@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
  * A user, as the API returns one.
  *
  * @param id its id
- * @param tenantId The user's home organisation.
+ * @param organizationId The user's home organization.
  * @param email the email address
  * @param emailVerifiedAt the email verified time
  * @param phone the phone
@@ -19,22 +19,22 @@ import org.jspecify.annotations.Nullable;
  * @param avatarUrl the avatar URL
  * @param status One of {@code "active"}, {@code "invited"}, {@code "suspended"}; others may be
  *     added
- * @param metadata Free-form data. Empty when the user's home is another organisation, which keeps
+ * @param metadata Free-form data. Empty when the user's home is another organization, which keeps
  *     it.
  * @param createdAt when it was created
  * @param updatedAt when it last changed
- * @param roles Role names in the organisation reading the user; on lists and a member's own record.
+ * @param roles Role names in the organization reading the user; on lists and a member's own record.
  * @param assignedRoles The same roles with their ids.
  * @param mfaEnabled whether MFA enabled
  * @param groupsCount the groups count
  * @param lastSeenAt the last seen time
  * @param lastSeenIp the last seen IP
- * @param homeTenantName The name of the organisation that manages the account.
+ * @param homeOrganizationName The name of the organization that manages the account.
  * @param suspension the suspension
  */
 public record User(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String email,
     @JsonProperty("email_verified_at") @Nullable Instant emailVerifiedAt,
     @Nullable String phone,
@@ -51,7 +51,7 @@ public record User(
     @JsonProperty("groups_count") @Nullable Integer groupsCount,
     @JsonProperty("last_seen_at") @Nullable Instant lastSeenAt,
     @JsonProperty("last_seen_ip") @Nullable String lastSeenIp,
-    @JsonProperty("home_tenant_name") @Nullable String homeTenantName,
+    @JsonProperty("home_organization_name") @Nullable String homeOrganizationName,
     @Nullable UserSuspension suspension) {
 
   /**

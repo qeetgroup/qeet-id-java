@@ -49,23 +49,23 @@ public final class ApiKeys {
   /**
    * Lists the API keys.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<ApiKey> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<ApiKey> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the API keys. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<ApiKey> list(String tenantId, RequestOptions options) {
+  public ListResult<ApiKey> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/api-keys", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/api-keys", organizationId)),
         ApiKey.class,
         options);
   }
@@ -74,42 +74,46 @@ public final class ApiKeys {
    * Replaces a key with a new one, shown once. The old one keeps working for {@code overlap_hours},
    * so deployments can switch over without downtime.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param apiKeyId the api key's id
    * @return the API key created
    */
-  public ApiKeyCreated rotate(String tenantId, String apiKeyId) {
-    return rotate(tenantId, apiKeyId, ApiKeyRotateParams.builder().build(), RequestOptions.none());
+  public ApiKeyCreated rotate(String organizationId, String apiKeyId) {
+    return rotate(
+        organizationId, apiKeyId, ApiKeyRotateParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * Replaces a key with a new one, shown once. The old one keeps working for {@code overlap_hours},
    * so deployments can switch over without downtime.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param apiKeyId the api key's id
    * @param params the parameters
    * @return the API key created
    */
-  public ApiKeyCreated rotate(String tenantId, String apiKeyId, ApiKeyRotateParams params) {
-    return rotate(tenantId, apiKeyId, params, RequestOptions.none());
+  public ApiKeyCreated rotate(String organizationId, String apiKeyId, ApiKeyRotateParams params) {
+    return rotate(organizationId, apiKeyId, params, RequestOptions.none());
   }
 
   /**
    * Replaces a key with a new one, shown once. With per-call settings: see {@link #rotate(String,
    * String, ApiKeyRotateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param apiKeyId the api key's id
    * @param params the parameters
    * @param options per-call settings
    * @return the API key created
    */
   public ApiKeyCreated rotate(
-      String tenantId, String apiKeyId, ApiKeyRotateParams params, RequestOptions options) {
+      String organizationId, String apiKeyId, ApiKeyRotateParams params, RequestOptions options) {
     return http.execute(
         ApiRequest.post(
-                Paths.of("/v1/tenants/{tenantId}/api-keys/{apiKeyId}/rotate", tenantId, apiKeyId))
+                Paths.of(
+                    "/v1/organizations/{organizationId}/api-keys/{apiKeyId}/rotate",
+                    organizationId,
+                    apiKeyId))
             .json(params),
         options,
         ApiKeyCreated.class);

@@ -6,7 +6,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * Manages the organisation's rate limits.
+ * Manages the organization's rate limits.
  *
  * <p>Get it from {@code qeetId.rateLimits()}. Safe for concurrent use.
  */
@@ -25,72 +25,76 @@ public final class RateLimits {
   /**
    * Fetches a rate limit.
    *
-   * @param tenantId the organisation's id
-   * @return the tenant rate limits
+   * @param organizationId the organization's id
+   * @return the organization rate limits
    */
-  public TenantRateLimits get(String tenantId) {
-    return get(tenantId, RequestOptions.none());
+  public OrganizationRateLimits get(String organizationId) {
+    return get(organizationId, RequestOptions.none());
   }
 
   /**
    * Fetches a rate limit. With per-call settings: see {@link #get(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
-   * @return the tenant rate limits
+   * @return the organization rate limits
    */
-  public TenantRateLimits get(String tenantId, RequestOptions options) {
+  public OrganizationRateLimits get(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/rate-limits", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/rate-limits", organizationId)),
         options,
-        TenantRateLimits.class);
+        OrganizationRateLimits.class);
   }
 
   /**
    * Sets the buckets given; the others keep their values.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
-   * @return the tenant rate limits
+   * @return the organization rate limits
    */
-  public TenantRateLimits update(String tenantId, RateLimitsUpdateParams params) {
-    return update(tenantId, params, RequestOptions.none());
+  public OrganizationRateLimits update(String organizationId, RateLimitsUpdateParams params) {
+    return update(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Sets the buckets given; the others keep their values. With per-call settings: see {@link
    * #update(String, RateLimitsUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
-   * @return the tenant rate limits
+   * @return the organization rate limits
    */
-  public TenantRateLimits update(
-      String tenantId, RateLimitsUpdateParams params, RequestOptions options) {
+  public OrganizationRateLimits update(
+      String organizationId, RateLimitsUpdateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.of("PUT", Paths.of("/v1/tenants/{tenantId}/rate-limits", tenantId)).json(params),
+        ApiRequest.of(
+                "PUT", Paths.of("/v1/organizations/{organizationId}/rate-limits", organizationId))
+            .json(params),
         options,
-        TenantRateLimits.class);
+        OrganizationRateLimits.class);
   }
 
   /**
    * Goes back to the platform defaults.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    */
-  public void reset(String tenantId) {
-    reset(tenantId, RequestOptions.none());
+  public void reset(String organizationId) {
+    reset(organizationId, RequestOptions.none());
   }
 
   /**
    * Goes back to the platform defaults. With per-call settings: see {@link #reset(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    */
-  public void reset(String tenantId, RequestOptions options) {
+  public void reset(String organizationId, RequestOptions options) {
     http.executeVoid(
-        ApiRequest.of("DELETE", Paths.of("/v1/tenants/{tenantId}/rate-limits", tenantId)), options);
+        ApiRequest.of(
+            "DELETE", Paths.of("/v1/organizations/{organizationId}/rate-limits", organizationId)),
+        options);
   }
 }

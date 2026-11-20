@@ -26,23 +26,24 @@ public final class OAuthDevices {
   /**
    * Lists the OAuth devices.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<OAuthDeviceAuthorization> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<OAuthDeviceAuthorization> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the OAuth devices. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<OAuthDeviceAuthorization> list(String tenantId, RequestOptions options) {
+  public ListResult<OAuthDeviceAuthorization> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/oauth/devices", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/oauth/devices", organizationId)),
         OAuthDeviceAuthorization.class,
         options);
   }
@@ -50,28 +51,28 @@ public final class OAuthDevices {
   /**
    * Revokes a device authorization; a grant it already bought ends too.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param deviceAuthorizationId the device authorization's id
    */
-  public void revoke(String tenantId, String deviceAuthorizationId) {
-    revoke(tenantId, deviceAuthorizationId, RequestOptions.none());
+  public void revoke(String organizationId, String deviceAuthorizationId) {
+    revoke(organizationId, deviceAuthorizationId, RequestOptions.none());
   }
 
   /**
    * Revokes a device authorization; a grant it already bought ends too. With per-call settings: see
    * {@link #revoke(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param deviceAuthorizationId the device authorization's id
    * @param options per-call settings
    */
-  public void revoke(String tenantId, String deviceAuthorizationId, RequestOptions options) {
+  public void revoke(String organizationId, String deviceAuthorizationId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/oauth/devices/{deviceAuthorizationId}",
-                tenantId,
+                "/v1/organizations/{organizationId}/oauth/devices/{deviceAuthorizationId}",
+                organizationId,
                 deviceAuthorizationId)),
         options);
   }

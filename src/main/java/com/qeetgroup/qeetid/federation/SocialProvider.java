@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
  * A social sign-in provider. Its client secret is never returned.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param provider Its name: {@code "github"}, {@code "facebook"}, {@code "x"}, {@code "discord"},
  *     {@code "apple"}, or any name for an OpenID Connect provider.
  * @param kind How it signs people in: its own OAuth flow, or {@code "oidc"} by discovery. One of
@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record SocialProvider(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String provider,
     String kind,
     @JsonProperty("client_id") String clientId,

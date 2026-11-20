@@ -7,8 +7,8 @@ import org.jspecify.annotations.Nullable;
 /**
  * Which model decided an authorization question, and by which rule.
  *
- * @param model One of {@code "tenant"}, {@code "abac"}, {@code "rbac"}, {@code "rebac"}, {@code
- *     "none"}; others may be added
+ * @param model One of {@code "organization"}, {@code "abac"}, {@code "rbac"}, {@code "rebac"},
+ *     {@code "none"}; others may be added
  * @param rule the rule
  * @param reasonCode the reason code
  * @param reasonParams the reason params

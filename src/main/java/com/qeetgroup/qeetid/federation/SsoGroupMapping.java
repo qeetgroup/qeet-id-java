@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
 /**
- * Maps an identity provider group to one of the organisation's groups.
+ * Maps an identity provider group to one of the organization's groups.
  *
  * @param id its id
  * @param idpGroup the idp group

@@ -120,12 +120,12 @@ public final class AccessTokenClaims {
   }
 
   /**
-   * The user's organisation ({@code tenant_id}).
+   * The user's organization ({@code organization_id}).
    *
-   * @return the organisation id, or null
+   * @return the organization id, or null
    */
-  public @Nullable String tenantId() {
-    return string("tenant_id");
+  public @Nullable String organizationId() {
+    return string("organization_id");
   }
 
   /**
@@ -233,8 +233,8 @@ public final class AccessTokenClaims {
   public String toString() {
     return "AccessTokenClaims[sub="
         + subject()
-        + ", tenant_id="
-        + tenantId()
+        + ", organization_id="
+        + organizationId()
         + ", scope="
         + scope()
         + "]";

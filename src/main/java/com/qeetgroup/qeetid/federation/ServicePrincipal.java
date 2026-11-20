@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
  * oauth().clientCredentialsGrant}).
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param name its name
  * @param description its description
  * @param scopes the scopes
@@ -21,7 +21,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record ServicePrincipal(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String name,
     String description,
     List<String> scopes,

@@ -51,23 +51,23 @@ public final class Invitations {
   /**
    * Lists the invitations.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<Invitation> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<Invitation> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the invitations. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<Invitation> list(String tenantId, RequestOptions options) {
+  public ListResult<Invitation> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/invites", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/invites", organizationId)),
         Invitation.class,
         options);
   }

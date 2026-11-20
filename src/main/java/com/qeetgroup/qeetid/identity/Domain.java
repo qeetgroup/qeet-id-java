@@ -5,7 +5,7 @@ import java.time.Instant;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A domain the organisation claimed, with the DNS record that proves it.
+ * A domain the organization claimed, with the DNS record that proves it.
  *
  * @param id its id
  * @param domain the domain
@@ -17,7 +17,7 @@ import org.jspecify.annotations.Nullable;
  * @param verifiedAt Set once DNS verification succeeds.
  * @param lastCheckedAt the last checked time
  * @param lastError the last error
- * @param ssoEnabled People on the domain sign in only through the organisation's SSO connection.
+ * @param ssoEnabled People on the domain sign in only through the organization's SSO connection.
  * @param jitEnabled Accounts are created on first SSO sign-in (just-in-time provisioning).
  * @param createdAt when it was created
  */

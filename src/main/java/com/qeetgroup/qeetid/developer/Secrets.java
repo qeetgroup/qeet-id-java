@@ -7,7 +7,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * The organisation's encrypted secrets store.
+ * The organization's encrypted secrets store.
  *
  * <p>Get it from {@code qeetId.secrets()}. Safe for concurrent use.
  */
@@ -26,23 +26,23 @@ public final class Secrets {
   /**
    * Lists the secrets.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<Secret> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<Secret> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the secrets. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<Secret> list(String tenantId, RequestOptions options) {
+  public ListResult<Secret> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/secrets", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/secrets", organizationId)),
         Secret.class,
         options);
   }
@@ -50,25 +50,26 @@ public final class Secrets {
   /**
    * Creates a secret.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the secret
    */
-  public Secret create(String tenantId, SecretCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public Secret create(String organizationId, SecretCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates a secret. With per-call settings: see {@link #create(String, SecretCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the secret
    */
-  public Secret create(String tenantId, SecretCreateParams params, RequestOptions options) {
+  public Secret create(String organizationId, SecretCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/secrets", tenantId)).json(params),
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/secrets", organizationId))
+            .json(params),
         options,
         Secret.class);
   }
@@ -76,30 +77,34 @@ public final class Secrets {
   /**
    * Changes only the fields given.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param secretId the secret's id
    * @param params the parameters
    * @return the secret
    */
-  public Secret update(String tenantId, String secretId, SecretUpdateParams params) {
-    return update(tenantId, secretId, params, RequestOptions.none());
+  public Secret update(String organizationId, String secretId, SecretUpdateParams params) {
+    return update(organizationId, secretId, params, RequestOptions.none());
   }
 
   /**
    * Changes only the fields given. With per-call settings: see {@link #update(String, String,
    * SecretUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param secretId the secret's id
    * @param params the parameters
    * @param options per-call settings
    * @return the secret
    */
   public Secret update(
-      String tenantId, String secretId, SecretUpdateParams params, RequestOptions options) {
+      String organizationId, String secretId, SecretUpdateParams params, RequestOptions options) {
     return http.execute(
         ApiRequest.of(
-                "PATCH", Paths.of("/v1/tenants/{tenantId}/secrets/{secretId}", tenantId, secretId))
+                "PATCH",
+                Paths.of(
+                    "/v1/organizations/{organizationId}/secrets/{secretId}",
+                    organizationId,
+                    secretId))
             .json(params),
         options,
         Secret.class);
@@ -108,50 +113,55 @@ public final class Secrets {
   /**
    * Deletes a secret.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param secretId the secret's id
    */
-  public void delete(String tenantId, String secretId) {
-    delete(tenantId, secretId, RequestOptions.none());
+  public void delete(String organizationId, String secretId) {
+    delete(organizationId, secretId, RequestOptions.none());
   }
 
   /**
    * Deletes a secret. With per-call settings: see {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param secretId the secret's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String secretId, RequestOptions options) {
+  public void delete(String organizationId, String secretId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
-            "DELETE", Paths.of("/v1/tenants/{tenantId}/secrets/{secretId}", tenantId, secretId)),
+            "DELETE",
+            Paths.of(
+                "/v1/organizations/{organizationId}/secrets/{secretId}", organizationId, secretId)),
         options);
   }
 
   /**
    * Returns the secret's value. Audited.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param secretId the secret's id
    * @return the secret's value; keep it out of logs
    */
-  public String reveal(String tenantId, String secretId) {
-    return reveal(tenantId, secretId, RequestOptions.none());
+  public String reveal(String organizationId, String secretId) {
+    return reveal(organizationId, secretId, RequestOptions.none());
   }
 
   /**
    * Returns the secret's value. With per-call settings: see {@link #reveal(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param secretId the secret's id
    * @param options per-call settings
    * @return the secret's value; keep it out of logs
    */
-  public String reveal(String tenantId, String secretId, RequestOptions options) {
+  public String reveal(String organizationId, String secretId, RequestOptions options) {
     return http.tree(
             ApiRequest.post(
-                Paths.of("/v1/tenants/{tenantId}/secrets/{secretId}/reveal", tenantId, secretId)),
+                Paths.of(
+                    "/v1/organizations/{organizationId}/secrets/{secretId}/reveal",
+                    organizationId,
+                    secretId)),
             options)
         .path("value")
         .asText();

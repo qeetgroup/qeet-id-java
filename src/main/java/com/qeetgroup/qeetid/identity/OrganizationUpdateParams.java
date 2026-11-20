@@ -4,15 +4,16 @@ import com.qeetgroup.qeetid.Params;
 import java.util.Map;
 
 /**
- * The fields an update may change. Changing {@code status} is an owner's; the region can't change.
+ * The fields an update may change. Changing {@code status} is an owner's; the region and the plan
+ * can't change here.
  */
-public final class TenantUpdateParams extends Params {
-  private TenantUpdateParams(Builder builder) {
+public final class OrganizationUpdateParams extends Params {
+  private OrganizationUpdateParams(Builder builder) {
     super(builder);
   }
 
   /**
-   * Starts building {@link TenantUpdateParams}.
+   * Starts building {@link OrganizationUpdateParams}.
    *
    * @return a builder
    */
@@ -20,8 +21,8 @@ public final class TenantUpdateParams extends Params {
     return new Builder();
   }
 
-  /** Builds {@link TenantUpdateParams}. */
-  public static final class Builder extends Params.Builder<TenantUpdateParams, Builder> {
+  /** Builds {@link OrganizationUpdateParams}. */
+  public static final class Builder extends Params.Builder<OrganizationUpdateParams, Builder> {
     private Builder() {}
 
     /**
@@ -45,13 +46,14 @@ public final class TenantUpdateParams extends Params {
     }
 
     /**
-     * One of {@code "free"}, {@code "pro"}, {@code "enterprise"}.
+     * The logo, a hosted URL or a small inline data URL, up to 3,000,000 characters; empty removes
+     * it.
      *
-     * @param plan the value
+     * @param logoUrl the value
      * @return this builder
      */
-    public Builder plan(String plan) {
-      return set("plan", nonNull(plan, "plan"));
+    public Builder logoUrl(String logoUrl) {
+      return set("logo_url", nonNull(logoUrl, "logoUrl"));
     }
 
     /**
@@ -65,8 +67,8 @@ public final class TenantUpdateParams extends Params {
     }
 
     @Override
-    public TenantUpdateParams build() {
-      return new TenantUpdateParams(this);
+    public OrganizationUpdateParams build() {
+      return new OrganizationUpdateParams(this);
     }
   }
 }

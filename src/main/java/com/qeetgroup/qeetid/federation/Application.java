@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * An application: an OAuth 2.0 / OpenID Connect client that signs people in with Qeet ID.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param clientId The OAuth {@code client_id}.
  * @param type {@code "confidential"} (has a secret) or {@code "public"} (a browser or mobile app).
  *     One of {@code "confidential"}, {@code "public"}; others may be added
@@ -29,7 +29,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record Application(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     @JsonProperty("client_id") String clientId,
     String type,
     String name,

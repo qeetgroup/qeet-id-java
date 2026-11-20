@@ -54,23 +54,24 @@ public final class ServicePrincipals {
   /**
    * Lists the service principals.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<ServicePrincipal> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<ServicePrincipal> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the service principals. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<ServicePrincipal> list(String tenantId, RequestOptions options) {
+  public ListResult<ServicePrincipal> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/service-principals", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/service-principals", organizationId)),
         ServicePrincipal.class,
         options);
   }
@@ -102,27 +103,27 @@ public final class ServicePrincipals {
   /**
    * Turns a disabled principal back on.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param servicePrincipalId the service principal's id
    */
-  public void enable(String tenantId, String servicePrincipalId) {
-    enable(tenantId, servicePrincipalId, RequestOptions.none());
+  public void enable(String organizationId, String servicePrincipalId) {
+    enable(organizationId, servicePrincipalId, RequestOptions.none());
   }
 
   /**
    * Turns a disabled principal back on. With per-call settings: see {@link #enable(String,
    * String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param servicePrincipalId the service principal's id
    * @param options per-call settings
    */
-  public void enable(String tenantId, String servicePrincipalId, RequestOptions options) {
+  public void enable(String organizationId, String servicePrincipalId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.post(
             Paths.of(
-                "/v1/tenants/{tenantId}/service-principals/{servicePrincipalId}/enable",
-                tenantId,
+                "/v1/organizations/{organizationId}/service-principals/{servicePrincipalId}/enable",
+                organizationId,
                 servicePrincipalId)),
         options);
   }
@@ -131,13 +132,13 @@ public final class ServicePrincipals {
    * Issues a new secret, shown once. The old one keeps getting tokens for {@code overlap_hours}
    * (default 24, at most 168; 0 stops it at once).
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param servicePrincipalId the service principal's id
    * @return the service principal secret
    */
-  public ServicePrincipalSecret rotateSecret(String tenantId, String servicePrincipalId) {
+  public ServicePrincipalSecret rotateSecret(String organizationId, String servicePrincipalId) {
     return rotateSecret(
-        tenantId,
+        organizationId,
         servicePrincipalId,
         ServicePrincipalRotateSecretParams.builder().build(),
         RequestOptions.none());
@@ -147,36 +148,36 @@ public final class ServicePrincipals {
    * Issues a new secret, shown once. The old one keeps getting tokens for {@code overlap_hours}
    * (default 24, at most 168; 0 stops it at once).
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param servicePrincipalId the service principal's id
    * @param params the parameters
    * @return the service principal secret
    */
   public ServicePrincipalSecret rotateSecret(
-      String tenantId, String servicePrincipalId, ServicePrincipalRotateSecretParams params) {
-    return rotateSecret(tenantId, servicePrincipalId, params, RequestOptions.none());
+      String organizationId, String servicePrincipalId, ServicePrincipalRotateSecretParams params) {
+    return rotateSecret(organizationId, servicePrincipalId, params, RequestOptions.none());
   }
 
   /**
    * Issues a new secret, shown once. With per-call settings: see {@link #rotateSecret(String,
    * String, ServicePrincipalRotateSecretParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param servicePrincipalId the service principal's id
    * @param params the parameters
    * @param options per-call settings
    * @return the service principal secret
    */
   public ServicePrincipalSecret rotateSecret(
-      String tenantId,
+      String organizationId,
       String servicePrincipalId,
       ServicePrincipalRotateSecretParams params,
       RequestOptions options) {
     return http.execute(
         ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/service-principals/{servicePrincipalId}/rotate-secret",
-                    tenantId,
+                    "/v1/organizations/{organizationId}/service-principals/{servicePrincipalId}/rotate-secret",
+                    organizationId,
                     servicePrincipalId))
             .json(params),
         options,

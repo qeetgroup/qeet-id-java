@@ -5,7 +5,7 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A template as it is used: the organisation's override ({@code custom}), or the platform's
+ * A template as it is used: the organization's override ({@code custom}), or the platform's
  * default.
  *
  * @param subject the subject
@@ -16,7 +16,7 @@ import org.jspecify.annotations.Nullable;
  * @param description its description
  * @param variables The placeholders it may use.
  * @param custom the custom
- * @param deliveryScope One of {@code "tenant"}, {@code "platform"}; others may be added
+ * @param deliveryScope One of {@code "organization"}, {@code "platform"}; others may be added
  */
 public record EmailTemplate(
     String subject,

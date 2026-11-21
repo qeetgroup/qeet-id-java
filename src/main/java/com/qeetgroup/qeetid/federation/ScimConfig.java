@@ -5,7 +5,7 @@ import java.time.Instant;
 import org.jspecify.annotations.Nullable;
 
 /**
- * The organisation's SCIM provisioning state. Tokens themselves are never returned after they are
+ * The organization's SCIM provisioning state. Tokens themselves are never returned after they are
  * issued.
  *
  * @param tokenSet the token set

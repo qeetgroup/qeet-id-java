@@ -2,7 +2,7 @@ package com.qeetgroup.qeetid.access;
 
 import com.qeetgroup.qeetid.Params;
 
-/** A permission check: may {@code user_id} use {@code permission} in {@code tenant_id}? */
+/** A permission check: may {@code user_id} use {@code permission} in {@code organization_id}? */
 public final class PermissionCheckParams extends Params {
   private PermissionCheckParams(Builder builder) {
     super(builder);
@@ -32,13 +32,13 @@ public final class PermissionCheckParams extends Params {
     }
 
     /**
-     * The organisation's id. Required.
+     * The organization's id. Required.
      *
-     * @param tenantId the value
+     * @param organizationId the value
      * @return this builder
      */
-    public Builder tenantId(String tenantId) {
-      return set("tenant_id", nonNull(tenantId, "tenantId"));
+    public Builder organizationId(String organizationId) {
+      return set("organization_id", nonNull(organizationId, "organizationId"));
     }
 
     /**
@@ -54,7 +54,7 @@ public final class PermissionCheckParams extends Params {
     @Override
     public PermissionCheckParams build() {
       require("user_id", "userId");
-      require("tenant_id", "tenantId");
+      require("organization_id", "organizationId");
       require("permission", "permission");
       return new PermissionCheckParams(this);
     }

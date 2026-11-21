@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * An audit event that departs from the actor's usual behaviour.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param eventId the event's id
  * @param actorUserId the actor user's id
  * @param actorEmail the actor email
@@ -27,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record AuditAnomaly(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     @JsonProperty("event_id") String eventId,
     @JsonProperty("actor_user_id") @Nullable String actorUserId,
     @JsonProperty("actor_email") @Nullable String actorEmail,

@@ -3,7 +3,7 @@ package com.qeetgroup.qeetid.identity;
 import com.qeetgroup.qeetid.Params;
 import java.util.Map;
 
-/** A new user in the API key's organisation. */
+/** A new user in the API key's organization. */
 public final class UserCreateParams extends Params {
   private UserCreateParams(Builder builder) {
     super(builder);
@@ -23,13 +23,13 @@ public final class UserCreateParams extends Params {
     private Builder() {}
 
     /**
-     * The organisation; must be the API key's own. Required.
+     * The organization; must be the API key's own. Required.
      *
-     * @param tenantId the value
+     * @param organizationId the value
      * @return this builder
      */
-    public Builder tenantId(String tenantId) {
-      return set("tenant_id", nonNull(tenantId, "tenantId"));
+    public Builder organizationId(String organizationId) {
+      return set("organization_id", nonNull(organizationId, "organizationId"));
     }
 
     /**
@@ -43,7 +43,7 @@ public final class UserCreateParams extends Params {
     }
 
     /**
-     * An initial password. It must meet the organisation's password rules.
+     * An initial password. It must meet the organization's password rules.
      *
      * @param password the value
      * @return this builder
@@ -84,7 +84,7 @@ public final class UserCreateParams extends Params {
 
     @Override
     public UserCreateParams build() {
-      require("tenant_id", "tenantId");
+      require("organization_id", "organizationId");
       require("email", "email");
       return new UserCreateParams(this);
     }

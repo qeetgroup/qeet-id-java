@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * names it alone as audience.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param identifier An absolute URI without a fragment, unique on the platform.
  * @param name its name
  * @param serverClientId The application that serves the resource, which may then introspect its
@@ -18,7 +18,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record OAuthResource(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String identifier,
     @Nullable String name,
     @JsonProperty("server_client_id") @Nullable String serverClientId,

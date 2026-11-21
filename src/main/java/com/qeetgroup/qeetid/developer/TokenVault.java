@@ -28,27 +28,30 @@ public final class TokenVault {
   /**
    * Registers a provider, or replaces one's settings.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the token vault provider
    */
-  public TokenVaultProvider createProvider(String tenantId, TokenVaultProviderCreateParams params) {
-    return createProvider(tenantId, params, RequestOptions.none());
+  public TokenVaultProvider createProvider(
+      String organizationId, TokenVaultProviderCreateParams params) {
+    return createProvider(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Registers a provider, or replaces one's settings. With per-call settings: see {@link
    * #createProvider(String, TokenVaultProviderCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the token vault provider
    */
   public TokenVaultProvider createProvider(
-      String tenantId, TokenVaultProviderCreateParams params, RequestOptions options) {
+      String organizationId, TokenVaultProviderCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/vault/tokens/providers", tenantId))
+        ApiRequest.post(
+                Paths.of(
+                    "/v1/organizations/{organizationId}/vault/tokens/providers", organizationId))
             .json(params),
         options,
         TokenVaultProvider.class);
@@ -57,23 +60,25 @@ public final class TokenVault {
   /**
    * List providers.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<TokenVaultProvider> listProviders(String tenantId) {
-    return listProviders(tenantId, RequestOptions.none());
+  public ListResult<TokenVaultProvider> listProviders(String organizationId) {
+    return listProviders(organizationId, RequestOptions.none());
   }
 
   /**
    * List providers. With per-call settings: see {@link #listProviders(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<TokenVaultProvider> listProviders(String tenantId, RequestOptions options) {
+  public ListResult<TokenVaultProvider> listProviders(
+      String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/vault/tokens/providers", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/vault/tokens/providers", organizationId)),
         TokenVaultProvider.class,
         options);
   }
@@ -81,26 +86,28 @@ public final class TokenVault {
   /**
    * Delete provider.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param provider the provider's name
    */
-  public void deleteProvider(String tenantId, String provider) {
-    deleteProvider(tenantId, provider, RequestOptions.none());
+  public void deleteProvider(String organizationId, String provider) {
+    deleteProvider(organizationId, provider, RequestOptions.none());
   }
 
   /**
    * Delete provider. With per-call settings: see {@link #deleteProvider(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param provider the provider's name
    * @param options per-call settings
    */
-  public void deleteProvider(String tenantId, String provider, RequestOptions options) {
+  public void deleteProvider(String organizationId, String provider, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/vault/tokens/providers/{provider}", tenantId, provider)),
+                "/v1/organizations/{organizationId}/vault/tokens/providers/{provider}",
+                organizationId,
+                provider)),
         options);
   }
 

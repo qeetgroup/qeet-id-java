@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * An inbound SAML connection: Qeet ID is the service provider for an external identity provider.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param name its name
  * @param spEntityId Give these to the identity provider.
  * @param acsUrl the acs URL
@@ -32,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record SamlConnection(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String name,
     @JsonProperty("sp_entity_id") String spEntityId,
     @JsonProperty("acs_url") String acsUrl,

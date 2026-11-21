@@ -26,26 +26,28 @@ public final class Decisions {
   /**
    * Evaluates one AuthZEN request.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the evaluation
    */
-  public Evaluation evaluate(String tenantId, EvaluationParams params) {
-    return evaluate(tenantId, params, RequestOptions.none());
+  public Evaluation evaluate(String organizationId, EvaluationParams params) {
+    return evaluate(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Evaluates one AuthZEN request. With per-call settings: see {@link #evaluate(String,
    * EvaluationParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the evaluation
    */
-  public Evaluation evaluate(String tenantId, EvaluationParams params, RequestOptions options) {
+  public Evaluation evaluate(
+      String organizationId, EvaluationParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/access/v1/evaluation", tenantId))
+        ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/access/v1/evaluation", organizationId))
             .json(params)
             .retrySafe(),
         options,
@@ -55,27 +57,29 @@ public final class Decisions {
   /**
    * Evaluates several AuthZEN requests; decisions come back in request order.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the evaluations
    */
-  public Evaluations evaluateMany(String tenantId, EvaluationsParams params) {
-    return evaluateMany(tenantId, params, RequestOptions.none());
+  public Evaluations evaluateMany(String organizationId, EvaluationsParams params) {
+    return evaluateMany(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Evaluates several AuthZEN requests; decisions come back in request order. With per-call
    * settings: see {@link #evaluateMany(String, EvaluationsParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the evaluations
    */
   public Evaluations evaluateMany(
-      String tenantId, EvaluationsParams params, RequestOptions options) {
+      String organizationId, EvaluationsParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/access/v1/evaluations", tenantId))
+        ApiRequest.post(
+                Paths.of(
+                    "/v1/organizations/{organizationId}/access/v1/evaluations", organizationId))
             .json(params)
             .retrySafe(),
         options,
@@ -83,39 +87,39 @@ public final class Decisions {
   }
 
   /**
-   * The access decisions the organisation asked for, newest first.
+   * The access decisions the organization asked for, newest first.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the first page; iterate it for every item, page by page
    */
-  public Page<DecisionLogEntry> list(String tenantId) {
-    return list(tenantId, DecisionListParams.builder().build(), RequestOptions.none());
+  public Page<DecisionLogEntry> list(String organizationId) {
+    return list(organizationId, DecisionListParams.builder().build(), RequestOptions.none());
   }
 
   /**
-   * The access decisions the organisation asked for, newest first.
+   * The access decisions the organization asked for, newest first.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the first page; iterate it for every item, page by page
    */
-  public Page<DecisionLogEntry> list(String tenantId, DecisionListParams params) {
-    return list(tenantId, params, RequestOptions.none());
+  public Page<DecisionLogEntry> list(String organizationId, DecisionListParams params) {
+    return list(organizationId, params, RequestOptions.none());
   }
 
   /**
-   * The access decisions the organisation asked for, newest first. With per-call settings: see
+   * The access decisions the organization asked for, newest first. With per-call settings: see
    * {@link #list(String, DecisionListParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the first page; iterate it for every item, page by page
    */
   public Page<DecisionLogEntry> list(
-      String tenantId, DecisionListParams params, RequestOptions options) {
+      String organizationId, DecisionListParams params, RequestOptions options) {
     return http.page(
-        Paths.of("/v1/tenants/{tenantId}/authorization/decisions", tenantId),
+        Paths.of("/v1/organizations/{organizationId}/authorization/decisions", organizationId),
         params,
         DecisionLogEntry.class,
         options);

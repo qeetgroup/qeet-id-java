@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * A downstream service provider that signs people in with Qeet ID as its SAML identity provider.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param name its name
  * @param entityId the entity's id
  * @param acsUrl the acs URL
@@ -28,7 +28,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record SamlServiceProvider(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String name,
     @JsonProperty("entity_id") String entityId,
     @JsonProperty("acs_url") String acsUrl,

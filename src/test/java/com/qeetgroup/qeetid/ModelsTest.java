@@ -167,10 +167,10 @@ import com.qeetgroup.qeetid.identity.InvitationDelivery;
 import com.qeetgroup.qeetid.identity.InvitationResult;
 import com.qeetgroup.qeetid.identity.LinkedIdentity;
 import com.qeetgroup.qeetid.identity.MembershipRemoval;
-import com.qeetgroup.qeetid.identity.Tenant;
-import com.qeetgroup.qeetid.identity.TenantBranding;
-import com.qeetgroup.qeetid.identity.TenantDeletion;
-import com.qeetgroup.qeetid.identity.TenantUpdateParams;
+import com.qeetgroup.qeetid.identity.Organization;
+import com.qeetgroup.qeetid.identity.OrganizationBranding;
+import com.qeetgroup.qeetid.identity.OrganizationDeletion;
+import com.qeetgroup.qeetid.identity.OrganizationUpdateParams;
 import com.qeetgroup.qeetid.identity.User;
 import com.qeetgroup.qeetid.identity.UserAccess;
 import com.qeetgroup.qeetid.identity.UserBulkCreateParams;
@@ -191,6 +191,7 @@ import com.qeetgroup.qeetid.operations.AnalyticsTrendPoint;
 import com.qeetgroup.qeetid.operations.AuditAnomaly;
 import com.qeetgroup.qeetid.operations.AuditAnomalyListParams;
 import com.qeetgroup.qeetid.operations.AuditAnomalySettings;
+import com.qeetgroup.qeetid.operations.AuditAnomalySettingsUpdateParams;
 import com.qeetgroup.qeetid.operations.AuditAnomalySummary;
 import com.qeetgroup.qeetid.operations.AuditChainVerification;
 import com.qeetgroup.qeetid.operations.AuditLogEntry;
@@ -217,6 +218,7 @@ import com.qeetgroup.qeetid.operations.InvoicePayParams;
 import com.qeetgroup.qeetid.operations.LogSink;
 import com.qeetgroup.qeetid.operations.LogSinkCreateParams;
 import com.qeetgroup.qeetid.operations.LogSinkTestResult;
+import com.qeetgroup.qeetid.operations.OrganizationRateLimits;
 import com.qeetgroup.qeetid.operations.PaymentMethod;
 import com.qeetgroup.qeetid.operations.RateLimitBucket;
 import com.qeetgroup.qeetid.operations.RateLimitsUpdateParams;
@@ -225,7 +227,6 @@ import com.qeetgroup.qeetid.operations.RetentionPolicyUpdateParams;
 import com.qeetgroup.qeetid.operations.RetentionPreview;
 import com.qeetgroup.qeetid.operations.Subscription;
 import com.qeetgroup.qeetid.operations.SubscriptionUpdateParams;
-import com.qeetgroup.qeetid.operations.TenantRateLimits;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
@@ -291,11 +292,11 @@ class ModelsTest {
     return Stream.of(
         record(
             AdminPortalLink.class,
-            "{\"id\": \"s_id_1\", \"tenant_id\": \"s_tenant_id_2\", \"capabilities\": [\"s_capabilities_3\"], \"created_by\": \"s_created_by_4\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_1\", \"organization_id\": \"s_organization_id_2\", \"capabilities\": [\"s_capabilities_3\"], \"created_by\": \"s_created_by_4\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             AdminPortalLinkCreated.class,
-            "{\"link\": {\"id\": \"s_id_6\", \"tenant_id\": \"s_tenant_id_7\", \"capabilities\": [\"s_capabilities_8\"], \"created_by\": \"s_created_by_9\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}, \"token\": \"s_token_10\", \"url\": \"s_url_11\"}",
+            "{\"link\": {\"id\": \"s_id_6\", \"organization_id\": \"s_organization_id_7\", \"capabilities\": [\"s_capabilities_8\"], \"created_by\": \"s_created_by_9\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}, \"token\": \"s_token_10\", \"url\": \"s_url_11\"}",
             List.of("s_token_10", "s_url_11")),
         record(
             Agent.class,
@@ -329,15 +330,15 @@ class ModelsTest {
             List.of()),
         record(
             ApiKey.class,
-            "{\"id\": \"s_id_56\", \"tenant_id\": \"s_tenant_id_57\", \"user_id\": \"s_user_id_58\", \"name\": \"s_name_59\", \"prefix\": \"s_prefix_60\", \"scopes\": [\"s_scopes_61\"], \"expires_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"created_by\": \"s_created_by_62\", \"rotated_from\": \"s_rotated_from_63\"}",
+            "{\"id\": \"s_id_56\", \"organization_id\": \"s_organization_id_57\", \"user_id\": \"s_user_id_58\", \"name\": \"s_name_59\", \"prefix\": \"s_prefix_60\", \"scopes\": [\"s_scopes_61\"], \"expires_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"created_by\": \"s_created_by_62\", \"rotated_from\": \"s_rotated_from_63\"}",
             List.of()),
         record(
             ApiKeyCreated.class,
-            "{\"api_key\": {\"id\": \"s_id_68\", \"tenant_id\": \"s_tenant_id_69\", \"user_id\": \"s_user_id_70\", \"name\": \"s_name_71\", \"prefix\": \"s_prefix_72\", \"scopes\": [\"s_scopes_73\"], \"expires_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"created_by\": \"s_created_by_74\", \"rotated_from\": \"s_rotated_from_75\"}, \"secret\": \"s_secret_76\", \"warning\": \"s_warning_77\"}",
+            "{\"api_key\": {\"id\": \"s_id_68\", \"organization_id\": \"s_organization_id_69\", \"user_id\": \"s_user_id_70\", \"name\": \"s_name_71\", \"prefix\": \"s_prefix_72\", \"scopes\": [\"s_scopes_73\"], \"expires_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"revoked_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"created_by\": \"s_created_by_74\", \"rotated_from\": \"s_rotated_from_75\"}, \"secret\": \"s_secret_76\", \"warning\": \"s_warning_77\"}",
             List.of("s_secret_76")),
         record(
             Application.class,
-            "{\"id\": \"s_id_78\", \"tenant_id\": \"s_tenant_id_79\", \"client_id\": \"s_client_id_80\", \"type\": \"s_type_81\", \"name\": \"s_name_82\", \"redirect_uris\": [\"s_redirect_uris_83\"], \"post_logout_uris\": [\"s_post_logout_uris_84\"], \"grant_types\": [\"s_grant_types_85\"], \"scopes\": [\"s_scopes_86\"], \"created_at\": \"2026-11-05T10:00:00Z\", \"pkce_exempt_until\": \"2026-11-05T10:00:00Z\", \"backchannel_logout_uri\": \"s_backchannel_logout_uri_87\", \"frontchannel_logout_uri\": \"s_frontchannel_logout_uri_88\", \"logo_uri\": \"s_logo_uri_89\", \"client_uri\": \"s_client_uri_90\", \"web_origins\": [\"s_web_origins_91\"]}",
+            "{\"id\": \"s_id_78\", \"organization_id\": \"s_organization_id_79\", \"client_id\": \"s_client_id_80\", \"type\": \"s_type_81\", \"name\": \"s_name_82\", \"redirect_uris\": [\"s_redirect_uris_83\"], \"post_logout_uris\": [\"s_post_logout_uris_84\"], \"grant_types\": [\"s_grant_types_85\"], \"scopes\": [\"s_scopes_86\"], \"created_at\": \"2026-11-05T10:00:00Z\", \"pkce_exempt_until\": \"2026-11-05T10:00:00Z\", \"backchannel_logout_uri\": \"s_backchannel_logout_uri_87\", \"frontchannel_logout_uri\": \"s_frontchannel_logout_uri_88\", \"logo_uri\": \"s_logo_uri_89\", \"client_uri\": \"s_client_uri_90\", \"web_origins\": [\"s_web_origins_91\"]}",
             List.of()),
         record(
             ApplicationAuthFailures.class,
@@ -345,7 +346,7 @@ class ModelsTest {
             List.of()),
         record(
             ApplicationCreated.class,
-            "{\"client\": {\"id\": \"s_id_105\", \"tenant_id\": \"s_tenant_id_106\", \"client_id\": \"s_client_id_107\", \"type\": \"s_type_108\", \"name\": \"s_name_109\", \"redirect_uris\": [\"s_redirect_uris_110\"], \"post_logout_uris\": [\"s_post_logout_uris_111\"], \"grant_types\": [\"s_grant_types_112\"], \"scopes\": [\"s_scopes_113\"], \"created_at\": \"2026-11-05T10:00:00Z\", \"pkce_exempt_until\": \"2026-11-05T10:00:00Z\", \"backchannel_logout_uri\": \"s_backchannel_logout_uri_114\", \"frontchannel_logout_uri\": \"s_frontchannel_logout_uri_115\", \"logo_uri\": \"s_logo_uri_116\", \"client_uri\": \"s_client_uri_117\", \"web_origins\": [\"s_web_origins_118\"]}, \"client_secret\": \"s_client_secret_119\", \"warning\": \"s_warning_120\"}",
+            "{\"client\": {\"id\": \"s_id_105\", \"organization_id\": \"s_organization_id_106\", \"client_id\": \"s_client_id_107\", \"type\": \"s_type_108\", \"name\": \"s_name_109\", \"redirect_uris\": [\"s_redirect_uris_110\"], \"post_logout_uris\": [\"s_post_logout_uris_111\"], \"grant_types\": [\"s_grant_types_112\"], \"scopes\": [\"s_scopes_113\"], \"created_at\": \"2026-11-05T10:00:00Z\", \"pkce_exempt_until\": \"2026-11-05T10:00:00Z\", \"backchannel_logout_uri\": \"s_backchannel_logout_uri_114\", \"frontchannel_logout_uri\": \"s_frontchannel_logout_uri_115\", \"logo_uri\": \"s_logo_uri_116\", \"client_uri\": \"s_client_uri_117\", \"web_origins\": [\"s_web_origins_118\"]}, \"client_secret\": \"s_client_secret_119\", \"warning\": \"s_warning_120\"}",
             List.of("s_client_secret_119")),
         record(
             ApplicationSecret.class,
@@ -353,11 +354,11 @@ class ModelsTest {
             List.of("s_client_secret_121")),
         record(
             AuditAnomaly.class,
-            "{\"id\": \"s_id_133\", \"tenant_id\": \"s_tenant_id_134\", \"event_id\": \"s_event_id_135\", \"actor_user_id\": \"s_actor_user_id_136\", \"actor_email\": \"s_actor_email_137\", \"score\": 0.5, \"reasons\": [\"s_reasons_138\"], \"status\": \"s_status_139\", \"resolved_at\": \"2026-11-05T10:00:00Z\", \"resolved_by\": \"s_resolved_by_140\", \"action\": \"s_action_141\", \"resource_type\": \"s_resource_type_142\", \"ip\": \"s_ip_143\", \"event_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_133\", \"organization_id\": \"s_organization_id_134\", \"event_id\": \"s_event_id_135\", \"actor_user_id\": \"s_actor_user_id_136\", \"actor_email\": \"s_actor_email_137\", \"score\": 0.5, \"reasons\": [\"s_reasons_138\"], \"status\": \"s_status_139\", \"resolved_at\": \"2026-11-05T10:00:00Z\", \"resolved_by\": \"s_resolved_by_140\", \"action\": \"s_action_141\", \"resource_type\": \"s_resource_type_142\", \"ip\": \"s_ip_143\", \"event_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             AuditAnomalySettings.class,
-            "{\"enabled\": true, \"score_threshold\": 0.5, \"min_baseline_events\": 7}",
+            "{\"organization_id\": \"s_organization_id_133\", \"enabled\": true, \"score_threshold\": 0.5, \"min_baseline_events\": 7}",
             List.of()),
         record(
             AuditAnomalySummary.class,
@@ -369,7 +370,7 @@ class ModelsTest {
             List.of()),
         record(
             AuditLogEntry.class,
-            "{\"id\": \"s_id_149\", \"tenant_id\": \"s_tenant_id_150\", \"action\": \"s_action_151\", \"actor_type\": \"s_actor_type_152\", \"actor_user_id\": \"s_actor_user_id_153\", \"resource_type\": \"s_resource_type_154\", \"resource_id\": \"s_resource_id_155\", \"ip\": \"s_ip_156\", \"user_agent\": \"s_user_agent_157\", \"request_id\": \"s_request_id_158\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_149\", \"organization_id\": \"s_organization_id_150\", \"action\": \"s_action_151\", \"actor_type\": \"s_actor_type_152\", \"actor_user_id\": \"s_actor_user_id_153\", \"resource_type\": \"s_resource_type_154\", \"resource_id\": \"s_resource_id_155\", \"ip\": \"s_ip_156\", \"user_agent\": \"s_user_agent_157\", \"request_id\": \"s_request_id_158\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             AuditVerificationStatus.class,
@@ -410,7 +411,7 @@ class ModelsTest {
             List.of()),
         record(
             BotActivity.class,
-            "{\"recent\": [{\"id\": \"s_id_217\", \"ip\": \"s_ip_218\", \"user_agent\": \"s_user_agent_219\", \"score\": 0.5, \"verdict\": \"s_verdict_220\", \"outcome\": \"s_outcome_221\", \"user_id\": \"s_user_id_222\", \"user_email\": \"s_user_email_223\", \"created_at\": \"2026-11-05T10:00:00Z\"}], \"next_cursor\": \"s_next_cursor_224\", \"total\": 7, \"stats\": {\"blocked_24h\": 7, \"challenged_24h\": 7, \"threshold\": 0.5}}",
+            "{\"items\": [{\"id\": \"s_id_217\", \"ip\": \"s_ip_218\", \"user_agent\": \"s_user_agent_219\", \"score\": 0.5, \"verdict\": \"s_verdict_220\", \"outcome\": \"s_outcome_221\", \"user_id\": \"s_user_id_222\", \"user_email\": \"s_user_email_223\", \"created_at\": \"2026-11-05T10:00:00Z\"}], \"next_cursor\": \"s_next_cursor_224\", \"total\": 7, \"stats\": {\"blocked_24h\": 7, \"challenged_24h\": 7, \"threshold\": 0.5}}",
             List.of()),
         record(
             BotEvent.class,
@@ -494,7 +495,7 @@ class ModelsTest {
             List.of()),
         record(
             ErasureRequest.class,
-            "{\"id\": \"s_id_389\", \"tenant_id\": \"s_tenant_id_390\", \"user_id\": \"s_user_id_391\", \"requested_by\": \"s_requested_by_392\", \"reason\": \"s_reason_393\", \"status\": \"s_status_394\", \"grace_until\": \"2026-11-05T10:00:00Z\", \"grace_period_days\": 7, \"completed_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"subject_email\": \"s_subject_email_395\", \"subject_name\": \"s_subject_name_396\", \"subject_redacted\": true}",
+            "{\"id\": \"s_id_389\", \"organization_id\": \"s_organization_id_390\", \"user_id\": \"s_user_id_391\", \"requested_by\": \"s_requested_by_392\", \"reason\": \"s_reason_393\", \"status\": \"s_status_394\", \"grace_until\": \"2026-11-05T10:00:00Z\", \"grace_period_days\": 7, \"completed_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"subject_email\": \"s_subject_email_395\", \"subject_name\": \"s_subject_name_396\", \"subject_redacted\": true}",
             List.of()),
         record(Evaluation.class, "{\"decision\": true, \"context\": {\"k\": \"v\"}}", List.of()),
         record(
@@ -503,7 +504,7 @@ class ModelsTest {
             List.of()),
         record(
             ExportRequest.class,
-            "{\"id\": \"s_id_414\", \"tenant_id\": \"s_tenant_id_415\", \"user_id\": \"s_user_id_416\", \"requested_by\": \"s_requested_by_417\", \"status\": \"s_status_418\", \"payload\": {\"k\": \"v\"}, \"error\": \"s_error_419\", \"completed_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_414\", \"organization_id\": \"s_organization_id_415\", \"user_id\": \"s_user_id_416\", \"requested_by\": \"s_requested_by_417\", \"status\": \"s_status_418\", \"payload\": {\"k\": \"v\"}, \"error\": \"s_error_419\", \"completed_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             GrantStep.class,
@@ -511,7 +512,7 @@ class ModelsTest {
             List.of()),
         record(
             Group.class,
-            "{\"id\": \"s_id_427\", \"tenant_id\": \"s_tenant_id_428\", \"parent_id\": \"s_parent_id_429\", \"name\": \"s_name_430\", \"description\": \"s_description_431\", \"member_count\": 7, \"created_at\": \"2026-11-05T10:00:00Z\", \"roles\": [{\"role_id\": \"s_role_id_432\", \"name\": \"s_name_433\"}]}",
+            "{\"id\": \"s_id_427\", \"organization_id\": \"s_organization_id_428\", \"parent_id\": \"s_parent_id_429\", \"name\": \"s_name_430\", \"description\": \"s_description_431\", \"member_count\": 7, \"created_at\": \"2026-11-05T10:00:00Z\", \"roles\": [{\"role_id\": \"s_role_id_432\", \"name\": \"s_name_433\"}]}",
             List.of()),
         record(
             GroupMember.class,
@@ -523,7 +524,7 @@ class ModelsTest {
             List.of()),
         record(
             Invitation.class,
-            "{\"id\": \"s_id_448\", \"tenant_id\": \"s_tenant_id_449\", \"email\": \"s_email_450\", \"role_id\": \"s_role_id_451\", \"status\": \"s_status_452\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"accepted_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"delivery\": {\"status\": \"s_status_453\", \"code\": \"s_code_454\", \"message\": \"s_message_455\"}}",
+            "{\"id\": \"s_id_448\", \"organization_id\": \"s_organization_id_449\", \"email\": \"s_email_450\", \"role_id\": \"s_role_id_451\", \"status\": \"s_status_452\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"accepted_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"delivery\": {\"status\": \"s_status_453\", \"code\": \"s_code_454\", \"message\": \"s_message_455\"}}",
             List.of()),
         record(
             InvitationDelivery.class,
@@ -531,7 +532,7 @@ class ModelsTest {
             List.of("s_code_460")),
         record(
             InvitationResult.class,
-            "{\"invite\": {\"id\": \"s_id_462\", \"tenant_id\": \"s_tenant_id_463\", \"email\": \"s_email_464\", \"role_id\": \"s_role_id_465\", \"status\": \"s_status_466\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"accepted_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"delivery\": {\"status\": \"s_status_467\", \"code\": \"s_code_468\", \"message\": \"s_message_469\"}}}",
+            "{\"invite\": {\"id\": \"s_id_462\", \"organization_id\": \"s_organization_id_463\", \"email\": \"s_email_464\", \"role_id\": \"s_role_id_465\", \"status\": \"s_status_466\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"accepted_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\", \"delivery\": {\"status\": \"s_status_467\", \"code\": \"s_code_468\", \"message\": \"s_message_469\"}}}",
             List.of()),
         record(
             Invoice.class,
@@ -539,7 +540,7 @@ class ModelsTest {
             List.of()),
         record(
             IpRule.class,
-            "{\"id\": \"s_id_492\", \"tenant_id\": \"s_tenant_id_493\", \"action\": \"s_action_494\", \"cidr\": \"s_cidr_495\", \"label\": \"s_label_496\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_492\", \"organization_id\": \"s_organization_id_493\", \"action\": \"s_action_494\", \"cidr\": \"s_cidr_495\", \"label\": \"s_label_496\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             IpRuleCheck.class,
@@ -551,11 +552,11 @@ class ModelsTest {
             List.of("s_jwt_505")),
         record(
             LdapConnection.class,
-            "{\"id\": \"s_id_506\", \"tenant_id\": \"s_tenant_id_507\", \"name\": \"s_name_508\", \"server_url\": \"s_server_url_509\", \"start_tls\": true, \"skip_tls_verify\": true, \"bind_dn\": \"s_bind_dn_510\", \"base_dn\": \"s_base_dn_511\", \"user_filter\": \"s_user_filter_512\", \"email_attribute\": \"s_email_attribute_513\", \"name_attribute\": \"s_name_attribute_514\", \"status\": \"s_status_515\", \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"last_login_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_506\", \"organization_id\": \"s_organization_id_507\", \"name\": \"s_name_508\", \"server_url\": \"s_server_url_509\", \"start_tls\": true, \"skip_tls_verify\": true, \"bind_dn\": \"s_bind_dn_510\", \"base_dn\": \"s_base_dn_511\", \"user_filter\": \"s_user_filter_512\", \"email_attribute\": \"s_email_attribute_513\", \"name_attribute\": \"s_name_attribute_514\", \"status\": \"s_status_515\", \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"last_login_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             LinkedIdentity.class,
-            "{\"id\": \"s_id_534\", \"user_id\": \"s_user_id_535\", \"tenant_id\": \"s_tenant_id_536\", \"provider\": \"s_provider_537\", \"subject\": \"s_subject_538\", \"email\": \"s_email_539\", \"linked_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_534\", \"user_id\": \"s_user_id_535\", \"organization_id\": \"s_organization_id_536\", \"provider\": \"s_provider_537\", \"subject\": \"s_subject_538\", \"email\": \"s_email_539\", \"linked_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             LockoutSettings.class,
@@ -591,7 +592,7 @@ class ModelsTest {
             List.of()),
         record(
             OAuthResource.class,
-            "{\"id\": \"s_id_574\", \"tenant_id\": \"s_tenant_id_575\", \"identifier\": \"s_identifier_576\", \"name\": \"s_name_577\", \"server_client_id\": \"s_server_client_id_578\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_574\", \"organization_id\": \"s_organization_id_575\", \"identifier\": \"s_identifier_576\", \"name\": \"s_name_577\", \"server_client_id\": \"s_server_client_id_578\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             PaymentMethod.class,
@@ -640,7 +641,7 @@ class ModelsTest {
             List.of()),
         record(
             Role.class,
-            "{\"id\": \"s_id_648\", \"tenant_id\": \"s_tenant_id_649\", \"name\": \"s_name_650\", \"description\": \"s_description_651\", \"is_system\": true, \"created_at\": \"2026-11-05T10:00:00Z\", \"holders\": {\"people_direct\": 7, \"people_through_groups\": 7, \"groups\": 7}}",
+            "{\"id\": \"s_id_648\", \"organization_id\": \"s_organization_id_649\", \"name\": \"s_name_650\", \"description\": \"s_description_651\", \"is_system\": true, \"created_at\": \"2026-11-05T10:00:00Z\", \"holders\": {\"people_direct\": 7, \"people_through_groups\": 7, \"groups\": 7}}",
             List.of()),
         record(
             RoleHolders.class,
@@ -656,11 +657,11 @@ class ModelsTest {
             List.of()),
         record(
             SamlConnection.class,
-            "{\"id\": \"s_id_673\", \"tenant_id\": \"s_tenant_id_674\", \"name\": \"s_name_675\", \"sp_entity_id\": \"s_sp_entity_id_676\", \"acs_url\": \"s_acs_url_677\", \"sp_metadata_url\": \"s_sp_metadata_url_678\", \"idp_entity_id\": \"s_idp_entity_id_679\", \"idp_sso_url\": \"s_idp_sso_url_680\", \"idp_certificate\": \"s_idp_certificate_681\", \"certificates\": [{\"id\": \"s_id_682\", \"certificate\": \"s_certificate_683\", \"subject\": \"s_subject_684\", \"fingerprint_sha256\": \"s_fingerprint_sha256_685\", \"not_before\": \"2026-11-05T10:00:00Z\", \"not_after\": \"2026-11-05T10:00:00Z\", \"source\": \"s_source_686\", \"created_at\": \"2026-11-05T10:00:00Z\"}], \"metadata_url\": \"s_metadata_url_687\", \"metadata_refreshed_at\": \"2026-11-05T10:00:00Z\", \"metadata_error\": \"s_metadata_error_688\", \"email_attribute\": \"s_email_attribute_689\", \"name_attribute\": \"s_name_attribute_690\", \"groups_attribute\": \"s_groups_attribute_691\", \"status\": \"s_status_692\", \"allow_idp_initiated\": true, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"last_login_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_673\", \"organization_id\": \"s_organization_id_674\", \"name\": \"s_name_675\", \"sp_entity_id\": \"s_sp_entity_id_676\", \"acs_url\": \"s_acs_url_677\", \"sp_metadata_url\": \"s_sp_metadata_url_678\", \"idp_entity_id\": \"s_idp_entity_id_679\", \"idp_sso_url\": \"s_idp_sso_url_680\", \"idp_certificate\": \"s_idp_certificate_681\", \"certificates\": [{\"id\": \"s_id_682\", \"certificate\": \"s_certificate_683\", \"subject\": \"s_subject_684\", \"fingerprint_sha256\": \"s_fingerprint_sha256_685\", \"not_before\": \"2026-11-05T10:00:00Z\", \"not_after\": \"2026-11-05T10:00:00Z\", \"source\": \"s_source_686\", \"created_at\": \"2026-11-05T10:00:00Z\"}], \"metadata_url\": \"s_metadata_url_687\", \"metadata_refreshed_at\": \"2026-11-05T10:00:00Z\", \"metadata_error\": \"s_metadata_error_688\", \"email_attribute\": \"s_email_attribute_689\", \"name_attribute\": \"s_name_attribute_690\", \"groups_attribute\": \"s_groups_attribute_691\", \"status\": \"s_status_692\", \"allow_idp_initiated\": true, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"last_login_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             SamlServiceProvider.class,
-            "{\"id\": \"s_id_719\", \"tenant_id\": \"s_tenant_id_720\", \"name\": \"s_name_721\", \"entity_id\": \"s_entity_id_722\", \"acs_url\": \"s_acs_url_723\", \"name_id_format\": \"s_name_id_format_724\", \"name_id_attribute\": \"s_name_id_attribute_725\", \"certificate\": \"s_certificate_726\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"certificate_details\": {\"subject\": \"s_subject_727\", \"fingerprint_sha256\": \"s_fingerprint_sha256_728\", \"not_before\": \"2026-11-05T10:00:00Z\", \"not_after\": \"2026-11-05T10:00:00Z\"}, \"status\": \"s_status_729\", \"attributes\": [{\"name\": \"s_name_730\", \"source\": \"s_source_731\", \"name_format\": \"s_name_format_732\"}], \"assignment_required\": true, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"last_login_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_719\", \"organization_id\": \"s_organization_id_720\", \"name\": \"s_name_721\", \"entity_id\": \"s_entity_id_722\", \"acs_url\": \"s_acs_url_723\", \"name_id_format\": \"s_name_id_format_724\", \"name_id_attribute\": \"s_name_id_attribute_725\", \"certificate\": \"s_certificate_726\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"certificate_details\": {\"subject\": \"s_subject_727\", \"fingerprint_sha256\": \"s_fingerprint_sha256_728\", \"not_before\": \"2026-11-05T10:00:00Z\", \"not_after\": \"2026-11-05T10:00:00Z\"}, \"status\": \"s_status_729\", \"attributes\": [{\"name\": \"s_name_730\", \"source\": \"s_source_731\", \"name_format\": \"s_name_format_732\"}], \"assignment_required\": true, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"last_login_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             SamlServiceProviderAssignments.class,
@@ -700,15 +701,15 @@ class ModelsTest {
             List.of("s_value_809")),
         record(
             SecurityPolicy.class,
-            "{\"tenant_id\": \"s_tenant_id_810\", \"password_min_length\": 7, \"password_complexity\": \"s_password_complexity_811\", \"session_max_age\": \"s_session_max_age_812\", \"session_idle_timeout\": \"s_session_idle_timeout_813\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_814\", \"mfa_enforcement\": \"s_mfa_enforcement_815\", \"mfa_grace_days\": 7, \"mfa_enforced_since\": \"2026-11-05T10:00:00Z\", \"step_up_window\": \"s_step_up_window_816\", \"step_up_methods\": [\"s_step_up_methods_817\"], \"settings\": {\"k\": \"v\"}}",
+            "{\"organization_id\": \"s_organization_id_810\", \"session_max_age\": \"s_session_max_age_812\", \"session_idle_timeout\": \"s_session_idle_timeout_813\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_814\", \"mfa_enforcement\": \"s_mfa_enforcement_815\", \"mfa_grace_days\": 7, \"mfa_enforced_since\": \"2026-11-05T10:00:00Z\", \"step_up_window\": \"s_step_up_window_816\", \"step_up_methods\": [\"s_step_up_methods_817\"], \"settings\": {\"k\": \"v\"}}",
             List.of()),
         record(
             ServicePrincipal.class,
-            "{\"id\": \"s_id_825\", \"tenant_id\": \"s_tenant_id_826\", \"name\": \"s_name_827\", \"description\": \"s_description_828\", \"scopes\": [\"s_scopes_829\"], \"disabled_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"previous_secret_expires_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_825\", \"organization_id\": \"s_organization_id_826\", \"name\": \"s_name_827\", \"description\": \"s_description_828\", \"scopes\": [\"s_scopes_829\"], \"disabled_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"previous_secret_expires_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             ServicePrincipalCreated.class,
-            "{\"service_principal\": {\"id\": \"s_id_834\", \"tenant_id\": \"s_tenant_id_835\", \"name\": \"s_name_836\", \"description\": \"s_description_837\", \"scopes\": [\"s_scopes_838\"], \"disabled_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"previous_secret_expires_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}, \"client_id\": \"s_client_id_839\", \"client_secret\": \"s_client_secret_840\", \"warning\": \"s_warning_841\"}",
+            "{\"service_principal\": {\"id\": \"s_id_834\", \"organization_id\": \"s_organization_id_835\", \"name\": \"s_name_836\", \"description\": \"s_description_837\", \"scopes\": [\"s_scopes_838\"], \"disabled_at\": \"2026-11-05T10:00:00Z\", \"last_used_at\": \"2026-11-05T10:00:00Z\", \"previous_secret_expires_at\": \"2026-11-05T10:00:00Z\", \"created_at\": \"2026-11-05T10:00:00Z\"}, \"client_id\": \"s_client_id_839\", \"client_secret\": \"s_client_secret_840\", \"warning\": \"s_warning_841\"}",
             List.of("s_client_secret_840")),
         record(
             ServicePrincipalSecret.class,
@@ -724,7 +725,7 @@ class ModelsTest {
             List.of()),
         record(
             SocialProvider.class,
-            "{\"id\": \"s_id_853\", \"tenant_id\": \"s_tenant_id_854\", \"provider\": \"s_provider_855\", \"kind\": \"s_kind_856\", \"client_id\": \"s_client_id_857\", \"discovery_url\": \"s_discovery_url_858\", \"enabled\": true, \"apple_team_id\": \"s_apple_team_id_859\", \"apple_key_id\": \"s_apple_key_id_860\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"id\": \"s_id_853\", \"organization_id\": \"s_organization_id_854\", \"provider\": \"s_provider_855\", \"kind\": \"s_kind_856\", \"client_id\": \"s_client_id_857\", \"discovery_url\": \"s_discovery_url_858\", \"enabled\": true, \"apple_team_id\": \"s_apple_team_id_859\", \"apple_key_id\": \"s_apple_key_id_860\", \"created_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             SsoGroupMapping.class,
@@ -735,24 +736,24 @@ class ModelsTest {
             "{\"status\": \"s_status_878\", \"plan_code\": \"s_plan_code_879\", \"plan_name\": \"s_plan_name_880\", \"currency\": \"s_currency_881\", \"amount_minor\": 7, \"interval\": \"s_interval_882\", \"current_period_start\": \"2026-11-05T10:00:00Z\", \"current_period_end\": \"2026-11-05T10:00:00Z\", \"trial_end\": \"2026-11-05T10:00:00Z\", \"cancel_at_period_end\": true, \"ended_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
-            Tenant.class,
-            "{\"id\": \"s_id_885\", \"slug\": \"s_slug_886\", \"name\": \"s_name_887\", \"status\": \"s_status_888\", \"plan\": \"s_plan_889\", \"region\": \"s_region_890\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"deletion_due_at\": \"2026-11-05T10:00:00Z\", \"member_count\": 7, \"mfa_enabled_count\": 7}",
+            Organization.class,
+            "{\"id\": \"s_id_885\", \"slug\": \"s_slug_886\", \"name\": \"s_name_887\", \"status\": \"s_status_888\", \"plan\": \"s_plan_889\", \"region\": \"s_region_890\", \"logo_url\": \"s_logo_url_890\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"deletion_due_at\": \"2026-11-05T10:00:00Z\", \"member_count\": 7, \"mfa_enabled_count\": 7}",
             List.of()),
         record(
-            TenantBranding.class,
-            "{\"tenant_id\": \"s_tenant_id_891\", \"logo_url\": \"s_logo_url_892\", \"primary_color\": \"s_primary_color_893\", \"secondary_color\": \"s_secondary_color_894\", \"custom_domain\": \"s_custom_domain_895\", \"email_from_name\": \"s_email_from_name_896\", \"email_from_address\": \"s_email_from_address_897\", \"settings\": {\"k\": \"v\"}}",
+            OrganizationBranding.class,
+            "{\"organization_id\": \"s_organization_id_891\", \"logo_url\": \"s_logo_url_892\", \"primary_color\": \"s_primary_color_893\", \"secondary_color\": \"s_secondary_color_894\", \"custom_domain\": \"s_custom_domain_895\", \"email_from_name\": \"s_email_from_name_896\", \"email_from_address\": \"s_email_from_address_897\", \"settings\": {\"k\": \"v\"}}",
             List.of()),
         record(
-            TenantDeletion.class,
-            "{\"tenant_id\": \"s_tenant_id_898\", \"deletion_due_at\": \"2026-11-05T10:00:00Z\"}",
+            OrganizationDeletion.class,
+            "{\"organization_id\": \"s_organization_id_898\", \"deletion_due_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
-            TenantRateLimits.class,
-            "{\"tenant\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}, \"defaults\": {\"tenant\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}}, \"ceiling\": {\"tenant\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}}, \"min_rate\": 0.5, \"built_in\": [{\"name\": \"s_name_899\", \"per\": \"s_per_900\", \"applies\": \"s_applies_901\", \"rate\": 0.5, \"capacity\": 7}]}",
+            OrganizationRateLimits.class,
+            "{\"organization\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}, \"defaults\": {\"organization\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}}, \"ceiling\": {\"organization\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}}, \"min_rate\": 0.5, \"built_in\": [{\"name\": \"s_name_899\", \"per\": \"s_per_900\", \"applies\": \"s_applies_901\", \"rate\": 0.5, \"capacity\": 7}]}",
             List.of()),
         record(
             TokenPair.class,
-            "{\"access_token\": \"s_access_token_914\", \"token_type\": \"s_token_type_915\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"refresh_token\": \"s_refresh_token_916\", \"session_expires_at\": \"2026-11-05T10:00:00Z\", \"idle_expires_at\": \"2026-11-05T10:00:00Z\", \"session_id\": \"s_session_id_917\", \"user_id\": \"s_user_id_918\", \"tenant_id\": \"s_tenant_id_919\"}",
+            "{\"access_token\": \"s_access_token_914\", \"token_type\": \"s_token_type_915\", \"expires_at\": \"2026-11-05T10:00:00Z\", \"refresh_token\": \"s_refresh_token_916\", \"session_expires_at\": \"2026-11-05T10:00:00Z\", \"idle_expires_at\": \"2026-11-05T10:00:00Z\", \"session_id\": \"s_session_id_917\", \"user_id\": \"s_user_id_918\", \"organization_id\": \"s_organization_id_919\"}",
             List.of("s_access_token_914", "s_refresh_token_916")),
         record(
             TokenResponse.class,
@@ -764,7 +765,7 @@ class ModelsTest {
             List.of()),
         record(
             User.class,
-            "{\"id\": \"s_id_938\", \"tenant_id\": \"s_tenant_id_939\", \"email\": \"s_email_940\", \"email_verified_at\": \"2026-11-05T10:00:00Z\", \"phone\": \"s_phone_941\", \"phone_verified_at\": \"2026-11-05T10:00:00Z\", \"display_name\": \"s_display_name_942\", \"avatar_url\": \"s_avatar_url_943\", \"status\": \"s_status_944\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"roles\": [\"s_roles_945\"], \"assigned_roles\": [{\"id\": \"s_id_946\", \"name\": \"s_name_947\"}], \"mfa_enabled\": true, \"groups_count\": 7, \"last_seen_at\": \"2026-11-05T10:00:00Z\", \"last_seen_ip\": \"s_last_seen_ip_948\", \"home_tenant_name\": \"s_home_tenant_name_949\", \"suspension\": {\"reason\": \"s_reason_950\", \"source\": \"s_source_951\", \"suspended_at\": \"2026-11-05T10:00:00Z\", \"suspended_by\": \"s_suspended_by_952\", \"suspended_by_email\": \"s_suspended_by_email_953\"}}",
+            "{\"id\": \"s_id_938\", \"organization_id\": \"s_organization_id_939\", \"email\": \"s_email_940\", \"email_verified_at\": \"2026-11-05T10:00:00Z\", \"phone\": \"s_phone_941\", \"phone_verified_at\": \"2026-11-05T10:00:00Z\", \"display_name\": \"s_display_name_942\", \"avatar_url\": \"s_avatar_url_943\", \"status\": \"s_status_944\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"roles\": [\"s_roles_945\"], \"assigned_roles\": [{\"id\": \"s_id_946\", \"name\": \"s_name_947\"}], \"mfa_enabled\": true, \"groups_count\": 7, \"last_seen_at\": \"2026-11-05T10:00:00Z\", \"last_seen_ip\": \"s_last_seen_ip_948\", \"home_organization_name\": \"s_home_organization_name_949\", \"suspension\": {\"reason\": \"s_reason_950\", \"source\": \"s_source_951\", \"suspended_at\": \"2026-11-05T10:00:00Z\", \"suspended_by\": \"s_suspended_by_952\", \"suspended_by_email\": \"s_suspended_by_email_953\"}, \"deleted_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             UserAccess.class,
@@ -812,7 +813,7 @@ class ModelsTest {
             List.of("s_secret_1019")),
         record(
             WebhookSubscription.class,
-            "{\"id\": \"s_id_1020\", \"tenant_id\": \"s_tenant_id_1021\", \"url\": \"s_url_1022\", \"events\": [\"s_events_1023\"], \"disabled_at\": \"2026-11-05T10:00:00Z\", \"disabled_reason\": \"s_disabled_reason_1024\", \"disabled_by\": \"s_disabled_by_1025\", \"failing_since\": \"2026-11-05T10:00:00Z\", \"previous_secret_expires_at\": \"2026-11-05T10:00:00Z\", \"last_delivered_at\": \"2026-11-05T10:00:00Z\", \"last_status_code\": 7, \"counts\": {\"pending\": 7, \"retrying\": 7, \"gave_up\": 7}, \"created_at\": \"2026-11-05T10:00:00Z\", \"secret\": \"s_secret_1026\"}",
+            "{\"id\": \"s_id_1020\", \"organization_id\": \"s_organization_id_1021\", \"url\": \"s_url_1022\", \"events\": [\"s_events_1023\"], \"disabled_at\": \"2026-11-05T10:00:00Z\", \"disabled_reason\": \"s_disabled_reason_1024\", \"disabled_by\": \"s_disabled_by_1025\", \"failing_since\": \"2026-11-05T10:00:00Z\", \"previous_secret_expires_at\": \"2026-11-05T10:00:00Z\", \"last_delivered_at\": \"2026-11-05T10:00:00Z\", \"last_status_code\": 7, \"counts\": {\"pending\": 7, \"retrying\": 7, \"gave_up\": 7}, \"created_at\": \"2026-11-05T10:00:00Z\", \"secret\": \"s_secret_1026\"}",
             List.of("s_secret_1026")),
         record(
             WebhookTestResult.class,
@@ -872,13 +873,13 @@ class ModelsTest {
             "ApiKeyCreateParams",
             () ->
                 ApiKeyCreateParams.builder()
-                    .tenantId("s_tenant_id_64")
+                    .organizationId("s_organization_id_64")
                     .name("s_name_65")
                     .userId("s_user_id_66")
                     .scopes(List.of("s_scopes_67"))
                     .expiresAt(Instant.parse("2026-11-05T10:00:00Z"))
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_64\", \"name\": \"s_name_65\", \"user_id\": \"s_user_id_66\", \"scopes\": [\"s_scopes_67\"], \"expires_at\": \"2026-11-05T10:00:00Z\"}",
+            "{\"organization_id\": \"s_organization_id_64\", \"name\": \"s_name_65\", \"user_id\": \"s_user_id_66\", \"scopes\": [\"s_scopes_67\"], \"expires_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         params(
             "ApiKeyRotateParams",
@@ -1184,11 +1185,11 @@ class ModelsTest {
             "ErasureCreateParams",
             () ->
                 ErasureCreateParams.builder()
-                    .tenantId("s_tenant_id_386")
+                    .organizationId("s_organization_id_386")
                     .userId("s_user_id_387")
                     .reason("s_reason_388")
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_386\", \"user_id\": \"s_user_id_387\", \"reason\": \"s_reason_388\"}",
+            "{\"organization_id\": \"s_organization_id_386\", \"user_id\": \"s_user_id_387\", \"reason\": \"s_reason_388\"}",
             List.of()),
         params(
             "EvaluationParams",
@@ -1227,21 +1228,20 @@ class ModelsTest {
             "ExportCreateParams",
             () ->
                 ExportCreateParams.builder()
-                    .tenantId("s_tenant_id_412")
+                    .organizationId("s_organization_id_412")
                     .userId("s_user_id_413")
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_412\", \"user_id\": \"s_user_id_413\"}",
+            "{\"organization_id\": \"s_organization_id_412\", \"user_id\": \"s_user_id_413\"}",
             List.of()),
         params(
             "GroupCreateParams",
             () ->
                 GroupCreateParams.builder()
-                    .tenantId("s_tenant_id_434")
                     .name("s_name_435")
                     .description("s_description_436")
                     .parentId("s_parent_id_437")
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_434\", \"name\": \"s_name_435\", \"description\": \"s_description_436\", \"parent_id\": \"s_parent_id_437\"}",
+            "{\"name\": \"s_name_435\", \"description\": \"s_description_436\", \"parent_id\": \"s_parent_id_437\"}",
             List.of()),
         params(
             "GroupListParams",
@@ -1262,11 +1262,11 @@ class ModelsTest {
             "InvitationCreateParams",
             () ->
                 InvitationCreateParams.builder()
-                    .tenantId("s_tenant_id_456")
+                    .organizationId("s_organization_id_456")
                     .email("s_email_457")
                     .roleId("s_role_id_458")
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_456\", \"email\": \"s_email_457\", \"role_id\": \"s_role_id_458\"}",
+            "{\"organization_id\": \"s_organization_id_456\", \"email\": \"s_email_457\", \"role_id\": \"s_role_id_458\"}",
             List.of()),
         params(
             "InvoicePayParams",
@@ -1358,20 +1358,20 @@ class ModelsTest {
             () ->
                 PermissionCheckParams.builder()
                     .userId("s_user_id_589")
-                    .tenantId("s_tenant_id_590")
+                    .organizationId("s_organization_id_590")
                     .permission("s_permission_591")
                     .build(),
-            "{\"user_id\": \"s_user_id_589\", \"tenant_id\": \"s_tenant_id_590\", \"permission\": \"s_permission_591\"}",
+            "{\"user_id\": \"s_user_id_589\", \"organization_id\": \"s_organization_id_590\", \"permission\": \"s_permission_591\"}",
             List.of()),
         params(
             "RateLimitsUpdateParams",
             () ->
                 RateLimitsUpdateParams.builder()
-                    .tenant(new RateLimitBucket(0.5, 7))
+                    .organization(new RateLimitBucket(0.5, 7))
                     .user(new RateLimitBucket(0.5, 7))
                     .apiKey(new RateLimitBucket(0.5, 7))
                     .build(),
-            "{\"tenant\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}}",
+            "{\"organization\": {\"rate\": 0.5, \"capacity\": 7}, \"user\": {\"rate\": 0.5, \"capacity\": 7}, \"api_key\": {\"rate\": 0.5, \"capacity\": 7}}",
             List.of()),
         params(
             "RefreshTokenGrantParams",
@@ -1433,6 +1433,16 @@ class ModelsTest {
                     .deletedUsersDays(7)
                     .build(),
             "{\"deleted_users_enabled\": true, \"deleted_users_days\": 7}",
+            List.of()),
+        params(
+            "AuditAnomalySettingsUpdateParams",
+            () ->
+                AuditAnomalySettingsUpdateParams.builder()
+                    .enabled(true)
+                    .scoreThreshold(0.5)
+                    .minBaselineEvents(7)
+                    .build(),
+            "{\"enabled\": true, \"score_threshold\": 0.5, \"min_baseline_events\": 7}",
             List.of()),
         params(
             "RiskSettingsUpdateParams",
@@ -1512,8 +1522,9 @@ class ModelsTest {
                     .nameAttribute("s_name_attribute_714")
                     .groupsAttribute("s_groups_attribute_715")
                     .status("s_status_716")
+                    .allowIdpInitiated(true)
                     .build(),
-            "{\"name\": \"s_name_709\", \"idp_entity_id\": \"s_idp_entity_id_710\", \"idp_sso_url\": \"s_idp_sso_url_711\", \"idp_certificate\": \"s_idp_certificate_712\", \"email_attribute\": \"s_email_attribute_713\", \"name_attribute\": \"s_name_attribute_714\", \"groups_attribute\": \"s_groups_attribute_715\", \"status\": \"s_status_716\"}",
+            "{\"name\": \"s_name_709\", \"idp_entity_id\": \"s_idp_entity_id_710\", \"idp_sso_url\": \"s_idp_sso_url_711\", \"idp_certificate\": \"s_idp_certificate_712\", \"email_attribute\": \"s_email_attribute_713\", \"name_attribute\": \"s_name_attribute_714\", \"groups_attribute\": \"s_groups_attribute_715\", \"status\": \"s_status_716\", \"allow_idp_initiated\": true}",
             List.of()),
         params(
             "SamlMetadataParams",
@@ -1541,8 +1552,9 @@ class ModelsTest {
                             new SamlAttributeMapping(
                                 "s_name_746", "s_source_747", "s_name_format_748")))
                     .assignmentRequired(true)
+                    .status("s_status_748")
                     .build(),
-            "{\"name\": \"s_name_740\", \"entity_id\": \"s_entity_id_741\", \"acs_url\": \"s_acs_url_742\", \"name_id_format\": \"s_name_id_format_743\", \"name_id_attribute\": \"s_name_id_attribute_744\", \"certificate\": \"s_certificate_745\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_746\", \"source\": \"s_source_747\", \"name_format\": \"s_name_format_748\"}], \"assignment_required\": true}",
+            "{\"name\": \"s_name_740\", \"entity_id\": \"s_entity_id_741\", \"acs_url\": \"s_acs_url_742\", \"name_id_format\": \"s_name_id_format_743\", \"name_id_attribute\": \"s_name_id_attribute_744\", \"certificate\": \"s_certificate_745\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_746\", \"source\": \"s_source_747\", \"name_format\": \"s_name_format_748\"}], \"assignment_required\": true, \"status\": \"s_status_748\"}",
             List.of()),
         params(
             "SamlServiceProviderUpdateParams",
@@ -1561,8 +1573,9 @@ class ModelsTest {
                             new SamlAttributeMapping(
                                 "s_name_755", "s_source_756", "s_name_format_757")))
                     .assignmentRequired(true)
+                    .status("s_status_757")
                     .build(),
-            "{\"name\": \"s_name_749\", \"entity_id\": \"s_entity_id_750\", \"acs_url\": \"s_acs_url_751\", \"name_id_format\": \"s_name_id_format_752\", \"name_id_attribute\": \"s_name_id_attribute_753\", \"certificate\": \"s_certificate_754\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_755\", \"source\": \"s_source_756\", \"name_format\": \"s_name_format_757\"}], \"assignment_required\": true}",
+            "{\"name\": \"s_name_749\", \"entity_id\": \"s_entity_id_750\", \"acs_url\": \"s_acs_url_751\", \"name_id_format\": \"s_name_id_format_752\", \"name_id_attribute\": \"s_name_id_attribute_753\", \"certificate\": \"s_certificate_754\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_755\", \"source\": \"s_source_756\", \"name_format\": \"s_name_format_757\"}], \"assignment_required\": true, \"status\": \"s_status_757\"}",
             List.of()),
         params(
             "ScimTokenCreateParams",
@@ -1607,31 +1620,28 @@ class ModelsTest {
             "SecurityPolicyUpdateParams",
             () ->
                 SecurityPolicyUpdateParams.builder()
-                    .passwordMinLength(7)
-                    .passwordComplexity("s_password_complexity_818")
                     .sessionMaxAge("s_session_max_age_819")
                     .sessionIdleTimeout("s_session_idle_timeout_820")
                     .maxSessions(7)
                     .sessionLimitAction("s_session_limit_action_821")
                     .mfaEnforcement("s_mfa_enforcement_822")
                     .mfaGraceDays(7)
-                    .mfaEnforcedSince(Instant.parse("2026-11-05T10:00:00Z"))
                     .stepUpWindow("s_step_up_window_823")
                     .stepUpMethods(List.of("s_step_up_methods_824"))
                     .settings(Map.of("k", "v"))
                     .build(),
-            "{\"password_min_length\": 7, \"password_complexity\": \"s_password_complexity_818\", \"session_max_age\": \"s_session_max_age_819\", \"session_idle_timeout\": \"s_session_idle_timeout_820\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_821\", \"mfa_enforcement\": \"s_mfa_enforcement_822\", \"mfa_grace_days\": 7, \"mfa_enforced_since\": \"2026-11-05T10:00:00Z\", \"step_up_window\": \"s_step_up_window_823\", \"step_up_methods\": [\"s_step_up_methods_824\"], \"settings\": {\"k\": \"v\"}}",
+            "{\"session_max_age\": \"s_session_max_age_819\", \"session_idle_timeout\": \"s_session_idle_timeout_820\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_821\", \"mfa_enforcement\": \"s_mfa_enforcement_822\", \"mfa_grace_days\": 7, \"step_up_window\": \"s_step_up_window_823\", \"step_up_methods\": [\"s_step_up_methods_824\"], \"settings\": {\"k\": \"v\"}}",
             List.of()),
         params(
             "ServicePrincipalCreateParams",
             () ->
                 ServicePrincipalCreateParams.builder()
-                    .tenantId("s_tenant_id_830")
+                    .organizationId("s_organization_id_830")
                     .name("s_name_831")
                     .description("s_description_832")
                     .scopes(List.of("s_scopes_833"))
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_830\", \"name\": \"s_name_831\", \"description\": \"s_description_832\", \"scopes\": [\"s_scopes_833\"]}",
+            "{\"organization_id\": \"s_organization_id_830\", \"name\": \"s_name_831\", \"description\": \"s_description_832\", \"scopes\": [\"s_scopes_833\"]}",
             List.of()),
         params(
             "ServicePrincipalRotateSecretParams",
@@ -1683,15 +1693,15 @@ class ModelsTest {
             "{\"plan_code\": \"s_plan_code_883\", \"currency\": \"s_currency_884\"}",
             List.of()),
         params(
-            "TenantUpdateParams",
+            "OrganizationUpdateParams",
             () ->
-                TenantUpdateParams.builder()
+                OrganizationUpdateParams.builder()
                     .name("s_name_902")
                     .status("s_status_903")
-                    .plan("s_plan_904")
+                    .logoUrl("s_logo_url_904")
                     .metadata(Map.of("k", "v"))
                     .build(),
-            "{\"name\": \"s_name_902\", \"status\": \"s_status_903\", \"plan\": \"s_plan_904\", \"metadata\": {\"k\": \"v\"}}",
+            "{\"name\": \"s_name_902\", \"status\": \"s_status_903\", \"logo_url\": \"s_logo_url_904\", \"metadata\": {\"k\": \"v\"}}",
             List.of()),
         params(
             "TokenExchangeGrantParams",
@@ -1726,7 +1736,7 @@ class ModelsTest {
             "UserBulkCreateParams",
             () ->
                 UserBulkCreateParams.builder()
-                    .tenantId("s_tenant_id_963")
+                    .organizationId("s_organization_id_963")
                     .roleId("s_role_id_964")
                     .users(
                         List.of(
@@ -1737,20 +1747,20 @@ class ModelsTest {
                                 .phone("s_phone_968")
                                 .build()))
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_963\", \"role_id\": \"s_role_id_964\", \"users\": [{\"email\": \"s_email_965\", \"password\": \"s_password_966\", \"display_name\": \"s_display_name_967\", \"phone\": \"s_phone_968\"}]}",
+            "{\"organization_id\": \"s_organization_id_963\", \"role_id\": \"s_role_id_964\", \"users\": [{\"email\": \"s_email_965\", \"password\": \"s_password_966\", \"display_name\": \"s_display_name_967\", \"phone\": \"s_phone_968\"}]}",
             List.of()),
         params(
             "UserCreateParams",
             () ->
                 UserCreateParams.builder()
-                    .tenantId("s_tenant_id_969")
+                    .organizationId("s_organization_id_969")
                     .email("s_email_970")
                     .password("s_password_971")
                     .displayName("s_display_name_972")
                     .phone("s_phone_973")
                     .metadata(Map.of("k", "v"))
                     .build(),
-            "{\"tenant_id\": \"s_tenant_id_969\", \"email\": \"s_email_970\", \"password\": \"s_password_971\", \"display_name\": \"s_display_name_972\", \"phone\": \"s_phone_973\", \"metadata\": {\"k\": \"v\"}}",
+            "{\"organization_id\": \"s_organization_id_969\", \"email\": \"s_email_970\", \"password\": \"s_password_971\", \"display_name\": \"s_display_name_972\", \"phone\": \"s_phone_973\", \"metadata\": {\"k\": \"v\"}}",
             List.of("s_password_971")),
         params(
             "UserListParams",
@@ -1761,12 +1771,19 @@ class ModelsTest {
                     .q("s_q_977")
                     .role("s_role_978")
                     .department("s_department_979")
-                    .mfa(true)
+                    .mfa("off")
                     .emailVerified(true)
                     .status("s_status_980")
                     .lastSeen("s_last_seen_981")
+                    .adminsWithoutMfa(true)
+                    .inGroup(false)
+                    .ids(List.of("s_id_982"))
+                    .emails(List.of("s_email_983"))
+                    .includeDeleted(true)
+                    .sort("name")
+                    .order("asc")
                     .build(),
-            "{\"limit\": 7, \"cursor\": \"s_cursor_976\", \"q\": \"s_q_977\", \"role\": \"s_role_978\", \"department\": \"s_department_979\", \"mfa\": true, \"email_verified\": true, \"status\": \"s_status_980\", \"last_seen\": \"s_last_seen_981\"}",
+            "{\"limit\": 7, \"cursor\": \"s_cursor_976\", \"q\": \"s_q_977\", \"role\": \"s_role_978\", \"department\": \"s_department_979\", \"mfa\": \"off\", \"email_verified\": true, \"status\": \"s_status_980\", \"last_seen\": \"s_last_seen_981\", \"admins_without_mfa\": true, \"in_group\": false, \"id\": [\"s_id_982\"], \"email\": [\"s_email_983\"], \"include_deleted\": true, \"sort\": \"name\", \"order\": \"asc\"}",
             List.of()),
         params(
             "UserUpdateParams",
@@ -1798,9 +1815,9 @@ class ModelsTest {
                 WebhookCreateParams.builder()
                     .url("s_url_1006")
                     .events(List.of("s_events_1007"))
-                    .tenantId("s_tenant_id_1008")
+                    .organizationId("s_organization_id_1008")
                     .build(),
-            "{\"url\": \"s_url_1006\", \"events\": [\"s_events_1007\"], \"tenant_id\": \"s_tenant_id_1008\"}",
+            "{\"url\": \"s_url_1006\", \"events\": [\"s_events_1007\"], \"organization_id\": \"s_organization_id_1008\"}",
             List.of()),
         params(
             "WebhookDeliveryListParams",

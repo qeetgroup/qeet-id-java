@@ -82,7 +82,7 @@ class TokenVerifierTest {
     claims.put("nbf", NOW.minusSeconds(10).getEpochSecond());
     claims.put("jti", "jti-1");
     claims.put("user_id", "c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f");
-    claims.put("tenant_id", "7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f");
+    claims.put("organization_id", "7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f");
     claims.put("sid", "3f0d9a6c-0d5e-4f2c-9a7b-6e1c9d5a3b84");
     claims.put("scope", "users:read  audit:read");
     return claims;
@@ -114,7 +114,7 @@ class TokenVerifierTest {
     assertEquals(NOW.minusSeconds(10), verified.issuedAt());
     assertEquals(NOW.minusSeconds(10), verified.notBefore());
     assertEquals("jti-1", verified.jwtId());
-    assertEquals("7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f", verified.tenantId());
+    assertEquals("7d2f9a1c-3b4e-4c5d-8e6f-1a2b3c4d5e6f", verified.organizationId());
     assertEquals("c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f", verified.userId());
     assertEquals("3f0d9a6c-0d5e-4f2c-9a7b-6e1c9d5a3b84", verified.sessionId());
     assertEquals(Set.of("users:read", "audit:read"), verified.scopes());
@@ -368,7 +368,7 @@ class TokenVerifierTest {
             + "/.well-known/jwks.json\","
             + "\"token_endpoint\":\""
             + ISSUER
-            + "/v1/oauth/token-code\",\"grant_types_supported\":[\"authorization_code\"],\"x_new\":1}");
+            + "/v1/oauth/token\",\"grant_types_supported\":[\"authorization_code\"],\"x_new\":1}");
     DiscoveryDocument document = Discovery.fetch(server.url() + "/");
     assertEquals("/.well-known/openid-configuration", server.onlyRequest().path());
     assertEquals(List.of("authorization_code"), document.grantTypesSupported());

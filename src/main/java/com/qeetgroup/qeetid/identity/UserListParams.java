@@ -1,6 +1,7 @@
 package com.qeetgroup.qeetid.identity;
 
 import com.qeetgroup.qeetid.Params;
+import java.util.List;
 
 /** Filters for {@code list}. They combine. */
 public final class UserListParams extends Params {
@@ -52,7 +53,7 @@ public final class UserListParams extends Params {
     }
 
     /**
-     * A role name in the organisation.
+     * A role name in the organization.
      *
      * @param role the value
      * @return this builder
@@ -72,13 +73,13 @@ public final class UserListParams extends Params {
     }
 
     /**
-     * Whether the user has a confirmed second factor.
+     * Whether the user has a confirmed second factor. One of {@code "on"}, {@code "off"}.
      *
      * @param mfa the value
      * @return this builder
      */
-    public Builder mfa(boolean mfa) {
-      return set("mfa", mfa);
+    public Builder mfa(String mfa) {
+      return set("mfa", nonNull(mfa, "mfa"));
     }
 
     /**
@@ -109,6 +110,78 @@ public final class UserListParams extends Params {
      */
     public Builder lastSeen(String lastSeen) {
       return set("last_seen", nonNull(lastSeen, "lastSeen"));
+    }
+
+    /**
+     * True: only the owners and admins with no second factor; false: everyone else.
+     *
+     * @param adminsWithoutMfa the value
+     * @return this builder
+     */
+    public Builder adminsWithoutMfa(boolean adminsWithoutMfa) {
+      return set("admins_without_mfa", adminsWithoutMfa);
+    }
+
+    /**
+     * True: only the members in one of the organization's groups; false: only those in none.
+     *
+     * @param inGroup the value
+     * @return this builder
+     */
+    public Builder inGroup(boolean inGroup) {
+      return set("in_group", inGroup);
+    }
+
+    /**
+     * Only these members, by id, up to 200.
+     *
+     * @param ids the value
+     * @return this builder
+     */
+    public Builder ids(List<String> ids) {
+      return set("id", listOf(ids));
+    }
+
+    /**
+     * Only these members, by email, exactly but in any case, up to 200.
+     *
+     * @param emails the value
+     * @return this builder
+     */
+    public Builder emails(List<String> emails) {
+      return set("email", listOf(emails));
+    }
+
+    /**
+     * Adds the members since deleted, each with {@code deletedAt} and status {@code "deleted"}.
+     *
+     * @param includeDeleted the value
+     * @return this builder
+     */
+    public Builder includeDeleted(boolean includeDeleted) {
+      return set("include_deleted", includeDeleted);
+    }
+
+    /**
+     * The order. One of {@code "created"}, {@code "name"}, {@code "last_seen"}; {@code "created"}
+     * by default. A cursor works only with the sort and order of the page that gave it.
+     *
+     * @param sort the value
+     * @return this builder
+     */
+    public Builder sort(String sort) {
+      return set("sort", nonNull(sort, "sort"));
+    }
+
+    /**
+     * One of {@code "asc"}, {@code "desc"}; newest or last seen first by default, and A to Z by
+     * name.
+     *
+     * @param order the value
+     * @return this builder
+     */
+    public Builder order(String order) {
+      return set("order", nonNull(order, "order"));
     }
 
     @Override

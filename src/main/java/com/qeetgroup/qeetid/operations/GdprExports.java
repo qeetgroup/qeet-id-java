@@ -49,26 +49,29 @@ public final class GdprExports {
   /**
    * Fetches a GDPR export.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param exportId the export's id
    * @return the export request
    */
-  public ExportRequest get(String tenantId, String exportId) {
-    return get(tenantId, exportId, RequestOptions.none());
+  public ExportRequest get(String organizationId, String exportId) {
+    return get(organizationId, exportId, RequestOptions.none());
   }
 
   /**
    * Fetches a GDPR export. With per-call settings: see {@link #get(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param exportId the export's id
    * @param options per-call settings
    * @return the export request
    */
-  public ExportRequest get(String tenantId, String exportId, RequestOptions options) {
+  public ExportRequest get(String organizationId, String exportId, RequestOptions options) {
     return http.execute(
         ApiRequest.get(
-            Paths.of("/v1/tenants/{tenantId}/gdpr/export/{exportId}", tenantId, exportId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/gdpr/export/{exportId}",
+                organizationId,
+                exportId)),
         options,
         ExportRequest.class);
   }
@@ -76,23 +79,23 @@ public final class GdprExports {
   /**
    * Lists the GDPR exports.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<ExportRequest> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<ExportRequest> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the GDPR exports. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<ExportRequest> list(String tenantId, RequestOptions options) {
+  public ListResult<ExportRequest> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/gdpr/export", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/gdpr/export", organizationId)),
         ExportRequest.class,
         options);
   }

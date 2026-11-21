@@ -6,14 +6,17 @@ import java.util.Map;
 import org.jspecify.annotations.Nullable;
 
 /**
- * An organisation (a tenant). Every API key belongs to one.
+ * An organization. Every API key belongs to one.
  *
  * @param id its id
  * @param slug the slug
  * @param name its name
  * @param status One of {@code "active"}, {@code "suspended"}; others may be added
- * @param plan One of {@code "free"}, {@code "pro"}, {@code "enterprise"}; others may be added
+ * @param plan One of {@code "free"}, {@code "starter"}, {@code "pro"}, {@code "enterprise"}; others
+ *     may be added
  * @param region the region
+ * @param logoUrl The organization's logo, a hosted URL or a small inline data URL; empty when none
+ *     is set.
  * @param metadata free-form data
  * @param createdAt when it was created
  * @param updatedAt when it last changed
@@ -21,13 +24,14 @@ import org.jspecify.annotations.Nullable;
  * @param memberCount the member count
  * @param mfaEnabledCount the MFA enabled count
  */
-public record Tenant(
+public record Organization(
     String id,
     String slug,
     String name,
     String status,
     String plan,
     String region,
+    @JsonProperty("logo_url") String logoUrl,
     Map<String, Object> metadata,
     @JsonProperty("created_at") Instant createdAt,
     @JsonProperty("updated_at") Instant updatedAt,

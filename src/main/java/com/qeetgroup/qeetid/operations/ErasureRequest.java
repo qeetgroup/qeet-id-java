@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
  * An erasure request. It runs when its grace period ends, unless cancelled first.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param userId the user's id
  * @param requestedBy the requested by
  * @param reason the reason
@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record ErasureRequest(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     @JsonProperty("user_id") String userId,
     @JsonProperty("requested_by") @Nullable String requestedBy,
     @Nullable String reason,

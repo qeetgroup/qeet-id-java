@@ -27,26 +27,27 @@ public final class VerifiableCredentials {
   /**
    * Issue.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the issued credential
    */
-  public IssuedCredential issue(String tenantId, VerifiableCredentialIssueParams params) {
-    return issue(tenantId, params, RequestOptions.none());
+  public IssuedCredential issue(String organizationId, VerifiableCredentialIssueParams params) {
+    return issue(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Issue. With per-call settings: see {@link #issue(String, VerifiableCredentialIssueParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the issued credential
    */
   public IssuedCredential issue(
-      String tenantId, VerifiableCredentialIssueParams params, RequestOptions options) {
+      String organizationId, VerifiableCredentialIssueParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/credentials", tenantId)).json(params),
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/credentials", organizationId))
+            .json(params),
         options,
         IssuedCredential.class);
   }
@@ -54,23 +55,23 @@ public final class VerifiableCredentials {
   /**
    * Lists the verifiable credentials.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<VerifiableCredential> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<VerifiableCredential> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the verifiable credentials. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<VerifiableCredential> list(String tenantId, RequestOptions options) {
+  public ListResult<VerifiableCredential> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/credentials", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/credentials", organizationId)),
         VerifiableCredential.class,
         options);
   }
@@ -78,26 +79,26 @@ public final class VerifiableCredentials {
   /**
    * Revokes a verifiable credential.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param credentialId the credential's id
    */
-  public void revoke(String tenantId, String credentialId) {
-    revoke(tenantId, credentialId, RequestOptions.none());
+  public void revoke(String organizationId, String credentialId) {
+    revoke(organizationId, credentialId, RequestOptions.none());
   }
 
   /**
    * Revokes a verifiable credential. With per-call settings: see {@link #revoke(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param credentialId the credential's id
    * @param options per-call settings
    */
-  public void revoke(String tenantId, String credentialId, RequestOptions options) {
+  public void revoke(String organizationId, String credentialId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/credentials/{credentialId}/revoke",
-                    tenantId,
+                    "/v1/organizations/{organizationId}/credentials/{credentialId}/revoke",
+                    organizationId,
                     credentialId))
             .retrySafe(),
         options);

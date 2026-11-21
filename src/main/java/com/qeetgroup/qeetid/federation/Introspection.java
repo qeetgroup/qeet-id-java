@@ -140,12 +140,12 @@ public final class Introspection {
   }
 
   /**
-   * The organisation.
+   * The organization.
    *
-   * @return the organisation's id, or null
+   * @return the organization's id, or null
    */
-  public @Nullable String tenantId() {
-    return string("tenant_id");
+  public @Nullable String organizationId() {
+    return string("organization_id");
   }
 
   /**

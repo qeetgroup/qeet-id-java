@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * One entry of the hash-chained audit log.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param action the action
  * @param actorType the actor type
  * @param actorUserId the actor user's id
@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record AuditLogEntry(
     String id,
-    @JsonProperty("tenant_id") @Nullable String tenantId,
+    @JsonProperty("organization_id") @Nullable String organizationId,
     String action,
     @JsonProperty("actor_type") String actorType,
     @JsonProperty("actor_user_id") @Nullable String actorUserId,

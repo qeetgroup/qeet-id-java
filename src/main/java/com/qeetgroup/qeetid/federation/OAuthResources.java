@@ -7,7 +7,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * The organisation's registered RFC 8707 resources.
+ * The organization's registered RFC 8707 resources.
  *
  * <p>Get it from its parent resource. Safe for concurrent use.
  */
@@ -26,23 +26,24 @@ public final class OAuthResources {
   /**
    * Lists the OAuth resources.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<OAuthResource> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<OAuthResource> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the OAuth resources. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<OAuthResource> list(String tenantId, RequestOptions options) {
+  public ListResult<OAuthResource> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/oidc/resources", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/oidc/resources", organizationId)),
         OAuthResource.class,
         options);
   }
@@ -50,27 +51,29 @@ public final class OAuthResources {
   /**
    * Creates an OAuth resource.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the OAuth resource
    */
-  public OAuthResource create(String tenantId, OAuthResourceCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public OAuthResource create(String organizationId, OAuthResourceCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates an OAuth resource. With per-call settings: see {@link #create(String,
    * OAuthResourceCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the OAuth resource
    */
   public OAuthResource create(
-      String tenantId, OAuthResourceCreateParams params, RequestOptions options) {
+      String organizationId, OAuthResourceCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/oidc/resources", tenantId)).json(params),
+        ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/oidc/resources", organizationId))
+            .json(params),
         options,
         OAuthResource.class);
   }
@@ -78,26 +81,29 @@ public final class OAuthResources {
   /**
    * No new token is issued for it; tokens already issued last out their short lifetime.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param resourceId the resource's id
    */
-  public void delete(String tenantId, String resourceId) {
-    delete(tenantId, resourceId, RequestOptions.none());
+  public void delete(String organizationId, String resourceId) {
+    delete(organizationId, resourceId, RequestOptions.none());
   }
 
   /**
    * No new token is issued for it; tokens already issued last out their short lifetime. With
    * per-call settings: see {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param resourceId the resource's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String resourceId, RequestOptions options) {
+  public void delete(String organizationId, String resourceId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
-            Paths.of("/v1/tenants/{tenantId}/oidc/resources/{resourceId}", tenantId, resourceId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/oidc/resources/{resourceId}",
+                organizationId,
+                resourceId)),
         options);
   }
 }

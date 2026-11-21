@@ -88,23 +88,23 @@ public final class Webhooks {
   /**
    * Lists the webhooks.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<WebhookSubscription> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<WebhookSubscription> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the webhooks. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<WebhookSubscription> list(String tenantId, RequestOptions options) {
+  public ListResult<WebhookSubscription> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/webhooks", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/webhooks", organizationId)),
         WebhookSubscription.class,
         options);
   }
@@ -112,31 +112,35 @@ public final class Webhooks {
   /**
    * Changes the URL, the events, or both.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @param params the parameters
    * @return the webhook subscription
    */
-  public WebhookSubscription update(String tenantId, String webhookId, WebhookUpdateParams params) {
-    return update(tenantId, webhookId, params, RequestOptions.none());
+  public WebhookSubscription update(
+      String organizationId, String webhookId, WebhookUpdateParams params) {
+    return update(organizationId, webhookId, params, RequestOptions.none());
   }
 
   /**
    * Changes the URL, the events, or both. With per-call settings: see {@link #update(String,
    * String, WebhookUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @param params the parameters
    * @param options per-call settings
    * @return the webhook subscription
    */
   public WebhookSubscription update(
-      String tenantId, String webhookId, WebhookUpdateParams params, RequestOptions options) {
+      String organizationId, String webhookId, WebhookUpdateParams params, RequestOptions options) {
     return http.execute(
         ApiRequest.of(
                 "PATCH",
-                Paths.of("/v1/tenants/{tenantId}/webhooks/{webhookId}", tenantId, webhookId))
+                Paths.of(
+                    "/v1/organizations/{organizationId}/webhooks/{webhookId}",
+                    organizationId,
+                    webhookId))
             .json(params),
         options,
         WebhookSubscription.class);
@@ -165,27 +169,31 @@ public final class Webhooks {
   /**
    * Turns a disabled subscription back on; deliveries held meanwhile are then sent.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @return the webhook subscription
    */
-  public WebhookSubscription enable(String tenantId, String webhookId) {
-    return enable(tenantId, webhookId, RequestOptions.none());
+  public WebhookSubscription enable(String organizationId, String webhookId) {
+    return enable(organizationId, webhookId, RequestOptions.none());
   }
 
   /**
    * Turns a disabled subscription back on; deliveries held meanwhile are then sent. With per-call
    * settings: see {@link #enable(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @param options per-call settings
    * @return the webhook subscription
    */
-  public WebhookSubscription enable(String tenantId, String webhookId, RequestOptions options) {
+  public WebhookSubscription enable(
+      String organizationId, String webhookId, RequestOptions options) {
     return http.execute(
         ApiRequest.post(
-            Paths.of("/v1/tenants/{tenantId}/webhooks/{webhookId}/enable", tenantId, webhookId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/webhooks/{webhookId}/enable",
+                organizationId,
+                webhookId)),
         options,
         WebhookSubscription.class);
   }
@@ -194,28 +202,31 @@ public final class Webhooks {
    * Replaces the signing secret and returns the new one, once. The old one keeps signing alongside
    * it until {@code previous_secret_expires_at} (24 hours): verify with both meanwhile.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @return the webhook secret
    */
-  public WebhookSecret rotateSecret(String tenantId, String webhookId) {
-    return rotateSecret(tenantId, webhookId, RequestOptions.none());
+  public WebhookSecret rotateSecret(String organizationId, String webhookId) {
+    return rotateSecret(organizationId, webhookId, RequestOptions.none());
   }
 
   /**
    * Replaces the signing secret and returns the new one, once. With per-call settings: see {@link
    * #rotateSecret(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param webhookId the webhook's id
    * @param options per-call settings
    * @return the webhook secret
    */
-  public WebhookSecret rotateSecret(String tenantId, String webhookId, RequestOptions options) {
+  public WebhookSecret rotateSecret(
+      String organizationId, String webhookId, RequestOptions options) {
     return http.execute(
         ApiRequest.post(
             Paths.of(
-                "/v1/tenants/{tenantId}/webhooks/{webhookId}/rotate-secret", tenantId, webhookId)),
+                "/v1/organizations/{organizationId}/webhooks/{webhookId}/rotate-secret",
+                organizationId,
+                webhookId)),
         options,
         WebhookSecret.class);
   }
@@ -248,24 +259,26 @@ public final class Webhooks {
   /**
    * The catalogue of events a subscription can name.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<WebhookEventType> listEventTypes(String tenantId) {
-    return listEventTypes(tenantId, RequestOptions.none());
+  public ListResult<WebhookEventType> listEventTypes(String organizationId) {
+    return listEventTypes(organizationId, RequestOptions.none());
   }
 
   /**
    * The catalogue of events a subscription can name. With per-call settings: see {@link
    * #listEventTypes(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<WebhookEventType> listEventTypes(String tenantId, RequestOptions options) {
+  public ListResult<WebhookEventType> listEventTypes(
+      String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/webhooks/events", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/webhooks/events", organizationId)),
         WebhookEventType.class,
         options);
   }

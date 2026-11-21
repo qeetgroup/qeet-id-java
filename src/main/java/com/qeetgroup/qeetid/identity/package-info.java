@@ -1,5 +1,5 @@
 /**
- * The organisation, its people and groups: tenants, domains, users, groups, invitations and
+ * The organization, its people and groups: organizations, domains, users, groups, invitations and
  * branding.
  *
  * <p>Reach these through a {@link com.qeetgroup.qeetid.QeetID} client. Requests and answers are

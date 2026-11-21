@@ -26,52 +26,55 @@ public final class Roles {
   }
 
   /**
-   * Lists the organisation's roles, built-in and custom.
+   * Lists the organization's roles, built-in and custom.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<Role> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<Role> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
-   * Lists the organisation's roles, built-in and custom. With per-call settings: see {@link
+   * Lists the organization's roles, built-in and custom. With per-call settings: see {@link
    * #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<Role> list(String tenantId, RequestOptions options) {
+  public ListResult<Role> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/roles", tenantId)), Role.class, options);
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/roles", organizationId)),
+        Role.class,
+        options);
   }
 
   /**
    * Creates a custom role with no permissions; grant them with {@code grantPermission} or {@code
    * setPermissions}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the role
    */
-  public Role create(String tenantId, RoleCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public Role create(String organizationId, RoleCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates a custom role with no permissions; grant them with {@code grantPermission} or {@code
    * setPermissions}. With per-call settings: see {@link #create(String, RoleCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the role
    */
-  public Role create(String tenantId, RoleCreateParams params, RequestOptions options) {
+  public Role create(String organizationId, RoleCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/roles", tenantId)).json(params),
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/roles", organizationId))
+            .json(params),
         options,
         Role.class);
   }
@@ -79,29 +82,32 @@ public final class Roles {
   /**
    * Renames a custom role or changes its description.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @param params the parameters
    * @return the role
    */
-  public Role update(String tenantId, String roleId, RoleUpdateParams params) {
-    return update(tenantId, roleId, params, RequestOptions.none());
+  public Role update(String organizationId, String roleId, RoleUpdateParams params) {
+    return update(organizationId, roleId, params, RequestOptions.none());
   }
 
   /**
    * Renames a custom role or changes its description. With per-call settings: see {@link
    * #update(String, String, RoleUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @param params the parameters
    * @param options per-call settings
    * @return the role
    */
   public Role update(
-      String tenantId, String roleId, RoleUpdateParams params, RequestOptions options) {
+      String organizationId, String roleId, RoleUpdateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.of("PATCH", Paths.of("/v1/tenants/{tenantId}/roles/{roleId}", tenantId, roleId))
+        ApiRequest.of(
+                "PATCH",
+                Paths.of(
+                    "/v1/organizations/{organizationId}/roles/{roleId}", organizationId, roleId))
             .json(params),
         options,
         Role.class);
@@ -110,24 +116,25 @@ public final class Roles {
   /**
    * Deletes a custom role. Refused with 409 {@code rbac.role_in_use} while anyone holds it.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    */
-  public void delete(String tenantId, String roleId) {
-    delete(tenantId, roleId, RequestOptions.none());
+  public void delete(String organizationId, String roleId) {
+    delete(organizationId, roleId, RequestOptions.none());
   }
 
   /**
    * Deletes a custom role. With per-call settings: see {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String roleId, RequestOptions options) {
+  public void delete(String organizationId, String roleId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
-            "DELETE", Paths.of("/v1/tenants/{tenantId}/roles/{roleId}", tenantId, roleId)),
+            "DELETE",
+            Paths.of("/v1/organizations/{organizationId}/roles/{roleId}", organizationId, roleId)),
         options);
   }
 
@@ -160,32 +167,35 @@ public final class Roles {
    * Makes {@code permissionIds} the whole of a custom role's permissions, in one step, and returns
    * them.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @param permissionIds the permissions the role grants from now on
    * @return the role's permissions
    */
   public ListResult<Permission> setPermissions(
-      String tenantId, String roleId, List<String> permissionIds) {
-    return setPermissions(tenantId, roleId, permissionIds, RequestOptions.none());
+      String organizationId, String roleId, List<String> permissionIds) {
+    return setPermissions(organizationId, roleId, permissionIds, RequestOptions.none());
   }
 
   /**
    * Replaces a role's permissions, with per-call settings. See {@link #setPermissions(String,
    * String, List)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @param permissionIds the permissions the role grants from now on
    * @param options per-call settings
    * @return the role's permissions
    */
   public ListResult<Permission> setPermissions(
-      String tenantId, String roleId, List<String> permissionIds, RequestOptions options) {
+      String organizationId, String roleId, List<String> permissionIds, RequestOptions options) {
     ApiRequest request =
         ApiRequest.of(
                 "PUT",
-                Paths.of("/v1/tenants/{tenantId}/roles/{roleId}/permissions", tenantId, roleId))
+                Paths.of(
+                    "/v1/organizations/{organizationId}/roles/{roleId}/permissions",
+                    organizationId,
+                    roleId))
             .json(Bodies.of("permission_ids", List.copyOf(permissionIds)));
     return http.list(request, Permission.class, options);
   }
@@ -243,100 +253,111 @@ public final class Roles {
   /**
    * One page of the people holding the role, and every group granted it.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @return the role holders
    */
-  public RoleHolders listHolders(String tenantId, String roleId) {
+  public RoleHolders listHolders(String organizationId, String roleId) {
     return listHolders(
-        tenantId, roleId, RoleHoldersParams.builder().build(), RequestOptions.none());
+        organizationId, roleId, RoleHoldersParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * One page of the people holding the role, and every group granted it.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @param params the parameters
    * @return the role holders
    */
-  public RoleHolders listHolders(String tenantId, String roleId, RoleHoldersParams params) {
-    return listHolders(tenantId, roleId, params, RequestOptions.none());
+  public RoleHolders listHolders(String organizationId, String roleId, RoleHoldersParams params) {
+    return listHolders(organizationId, roleId, params, RequestOptions.none());
   }
 
   /**
    * One page of the people holding the role, and every group granted it. With per-call settings:
    * see {@link #listHolders(String, String, RoleHoldersParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param roleId the role's id
    * @param params the parameters
    * @param options per-call settings
    * @return the role holders
    */
   public RoleHolders listHolders(
-      String tenantId, String roleId, RoleHoldersParams params, RequestOptions options) {
+      String organizationId, String roleId, RoleHoldersParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/roles/{roleId}/holders", tenantId, roleId))
+        ApiRequest.get(
+                Paths.of(
+                    "/v1/organizations/{organizationId}/roles/{roleId}/holders",
+                    organizationId,
+                    roleId))
             .query(params),
         options,
         RoleHolders.class);
   }
 
   /**
-   * Assigns a role to a user in the organisation. Assigning it twice changes nothing.
+   * Assigns a role to a user in the organization. Assigning it twice changes nothing.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param roleId the role's id
    */
-  public void assign(String tenantId, String userId, String roleId) {
-    assign(tenantId, userId, roleId, RequestOptions.none());
+  public void assign(String organizationId, String userId, String roleId) {
+    assign(organizationId, userId, roleId, RequestOptions.none());
   }
 
   /**
-   * Assigns a role to a user in the organisation. With per-call settings: see {@link
+   * Assigns a role to a user in the organization. With per-call settings: see {@link
    * #assign(String, String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param roleId the role's id
    * @param options per-call settings
    */
-  public void assign(String tenantId, String userId, String roleId, RequestOptions options) {
+  public void assign(String organizationId, String userId, String roleId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.post(
             Paths.of(
-                "/v1/users/{userId}/tenants/{tenantId}/roles/{roleId}", userId, tenantId, roleId)),
+                "/v1/users/{userId}/organizations/{organizationId}/roles/{roleId}",
+                userId,
+                organizationId,
+                roleId)),
         options);
   }
 
   /**
    * Removes a directly assigned role from a user. A group may still grant it.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param roleId the role's id
    */
-  public void unassign(String tenantId, String userId, String roleId) {
-    unassign(tenantId, userId, roleId, RequestOptions.none());
+  public void unassign(String organizationId, String userId, String roleId) {
+    unassign(organizationId, userId, roleId, RequestOptions.none());
   }
 
   /**
    * Removes a directly assigned role from a user. With per-call settings: see {@link
    * #unassign(String, String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param roleId the role's id
    * @param options per-call settings
    */
-  public void unassign(String tenantId, String userId, String roleId, RequestOptions options) {
+  public void unassign(
+      String organizationId, String userId, String roleId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/users/{userId}/tenants/{tenantId}/roles/{roleId}", userId, tenantId, roleId)),
+                "/v1/users/{userId}/organizations/{organizationId}/roles/{roleId}",
+                userId,
+                organizationId,
+                roleId)),
         options);
   }
 }

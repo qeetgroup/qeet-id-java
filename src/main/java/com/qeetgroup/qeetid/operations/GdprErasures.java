@@ -49,23 +49,23 @@ public final class GdprErasures {
   /**
    * Lists the GDPR erasures.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<ErasureRequest> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<ErasureRequest> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the GDPR erasures. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<ErasureRequest> list(String tenantId, RequestOptions options) {
+  public ListResult<ErasureRequest> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/gdpr/purge", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/gdpr/purge", organizationId)),
         ErasureRequest.class,
         options);
   }

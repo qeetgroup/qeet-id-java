@@ -12,7 +12,8 @@ import org.jspecify.annotations.Nullable;
  * @param brokenAtId the broken at's id
  * @param brokenReason the broken reason
  * @param reasonCode One of {@code "audit.chain_prev_hash_mismatch"}, {@code
- *     "audit.chain_row_hash_mismatch"}; others may be added
+ *     "audit.chain_row_hash_mismatch"}, {@code "audit.chain_checkpoint_gone"}, {@code
+ *     "audit.chain_checkpoint_unsigned"}; others may be added
  */
 public record AuditChainVerification(
     boolean ok,

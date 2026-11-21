@@ -86,7 +86,7 @@ class OAuthTest {
     for (String secret : List.of("at_1", "rt_1", "id_1")) {
       assertFalse(tokens.toString().contains(secret));
     }
-    Map<String, List<String>> form = onlyFormRequest("/v1/oauth/token-code").form();
+    Map<String, List<String>> form = onlyFormRequest("/v1/oauth/token").form();
     assertEquals(List.of("authorization_code"), form.get("grant_type"));
     assertEquals(List.of("code_1"), form.get("code"));
     assertEquals(List.of("verifier_1"), form.get("code_verifier"));
@@ -104,7 +104,7 @@ class OAuthTest {
                 .refreshToken("rt_0")
                 .scope("openid")
                 .build());
-    Map<String, List<String>> form = onlyFormRequest("/v1/oauth/token-code").form();
+    Map<String, List<String>> form = onlyFormRequest("/v1/oauth/token").form();
     assertEquals(List.of("refresh_token"), form.get("grant_type"));
     assertEquals(List.of("rt_0"), form.get("refresh_token"));
     assertFalse(form.containsKey("client_secret"), "a public client sends no secret");
@@ -162,7 +162,7 @@ class OAuthTest {
     assertEquals(400, pending.status());
     assertEquals(
         List.of("urn:ietf:params:oauth:grant-type:device_code"),
-        onlyFormRequest("/v1/oauth/token-code").form().get("grant_type"));
+        onlyFormRequest("/v1/oauth/token").form().get("grant_type"));
   }
 
   @Test
@@ -183,7 +183,7 @@ class OAuthTest {
     assertEquals(OAuthException.SLOW_DOWN, slow.code());
     assertEquals(
         List.of("urn:openid:params:grant-type:ciba"),
-        onlyFormRequest("/v1/oauth/token-code").form().get("grant_type"));
+        onlyFormRequest("/v1/oauth/token").form().get("grant_type"));
   }
 
   @Test
@@ -258,7 +258,7 @@ class OAuthTest {
             200,
             "{\"active\":true,\"sub\":\"u_1\",\"scope\":\"files:read files:write\",\"aud\":[\"https://mcp.brightleaffoods.in\"],"
                 + "\"client_id\":\"app_1\",\"iss\":\"https://api.id.qeet.in\",\"token_type\":\"access_token\",\"exp\":1793870000,"
-                + "\"iat\":1793869000,\"tenant_id\":\"t_1\",\"sid\":\"s_1\",\"actor_type\":\"agent\",\"agent_id\":\"agt_1\","
+                + "\"iat\":1793869000,\"organization_id\":\"t_1\",\"sid\":\"s_1\",\"actor_type\":\"agent\",\"agent_id\":\"agt_1\","
                 + "\"act\":{\"sub\":\"svc_1\"},\"resource\":\"https://mcp.brightleaffoods.in\"}");
     Introspection answer = qeetId.oauth().introspect("at_1", client);
     assertTrue(answer.active());
@@ -271,7 +271,7 @@ class OAuthTest {
     assertEquals("access_token", answer.tokenType());
     assertEquals(Instant.ofEpochSecond(1793870000), answer.expiresAt());
     assertEquals(Instant.ofEpochSecond(1793869000), answer.issuedAt());
-    assertEquals("t_1", answer.tenantId());
+    assertEquals("t_1", answer.organizationId());
     assertEquals("s_1", answer.sessionId());
     assertEquals("agent", answer.actorType());
     assertEquals("agt_1", answer.agentId());
@@ -360,7 +360,7 @@ class OAuthTest {
     server.enqueue(200, "{\"revoked\":3}");
     assertEquals(3, qeetId.oauth().grants().revokeMany("t1", List.of("g1", "g2", "g3")));
     assertEquals("{\"ids\":[\"g1\",\"g2\",\"g3\"]}", server.lastRequest().bodyText());
-    assertEquals("/v1/tenants/t1/oauth/grants/revoke", server.lastRequest().path());
+    assertEquals("/v1/organizations/t1/oauth/grants/revoke", server.lastRequest().path());
 
     server.enqueue(200, "{\"revoked\":5}");
     assertEquals(5, qeetId.oauth().grants().revokeForApplication("t1", "app_1"));

@@ -39,7 +39,7 @@ unless they start with `src/`, `docs/` or `.github/`.
 ## Resources — one package per OpenAPI document
 
 ```text
-identity/     tenants · domains · users · groups · invitations · branding
+identity/     organizations · domains · users · groups · invitations · branding
 access/       roles · permissions · relationships · decisions · auth policies · security policies · IP rules · threat detection
 federation/   OAuth · applications · service principals · SAML · LDAP · SCIM · social providers · admin portal links
 developer/    API keys · agents · verifiable credentials · auth hooks · webhooks · secrets · token vault

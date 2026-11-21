@@ -6,7 +6,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * Manages the organisation's sign-in policy: methods, password rules and lockout.
+ * Manages the organization's sign-in policy: methods, password rules and lockout.
  *
  * <p>Get it from {@code qeetId.authPolicies()}. Safe for concurrent use.
  */
@@ -25,23 +25,23 @@ public final class AuthPolicies {
   /**
    * Fetches an auth policie.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the auth policy
    */
-  public AuthPolicy get(String tenantId) {
-    return get(tenantId, RequestOptions.none());
+  public AuthPolicy get(String organizationId) {
+    return get(organizationId, RequestOptions.none());
   }
 
   /**
    * Fetches an auth policie. With per-call settings: see {@link #get(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the auth policy
    */
-  public AuthPolicy get(String tenantId, RequestOptions options) {
+  public AuthPolicy get(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/auth-policy", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/auth-policy", organizationId)),
         options,
         AuthPolicy.class);
   }
@@ -49,51 +49,55 @@ public final class AuthPolicies {
   /**
    * Replaces the policy. Read it first and send it back whole.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param policy the policy
    * @return the auth policy
    */
-  public AuthPolicy update(String tenantId, AuthPolicyUpdateParams policy) {
-    return update(tenantId, policy, RequestOptions.none());
+  public AuthPolicy update(String organizationId, AuthPolicyUpdateParams policy) {
+    return update(organizationId, policy, RequestOptions.none());
   }
 
   /**
    * Replaces the policy. With per-call settings: see {@link #update(String,
    * AuthPolicyUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param policy the policy
    * @param options per-call settings
    * @return the auth policy
    */
-  public AuthPolicy update(String tenantId, AuthPolicyUpdateParams policy, RequestOptions options) {
+  public AuthPolicy update(
+      String organizationId, AuthPolicyUpdateParams policy, RequestOptions options) {
     return http.execute(
-        ApiRequest.of("PUT", Paths.of("/v1/tenants/{tenantId}/auth-policy", tenantId)).json(policy),
+        ApiRequest.of(
+                "PUT", Paths.of("/v1/organizations/{organizationId}/auth-policy", organizationId))
+            .json(policy),
         options,
         AuthPolicy.class);
   }
 
   /**
-   * How the organisation's people sign in: who would be locked out by turning a method off.
+   * How the organization's people sign in: who would be locked out by turning a method off.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the auth policy usage
    */
-  public AuthPolicyUsage getUsage(String tenantId) {
-    return getUsage(tenantId, RequestOptions.none());
+  public AuthPolicyUsage getUsage(String organizationId) {
+    return getUsage(organizationId, RequestOptions.none());
   }
 
   /**
-   * How the organisation's people sign in: who would be locked out by turning a method off. With
+   * How the organization's people sign in: who would be locked out by turning a method off. With
    * per-call settings: see {@link #getUsage(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the auth policy usage
    */
-  public AuthPolicyUsage getUsage(String tenantId, RequestOptions options) {
+  public AuthPolicyUsage getUsage(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/auth-policy/usage", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/auth-policy/usage", organizationId)),
         options,
         AuthPolicyUsage.class);
   }

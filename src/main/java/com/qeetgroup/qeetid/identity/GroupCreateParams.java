@@ -3,7 +3,9 @@ package com.qeetgroup.qeetid.identity;
 import com.qeetgroup.qeetid.Params;
 import org.jspecify.annotations.Nullable;
 
-/** A new group. */
+/**
+ * A new group, in the caller's organization: the API takes it from the credential, never the body.
+ */
 public final class GroupCreateParams extends Params {
   private GroupCreateParams(Builder builder) {
     super(builder);
@@ -21,16 +23,6 @@ public final class GroupCreateParams extends Params {
   /** Builds {@link GroupCreateParams}. */
   public static final class Builder extends Params.Builder<GroupCreateParams, Builder> {
     private Builder() {}
-
-    /**
-     * The organisation's id. Required.
-     *
-     * @param tenantId the value
-     * @return this builder
-     */
-    public Builder tenantId(String tenantId) {
-      return set("tenant_id", nonNull(tenantId, "tenantId"));
-    }
 
     /**
      * Its name. Required.
@@ -53,7 +45,7 @@ public final class GroupCreateParams extends Params {
     }
 
     /**
-     * One of the organisation's groups; omit or null for a top-level group. Null sends an explicit
+     * One of the organization's groups; omit or null for a top-level group. Null sends an explicit
      * null, which clears it.
      *
      * @param parentId the value
@@ -65,7 +57,6 @@ public final class GroupCreateParams extends Params {
 
     @Override
     public GroupCreateParams build() {
-      require("tenant_id", "tenantId");
       require("name", "name");
       return new GroupCreateParams(this);
     }

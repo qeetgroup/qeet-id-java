@@ -1,6 +1,6 @@
 package com.qeetgroup.qeetid.exception;
 
-/** 402: the organisation's plan doesn't include this, or a plan limit is reached. */
+/** 402: the organization's plan doesn't include this, or a plan limit is reached. */
 public class PaymentRequiredException extends ApiException {
   private static final long serialVersionUID = 1L;
 

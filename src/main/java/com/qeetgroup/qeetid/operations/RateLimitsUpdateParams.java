@@ -22,13 +22,13 @@ public final class RateLimitsUpdateParams extends Params {
     private Builder() {}
 
     /**
-     * The tenant.
+     * The organization.
      *
-     * @param tenant the value
+     * @param organization the value
      * @return this builder
      */
-    public Builder tenant(RateLimitBucket tenant) {
-      return set("tenant", nonNull(tenant, "tenant"));
+    public Builder organization(RateLimitBucket organization) {
+      return set("organization", nonNull(organization, "organization"));
     }
 
     /**

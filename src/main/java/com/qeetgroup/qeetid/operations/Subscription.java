@@ -5,7 +5,7 @@ import java.time.Instant;
 import org.jspecify.annotations.Nullable;
 
 /**
- * The organisation's Qeet ID subscription. Status {@code none} means it has none.
+ * The organization's Qeet ID subscription. Status {@code none} means it has none.
  *
  * @param status One of {@code "none"}, {@code "trialing"}, {@code "active"}, {@code "past_due"},
  *     {@code "canceled"}; others may be added

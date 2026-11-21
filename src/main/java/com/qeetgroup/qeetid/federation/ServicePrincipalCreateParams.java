@@ -23,13 +23,13 @@ public final class ServicePrincipalCreateParams extends Params {
     private Builder() {}
 
     /**
-     * The organisation's id. Required.
+     * The organization's id. Required.
      *
-     * @param tenantId the value
+     * @param organizationId the value
      * @return this builder
      */
-    public Builder tenantId(String tenantId) {
-      return set("tenant_id", nonNull(tenantId, "tenantId"));
+    public Builder organizationId(String organizationId) {
+      return set("organization_id", nonNull(organizationId, "organizationId"));
     }
 
     /**
@@ -64,7 +64,7 @@ public final class ServicePrincipalCreateParams extends Params {
 
     @Override
     public ServicePrincipalCreateParams build() {
-      require("tenant_id", "tenantId");
+      require("organization_id", "organizationId");
       require("name", "name");
       return new ServicePrincipalCreateParams(this);
     }

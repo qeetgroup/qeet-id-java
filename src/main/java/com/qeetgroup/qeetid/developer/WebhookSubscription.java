@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * A webhook subscription: an endpoint and the events it receives.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param url the URL
  * @param events the events
  * @param disabledAt Set while disabled; null while enabled.
@@ -27,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record WebhookSubscription(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String url,
     List<String> events,
     @JsonProperty("disabled_at") @Nullable Instant disabledAt,
@@ -55,8 +55,8 @@ public record WebhookSubscription(
   public String toString() {
     return "WebhookSubscription[id="
         + id
-        + ", tenantId="
-        + tenantId
+        + ", organizationId="
+        + organizationId
         + ", url="
         + url
         + ", events="

@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @param id its id
  * @param userId the user's id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param provider the provider
  * @param subject the subject
  * @param email the email address
@@ -18,7 +18,7 @@ import org.jspecify.annotations.Nullable;
 public record LinkedIdentity(
     String id,
     @JsonProperty("user_id") String userId,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String provider,
     String subject,
     @Nullable String email,

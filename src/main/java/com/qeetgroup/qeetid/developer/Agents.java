@@ -6,6 +6,10 @@ import com.qeetgroup.qeetid.internal.ApiRequest;
 import com.qeetgroup.qeetid.internal.Bodies;
 import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Manages AI agent identities: their tokens, secrets and lifecycle.
@@ -28,25 +32,25 @@ public final class Agents {
    * Creates an agent. The API makes it idempotent: an {@code Idempotency-Key} is sent with it,
    * generated per call unless you give one in {@link RequestOptions}, so a retry never acts twice.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the agent
    */
-  public Agent create(String tenantId, AgentCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public Agent create(String organizationId, AgentCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates an agent. With per-call settings: see {@link #create(String, AgentCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the agent
    */
-  public Agent create(String tenantId, AgentCreateParams params, RequestOptions options) {
+  public Agent create(String organizationId, AgentCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/agents", tenantId))
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/agents", organizationId))
             .json(params)
             .idempotent(),
         options,
@@ -56,46 +60,50 @@ public final class Agents {
   /**
    * Lists the agents.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<Agent> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<Agent> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the agents. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<Agent> list(String tenantId, RequestOptions options) {
+  public ListResult<Agent> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/agents", tenantId)), Agent.class, options);
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/agents", organizationId)),
+        Agent.class,
+        options);
   }
 
   /**
    * Deletes an agent.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    */
-  public void delete(String tenantId, String agentId) {
-    delete(tenantId, agentId, RequestOptions.none());
+  public void delete(String organizationId, String agentId) {
+    delete(organizationId, agentId, RequestOptions.none());
   }
 
   /**
    * Deletes an agent. With per-call settings: see {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String agentId, RequestOptions options) {
+  public void delete(String organizationId, String agentId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
-            "DELETE", Paths.of("/v1/tenants/{tenantId}/agents/{agentId}", tenantId, agentId)),
+            "DELETE",
+            Paths.of(
+                "/v1/organizations/{organizationId}/agents/{agentId}", organizationId, agentId)),
         options);
   }
 
@@ -103,28 +111,30 @@ public final class Agents {
    * Suspends ({@code true}) or resumes ({@code false}) the agent. Prefer {@code suspend} and {@code
    * resume}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param disabled the disabled
    */
-  public void setDisabled(String tenantId, String agentId, boolean disabled) {
-    setDisabled(tenantId, agentId, disabled, RequestOptions.none());
+  public void setDisabled(String organizationId, String agentId, boolean disabled) {
+    setDisabled(organizationId, agentId, disabled, RequestOptions.none());
   }
 
   /**
    * Suspends ({@code true}) or resumes ({@code false}) the agent. With per-call settings: see
    * {@link #setDisabled(String, String, boolean)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param disabled the disabled
    * @param options per-call settings
    */
   public void setDisabled(
-      String tenantId, String agentId, boolean disabled, RequestOptions options) {
+      String organizationId, String agentId, boolean disabled, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
-                "PATCH", Paths.of("/v1/tenants/{tenantId}/agents/{agentId}", tenantId, agentId))
+                "PATCH",
+                Paths.of(
+                    "/v1/organizations/{organizationId}/agents/{agentId}", organizationId, agentId))
             .json(Bodies.of("disabled", disabled)),
         options);
   }
@@ -132,27 +142,30 @@ public final class Agents {
   /**
    * Suspends the agent: its tokens stop working at once. Reversible with {@code resume}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @return the agent's new state, {@code suspended}
    */
-  public String suspend(String tenantId, String agentId) {
-    return suspend(tenantId, agentId, RequestOptions.none());
+  public String suspend(String organizationId, String agentId) {
+    return suspend(organizationId, agentId, RequestOptions.none());
   }
 
   /**
    * Suspends the agent: its tokens stop working at once. With per-call settings: see {@link
    * #suspend(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param options per-call settings
    * @return the agent's new state, {@code suspended}
    */
-  public String suspend(String tenantId, String agentId, RequestOptions options) {
+  public String suspend(String organizationId, String agentId, RequestOptions options) {
     return http.tree(
             ApiRequest.post(
-                Paths.of("/v1/tenants/{tenantId}/agents/{agentId}/suspend", tenantId, agentId)),
+                Paths.of(
+                    "/v1/organizations/{organizationId}/agents/{agentId}/suspend",
+                    organizationId,
+                    agentId)),
             options)
         .path("status")
         .asText();
@@ -161,26 +174,29 @@ public final class Agents {
   /**
    * Resume.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @return the agent's new state, {@code active}
    */
-  public String resume(String tenantId, String agentId) {
-    return resume(tenantId, agentId, RequestOptions.none());
+  public String resume(String organizationId, String agentId) {
+    return resume(organizationId, agentId, RequestOptions.none());
   }
 
   /**
    * Resume. With per-call settings: see {@link #resume(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param options per-call settings
    * @return the agent's new state, {@code active}
    */
-  public String resume(String tenantId, String agentId, RequestOptions options) {
+  public String resume(String organizationId, String agentId, RequestOptions options) {
     return http.tree(
             ApiRequest.post(
-                Paths.of("/v1/tenants/{tenantId}/agents/{agentId}/resume", tenantId, agentId)),
+                Paths.of(
+                    "/v1/organizations/{organizationId}/agents/{agentId}/resume",
+                    organizationId,
+                    agentId)),
             options)
         .path("status")
         .asText();
@@ -189,78 +205,83 @@ public final class Agents {
   /**
    * Retires the agent for good.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @return the agent's new state, {@code decommissioned}
    */
-  public String decommission(String tenantId, String agentId) {
-    return decommission(tenantId, agentId, RequestOptions.none());
+  public String decommission(String organizationId, String agentId) {
+    return decommission(organizationId, agentId, RequestOptions.none());
   }
 
   /**
    * Retires the agent for good. With per-call settings: see {@link #decommission(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param options per-call settings
    * @return the agent's new state, {@code decommissioned}
    */
-  public String decommission(String tenantId, String agentId, RequestOptions options) {
+  public String decommission(String organizationId, String agentId, RequestOptions options) {
     return http.tree(
             ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/agents/{agentId}/decommission", tenantId, agentId)),
+                    "/v1/organizations/{organizationId}/agents/{agentId}/decommission",
+                    organizationId,
+                    agentId)),
             options)
         .path("status")
         .asText();
   }
 
   /**
-   * Incident response: suspends every active agent of the organisation at once.
+   * Incident response: suspends every active agent of the organization at once.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return how many agents were suspended
    */
-  public int suspendAll(String tenantId) {
-    return suspendAll(tenantId, RequestOptions.none());
+  public int suspendAll(String organizationId) {
+    return suspendAll(organizationId, RequestOptions.none());
   }
 
   /**
-   * Incident response: suspends every active agent of the organisation at once. With per-call
+   * Incident response: suspends every active agent of the organization at once. With per-call
    * settings: see {@link #suspendAll(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return how many agents were suspended
    */
-  public int suspendAll(String tenantId, RequestOptions options) {
+  public int suspendAll(String organizationId, RequestOptions options) {
     return http.tree(
-            ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/agents/kill-all", tenantId)), options)
+            ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/agents/kill-all", organizationId)),
+            options)
         .path("suspended")
         .asInt();
   }
 
   /**
-   * Resumes every suspended agent of the organisation at once.
+   * Resumes every suspended agent of the organization at once.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return how many agents were resumed
    */
-  public int resumeAll(String tenantId) {
-    return resumeAll(tenantId, RequestOptions.none());
+  public int resumeAll(String organizationId) {
+    return resumeAll(organizationId, RequestOptions.none());
   }
 
   /**
-   * Resumes every suspended agent of the organisation at once. With per-call settings: see {@link
+   * Resumes every suspended agent of the organization at once. With per-call settings: see {@link
    * #resumeAll(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return how many agents were resumed
    */
-  public int resumeAll(String tenantId, RequestOptions options) {
+  public int resumeAll(String organizationId, RequestOptions options) {
     return http.tree(
-            ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/agents/resume-all", tenantId)),
+            ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/agents/resume-all", organizationId)),
             options)
         .path("resumed")
         .asInt();
@@ -269,43 +290,49 @@ public final class Agents {
   /**
    * Issues a new secret, shown once; the old one keeps working for {@code overlap_hours}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @return the agent secret
    */
-  public AgentSecret rotateSecret(String tenantId, String agentId) {
+  public AgentSecret rotateSecret(String organizationId, String agentId) {
     return rotateSecret(
-        tenantId, agentId, AgentRotateSecretParams.builder().build(), RequestOptions.none());
+        organizationId, agentId, AgentRotateSecretParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * Issues a new secret, shown once; the old one keeps working for {@code overlap_hours}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param params the parameters
    * @return the agent secret
    */
-  public AgentSecret rotateSecret(String tenantId, String agentId, AgentRotateSecretParams params) {
-    return rotateSecret(tenantId, agentId, params, RequestOptions.none());
+  public AgentSecret rotateSecret(
+      String organizationId, String agentId, AgentRotateSecretParams params) {
+    return rotateSecret(organizationId, agentId, params, RequestOptions.none());
   }
 
   /**
    * Issues a new secret, shown once; the old one keeps working for {@code overlap_hours}. With
    * per-call settings: see {@link #rotateSecret(String, String, AgentRotateSecretParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param agentId the agent's id
    * @param params the parameters
    * @param options per-call settings
    * @return the agent secret
    */
   public AgentSecret rotateSecret(
-      String tenantId, String agentId, AgentRotateSecretParams params, RequestOptions options) {
+      String organizationId,
+      String agentId,
+      AgentRotateSecretParams params,
+      RequestOptions options) {
     return http.execute(
         ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/agents/{agentId}/rotate-secret", tenantId, agentId))
+                    "/v1/organizations/{organizationId}/agents/{agentId}/rotate-secret",
+                    organizationId,
+                    agentId))
             .json(params),
         options,
         AgentSecret.class);
@@ -314,27 +341,31 @@ public final class Agents {
   /**
    * Lists the agents a person sponsors.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @return the list
    */
-  public ListResult<Agent> listSponsoredBy(String tenantId, String userId) {
-    return listSponsoredBy(tenantId, userId, RequestOptions.none());
+  public ListResult<Agent> listSponsoredBy(String organizationId, String userId) {
+    return listSponsoredBy(organizationId, userId, RequestOptions.none());
   }
 
   /**
    * Lists the agents a person sponsors. With per-call settings: see {@link #listSponsoredBy(String,
    * String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param userId the user's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<Agent> listSponsoredBy(String tenantId, String userId, RequestOptions options) {
+  public ListResult<Agent> listSponsoredBy(
+      String organizationId, String userId, RequestOptions options) {
     return http.list(
         ApiRequest.get(
-            Paths.of("/v1/tenants/{tenantId}/agents/sponsored-by/{userId}", tenantId, userId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/agents/sponsored-by/{userId}",
+                organizationId,
+                userId)),
         Agent.class,
         options);
   }
@@ -342,32 +373,32 @@ public final class Agents {
   /**
    * Gives every agent a person sponsors to another sponsor, as when the person leaves.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param fromUserId the from user's id
    * @param toUserId the to user id
    * @return how many agents changed sponsor
    */
-  public int transferSponsorship(String tenantId, String fromUserId, String toUserId) {
-    return transferSponsorship(tenantId, fromUserId, toUserId, RequestOptions.none());
+  public int transferSponsorship(String organizationId, String fromUserId, String toUserId) {
+    return transferSponsorship(organizationId, fromUserId, toUserId, RequestOptions.none());
   }
 
   /**
    * Gives every agent a person sponsors to another sponsor, as when the person leaves. With
    * per-call settings: see {@link #transferSponsorship(String, String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param fromUserId the from user's id
    * @param toUserId the to user id
    * @param options per-call settings
    * @return how many agents changed sponsor
    */
   public int transferSponsorship(
-      String tenantId, String fromUserId, String toUserId, RequestOptions options) {
+      String organizationId, String fromUserId, String toUserId, RequestOptions options) {
     return http.tree(
             ApiRequest.post(
                     Paths.of(
-                        "/v1/tenants/{tenantId}/agents/sponsored-by/{fromUserId}/transfer",
-                        tenantId,
+                        "/v1/organizations/{organizationId}/agents/sponsored-by/{fromUserId}/transfer",
+                        organizationId,
                         fromUserId))
                 .json(Bodies.of("to_user_id", toUserId)),
             options)
@@ -376,8 +407,11 @@ public final class Agents {
   }
 
   /**
-   * Gets a short-lived access token for an agent from its id and secret. The token carries the
-   * agent's scopes. Sends no API key.
+   * Gets a short-lived access token for an agent from its id and secret: the OAuth {@code
+   * client_credentials} grant at {@code POST /v1/oauth/token}, with the agent's id as {@code
+   * client_id} and its secret as {@code client_secret}. The token carries the agent's scopes. Sends
+   * no API key. A wrong secret throws an {@link com.qeetgroup.qeetid.exception.OAuthException} with
+   * code {@code invalid_client}, an agent that isn't active one with {@code unauthorized_client}.
    *
    * @param agentId the agent id
    * @param secret the secret
@@ -397,10 +431,13 @@ public final class Agents {
    * @return the agent token
    */
   public AgentToken createToken(String agentId, String secret, RequestOptions options) {
+    Map<String, @Nullable String> form = new LinkedHashMap<>();
+    form.put("grant_type", "client_credentials");
+    form.put("client_id", Objects.requireNonNull(agentId, "agentId"));
+    form.put("client_secret", Objects.requireNonNull(secret, "secret"));
+    // An OAuth grant, so never retried, as every grant is.
     return http.execute(
-        ApiRequest.post("/v1/agents/token")
-            .json(Bodies.of("agent_id", agentId, "secret", secret))
-            .unauthenticated(),
+        ApiRequest.post("/v1/oauth/token").form(form).unauthenticated().neverRetry(),
         options,
         AgentToken.class);
   }

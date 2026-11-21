@@ -101,6 +101,16 @@ public final class SamlConnectionUpdateParams extends Params {
       return set("status", nonNull(status, "status"));
     }
 
+    /**
+     * Accept IdP-initiated sign-ins (unsolicited assertions). Off by default.
+     *
+     * @param allowIdpInitiated the value
+     * @return this builder
+     */
+    public Builder allowIdpInitiated(boolean allowIdpInitiated) {
+      return set("allow_idp_initiated", allowIdpInitiated);
+    }
+
     @Override
     public SamlConnectionUpdateParams build() {
       return new SamlConnectionUpdateParams(this);

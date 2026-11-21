@@ -23,13 +23,13 @@ public final class UserBulkCreateParams extends Params {
     private Builder() {}
 
     /**
-     * Optional; when present it must be the API key's own organisation.
+     * Optional; when present it must be the API key's own organization.
      *
-     * @param tenantId the value
+     * @param organizationId the value
      * @return this builder
      */
-    public Builder tenantId(String tenantId) {
-      return set("tenant_id", nonNull(tenantId, "tenantId"));
+    public Builder organizationId(String organizationId) {
+      return set("organization_id", nonNull(organizationId, "organizationId"));
     }
 
     /**

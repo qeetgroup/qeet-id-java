@@ -65,7 +65,7 @@ public final class VerifiableCredentialIssueParams extends Params {
     }
 
     /**
-     * One of the organisation's users the credential is about. Null sends an explicit null, which
+     * One of the organization's users the credential is about. Null sends an explicit null, which
      * clears it.
      *
      * @param userId the value

@@ -9,10 +9,11 @@ import org.jspecify.annotations.Nullable;
  * A data export. {@code payload} is filled in once {@code status} is {@code ready}.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param userId the user's id
  * @param requestedBy the requested by
- * @param status One of {@code "pending"}, {@code "ready"}, {@code "failed"}; others may be added
+ * @param status One of {@code "pending"}, {@code "ready"}, {@code "failed"}, {@code "expired"};
+ *     others may be added
  * @param payload the payload
  * @param error the error
  * @param completedAt the completed time
@@ -20,7 +21,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record ExportRequest(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     @JsonProperty("user_id") String userId,
     @JsonProperty("requested_by") @Nullable String requestedBy,
     String status,

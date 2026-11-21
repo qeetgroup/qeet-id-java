@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
  * {@code viewer}) have {@code is_system} set and can't change.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param name its name
  * @param description its description
  * @param isSystem whether is system
@@ -18,7 +18,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record Role(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String name,
     @Nullable String description,
     @JsonProperty("is_system") boolean isSystem,

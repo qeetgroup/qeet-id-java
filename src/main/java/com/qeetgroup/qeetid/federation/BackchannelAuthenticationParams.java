@@ -43,7 +43,7 @@ public final class BackchannelAuthenticationParams extends Params {
     }
 
     /**
-     * The person's email address in the client's organisation. Required.
+     * The person's email address in the client's organization. Required.
      *
      * @param loginHint the value
      * @return this builder

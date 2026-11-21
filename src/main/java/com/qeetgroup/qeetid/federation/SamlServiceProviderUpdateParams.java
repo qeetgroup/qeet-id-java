@@ -123,6 +123,16 @@ public final class SamlServiceProviderUpdateParams extends Params {
       return set("assignment_required", assignmentRequired);
     }
 
+    /**
+     * The service provider's state. One of {@code "draft"}, {@code "active"}, {@code "disabled"}.
+     *
+     * @param status the value
+     * @return this builder
+     */
+    public Builder status(String status) {
+      return set("status", nonNull(status, "status"));
+    }
+
     @Override
     public SamlServiceProviderUpdateParams build() {
       return new SamlServiceProviderUpdateParams(this);

@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
  * A directory (LDAP or Active Directory) connection. The bind password is never returned.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param name its name
  * @param serverUrl the server URL
  * @param startTls the start tls
@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record LdapConnection(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String name,
     @JsonProperty("server_url") String serverUrl,
     @JsonProperty("start_tls") boolean startTls,

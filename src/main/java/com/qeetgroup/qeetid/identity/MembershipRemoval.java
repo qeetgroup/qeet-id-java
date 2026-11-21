@@ -3,7 +3,7 @@ package com.qeetgroup.qeetid.identity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * What removing a member who belongs to another organisation took away here.
+ * What removing a member who belongs to another organization took away here.
  *
  * @param id its id
  * @param rolesRemoved the roles removed

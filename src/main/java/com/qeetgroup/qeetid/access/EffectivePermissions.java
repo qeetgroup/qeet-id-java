@@ -3,7 +3,7 @@ package com.qeetgroup.qeetid.access;
 import java.util.List;
 
 /**
- * Every permission a user holds in an organisation, and the grants behind them.
+ * Every permission a user holds in an organization, and the grants behind them.
  *
  * @param permissions the permissions
  * @param grants the grants

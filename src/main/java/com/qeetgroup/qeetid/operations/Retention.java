@@ -6,7 +6,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * Manages the organisation's data-retention policy.
+ * Manages the organization's data-retention policy.
  *
  * <p>Get it from {@code qeetId.retention()}. Safe for concurrent use.
  */
@@ -25,23 +25,23 @@ public final class Retention {
   /**
    * Fetches a retention.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the retention policy
    */
-  public RetentionPolicy get(String tenantId) {
-    return get(tenantId, RequestOptions.none());
+  public RetentionPolicy get(String organizationId) {
+    return get(organizationId, RequestOptions.none());
   }
 
   /**
    * Fetches a retention. With per-call settings: see {@link #get(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the retention policy
    */
-  public RetentionPolicy get(String tenantId, RequestOptions options) {
+  public RetentionPolicy get(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/retention", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/retention", organizationId)),
         options,
         RetentionPolicy.class);
   }
@@ -49,27 +49,29 @@ public final class Retention {
   /**
    * Changes only the fields given.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param policy the policy
    * @return the retention policy
    */
-  public RetentionPolicy update(String tenantId, RetentionPolicyUpdateParams policy) {
-    return update(tenantId, policy, RequestOptions.none());
+  public RetentionPolicy update(String organizationId, RetentionPolicyUpdateParams policy) {
+    return update(organizationId, policy, RequestOptions.none());
   }
 
   /**
    * Changes only the fields given. With per-call settings: see {@link #update(String,
    * RetentionPolicyUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param policy the policy
    * @param options per-call settings
    * @return the retention policy
    */
   public RetentionPolicy update(
-      String tenantId, RetentionPolicyUpdateParams policy, RequestOptions options) {
+      String organizationId, RetentionPolicyUpdateParams policy, RequestOptions options) {
     return http.execute(
-        ApiRequest.of("PUT", Paths.of("/v1/tenants/{tenantId}/retention", tenantId)).json(policy),
+        ApiRequest.of(
+                "PUT", Paths.of("/v1/organizations/{organizationId}/retention", organizationId))
+            .json(policy),
         options,
         RetentionPolicy.class);
   }
@@ -77,23 +79,25 @@ public final class Retention {
   /**
    * Counts what the policy would purge now. Deletes nothing.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the retention preview
    */
-  public RetentionPreview preview(String tenantId) {
-    return preview(tenantId, RequestOptions.none());
+  public RetentionPreview preview(String organizationId) {
+    return preview(organizationId, RequestOptions.none());
   }
 
   /**
    * Counts what the policy would purge now. With per-call settings: see {@link #preview(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the retention preview
    */
-  public RetentionPreview preview(String tenantId, RequestOptions options) {
+  public RetentionPreview preview(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/retention/preview", tenantId)).retrySafe(),
+        ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/retention/preview", organizationId))
+            .retrySafe(),
         options,
         RetentionPreview.class);
   }
@@ -101,24 +105,26 @@ public final class Retention {
   /**
    * Purges what is due now, ahead of the scheduled run.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return how many users were purged
    */
-  public int run(String tenantId) {
-    return run(tenantId, RequestOptions.none());
+  public int run(String organizationId) {
+    return run(organizationId, RequestOptions.none());
   }
 
   /**
    * Purges what is due now, ahead of the scheduled run. With per-call settings: see {@link
    * #run(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return how many users were purged
    */
-  public int run(String tenantId, RequestOptions options) {
+  public int run(String organizationId, RequestOptions options) {
     return http.tree(
-            ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/retention/run", tenantId)), options)
+            ApiRequest.post(
+                Paths.of("/v1/organizations/{organizationId}/retention/run", organizationId)),
+            options)
         .path("purged")
         .asInt();
   }

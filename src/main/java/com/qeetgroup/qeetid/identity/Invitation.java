@@ -5,11 +5,11 @@ import java.time.Instant;
 import org.jspecify.annotations.Nullable;
 
 /**
- * An invitation to join the organisation. Its token is never returned: the link goes only to the
+ * An invitation to join the organization. Its token is never returned: the link goes only to the
  * invited address.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param email the email address
  * @param roleId The role the invitee receives on accepting.
  * @param status its state
@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record Invitation(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     String email,
     @JsonProperty("role_id") @Nullable String roleId,
     String status,

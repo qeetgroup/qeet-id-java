@@ -29,27 +29,28 @@ public final class LdapConnections {
   /**
    * Creates an LDAP connection.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the LDAP connection
    */
-  public LdapConnection create(String tenantId, LdapConnectionCreateParams params) {
-    return create(tenantId, params, RequestOptions.none());
+  public LdapConnection create(String organizationId, LdapConnectionCreateParams params) {
+    return create(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Creates an LDAP connection. With per-call settings: see {@link #create(String,
    * LdapConnectionCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the LDAP connection
    */
   public LdapConnection create(
-      String tenantId, LdapConnectionCreateParams params, RequestOptions options) {
+      String organizationId, LdapConnectionCreateParams params, RequestOptions options) {
     return http.execute(
-        ApiRequest.post(Paths.of("/v1/tenants/{tenantId}/ldap", tenantId)).json(params),
+        ApiRequest.post(Paths.of("/v1/organizations/{organizationId}/ldap", organizationId))
+            .json(params),
         options,
         LdapConnection.class);
   }
@@ -57,26 +58,29 @@ public final class LdapConnections {
   /**
    * Fetches an LDAP connection.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @return the LDAP connection
    */
-  public LdapConnection get(String tenantId, String connectionId) {
-    return get(tenantId, connectionId, RequestOptions.none());
+  public LdapConnection get(String organizationId, String connectionId) {
+    return get(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * Fetches an LDAP connection. With per-call settings: see {@link #get(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    * @return the LDAP connection
    */
-  public LdapConnection get(String tenantId, String connectionId, RequestOptions options) {
+  public LdapConnection get(String organizationId, String connectionId, RequestOptions options) {
     return http.execute(
         ApiRequest.get(
-            Paths.of("/v1/tenants/{tenantId}/ldap/{connectionId}", tenantId, connectionId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/ldap/{connectionId}",
+                organizationId,
+                connectionId)),
         options,
         LdapConnection.class);
   }
@@ -84,23 +88,23 @@ public final class LdapConnections {
   /**
    * Lists the LDAP connections.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<LdapConnection> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<LdapConnection> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the LDAP connections. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<LdapConnection> list(String tenantId, RequestOptions options) {
+  public ListResult<LdapConnection> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/ldap", tenantId)),
+        ApiRequest.get(Paths.of("/v1/organizations/{organizationId}/ldap", organizationId)),
         LdapConnection.class,
         options);
   }
@@ -108,35 +112,38 @@ public final class LdapConnections {
   /**
    * Changes only the fields given.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @return the LDAP connection
    */
   public LdapConnection update(
-      String tenantId, String connectionId, LdapConnectionUpdateParams params) {
-    return update(tenantId, connectionId, params, RequestOptions.none());
+      String organizationId, String connectionId, LdapConnectionUpdateParams params) {
+    return update(organizationId, connectionId, params, RequestOptions.none());
   }
 
   /**
    * Changes only the fields given. With per-call settings: see {@link #update(String, String,
    * LdapConnectionUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @param options per-call settings
    * @return the LDAP connection
    */
   public LdapConnection update(
-      String tenantId,
+      String organizationId,
       String connectionId,
       LdapConnectionUpdateParams params,
       RequestOptions options) {
     return http.execute(
         ApiRequest.of(
                 "PATCH",
-                Paths.of("/v1/tenants/{tenantId}/ldap/{connectionId}", tenantId, connectionId))
+                Paths.of(
+                    "/v1/organizations/{organizationId}/ldap/{connectionId}",
+                    organizationId,
+                    connectionId))
             .json(params),
         options,
         LdapConnection.class);
@@ -145,53 +152,58 @@ public final class LdapConnections {
   /**
    * Deletes an LDAP connection.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    */
-  public void delete(String tenantId, String connectionId) {
-    delete(tenantId, connectionId, RequestOptions.none());
+  public void delete(String organizationId, String connectionId) {
+    delete(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * Deletes an LDAP connection. With per-call settings: see {@link #delete(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    */
-  public void delete(String tenantId, String connectionId, RequestOptions options) {
+  public void delete(String organizationId, String connectionId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
-            Paths.of("/v1/tenants/{tenantId}/ldap/{connectionId}", tenantId, connectionId)),
+            Paths.of(
+                "/v1/organizations/{organizationId}/ldap/{connectionId}",
+                organizationId,
+                connectionId)),
         options);
   }
 
   /**
    * Binds to the directory with the stored credentials. A failure throws.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @return whether the bind succeeded
    */
-  public boolean test(String tenantId, String connectionId) {
-    return test(tenantId, connectionId, RequestOptions.none());
+  public boolean test(String organizationId, String connectionId) {
+    return test(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * Binds to the directory with the stored credentials. With per-call settings: see {@link
    * #test(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    * @return whether the bind succeeded
    */
-  public boolean test(String tenantId, String connectionId, RequestOptions options) {
+  public boolean test(String organizationId, String connectionId, RequestOptions options) {
     return http.tree(
             ApiRequest.post(
                     Paths.of(
-                        "/v1/tenants/{tenantId}/ldap/{connectionId}/test", tenantId, connectionId))
+                        "/v1/organizations/{organizationId}/ldap/{connectionId}/test",
+                        organizationId,
+                        connectionId))
                 .retrySafe(),
             options)
         .path("ok")
@@ -201,29 +213,29 @@ public final class LdapConnections {
   /**
    * List group mappings.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @return the list
    */
-  public ListResult<SsoGroupMapping> listGroupMappings(String tenantId, String connectionId) {
-    return listGroupMappings(tenantId, connectionId, RequestOptions.none());
+  public ListResult<SsoGroupMapping> listGroupMappings(String organizationId, String connectionId) {
+    return listGroupMappings(organizationId, connectionId, RequestOptions.none());
   }
 
   /**
    * List group mappings. With per-call settings: see {@link #listGroupMappings(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param options per-call settings
    * @return the list
    */
   public ListResult<SsoGroupMapping> listGroupMappings(
-      String tenantId, String connectionId, RequestOptions options) {
+      String organizationId, String connectionId, RequestOptions options) {
     return http.list(
         ApiRequest.get(
             Paths.of(
-                "/v1/tenants/{tenantId}/ldap/{connectionId}/group-mappings",
-                tenantId,
+                "/v1/organizations/{organizationId}/ldap/{connectionId}/group-mappings",
+                organizationId,
                 connectionId)),
         SsoGroupMapping.class,
         options);
@@ -232,36 +244,36 @@ public final class LdapConnections {
   /**
    * Create group mapping.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @return the SSO group mapping
    */
   public SsoGroupMapping createGroupMapping(
-      String tenantId, String connectionId, SsoGroupMappingCreateParams params) {
-    return createGroupMapping(tenantId, connectionId, params, RequestOptions.none());
+      String organizationId, String connectionId, SsoGroupMappingCreateParams params) {
+    return createGroupMapping(organizationId, connectionId, params, RequestOptions.none());
   }
 
   /**
    * Create group mapping. With per-call settings: see {@link #createGroupMapping(String, String,
    * SsoGroupMappingCreateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param params the parameters
    * @param options per-call settings
    * @return the SSO group mapping
    */
   public SsoGroupMapping createGroupMapping(
-      String tenantId,
+      String organizationId,
       String connectionId,
       SsoGroupMappingCreateParams params,
       RequestOptions options) {
     return http.execute(
         ApiRequest.post(
                 Paths.of(
-                    "/v1/tenants/{tenantId}/ldap/{connectionId}/group-mappings",
-                    tenantId,
+                    "/v1/organizations/{organizationId}/ldap/{connectionId}/group-mappings",
+                    organizationId,
                     connectionId))
             .json(params),
         options,
@@ -271,38 +283,38 @@ public final class LdapConnections {
   /**
    * Delete group mapping.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param mappingId the mapping's id
    */
-  public void deleteGroupMapping(String tenantId, String connectionId, String mappingId) {
-    deleteGroupMapping(tenantId, connectionId, mappingId, RequestOptions.none());
+  public void deleteGroupMapping(String organizationId, String connectionId, String mappingId) {
+    deleteGroupMapping(organizationId, connectionId, mappingId, RequestOptions.none());
   }
 
   /**
    * Delete group mapping. With per-call settings: see {@link #deleteGroupMapping(String, String,
    * String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param connectionId the connection's id
    * @param mappingId the mapping's id
    * @param options per-call settings
    */
   public void deleteGroupMapping(
-      String tenantId, String connectionId, String mappingId, RequestOptions options) {
+      String organizationId, String connectionId, String mappingId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.of(
             "DELETE",
             Paths.of(
-                "/v1/tenants/{tenantId}/ldap/{connectionId}/group-mappings/{mappingId}",
-                tenantId,
+                "/v1/organizations/{organizationId}/ldap/{connectionId}/group-mappings/{mappingId}",
+                organizationId,
                 connectionId,
                 mappingId)),
         options);
   }
 
   /**
-   * Signs a person in with their directory username and password, under the organisation's lockout,
+   * Signs a person in with their directory username and password, under the organization's lockout,
    * network, risk and second-factor rules. The result is tokens, or a challenge to complete at
    * {@code POST /v1/auth/mfa}:
    *

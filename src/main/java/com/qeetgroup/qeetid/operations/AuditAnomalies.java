@@ -26,37 +26,39 @@ public final class AuditAnomalies {
   /**
    * Lists the audit anomalies.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<AuditAnomaly> list(String tenantId) {
-    return list(tenantId, AuditAnomalyListParams.builder().build(), RequestOptions.none());
+  public ListResult<AuditAnomaly> list(String organizationId) {
+    return list(organizationId, AuditAnomalyListParams.builder().build(), RequestOptions.none());
   }
 
   /**
    * Lists the audit anomalies.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @return the list
    */
-  public ListResult<AuditAnomaly> list(String tenantId, AuditAnomalyListParams params) {
-    return list(tenantId, params, RequestOptions.none());
+  public ListResult<AuditAnomaly> list(String organizationId, AuditAnomalyListParams params) {
+    return list(organizationId, params, RequestOptions.none());
   }
 
   /**
    * Lists the audit anomalies. With per-call settings: see {@link #list(String,
    * AuditAnomalyListParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param params the parameters
    * @param options per-call settings
    * @return the list
    */
   public ListResult<AuditAnomaly> list(
-      String tenantId, AuditAnomalyListParams params, RequestOptions options) {
+      String organizationId, AuditAnomalyListParams params, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/audit/anomalies", tenantId)).query(params),
+        ApiRequest.get(
+                Paths.of("/v1/organizations/{organizationId}/audit/anomalies", organizationId))
+            .query(params),
         AuditAnomaly.class,
         options);
   }
@@ -64,23 +66,24 @@ public final class AuditAnomalies {
   /**
    * Get summary.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the audit anomaly summary
    */
-  public AuditAnomalySummary getSummary(String tenantId) {
-    return getSummary(tenantId, RequestOptions.none());
+  public AuditAnomalySummary getSummary(String organizationId) {
+    return getSummary(organizationId, RequestOptions.none());
   }
 
   /**
    * Get summary. With per-call settings: see {@link #getSummary(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the audit anomaly summary
    */
-  public AuditAnomalySummary getSummary(String tenantId, RequestOptions options) {
+  public AuditAnomalySummary getSummary(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/audit/anomalies/summary", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/audit/anomalies/summary", organizationId)),
         options,
         AuditAnomalySummary.class);
   }
@@ -88,48 +91,51 @@ public final class AuditAnomalies {
   /**
    * Resolve.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param anomalyId the anomaly's id
    */
-  public void resolve(String tenantId, String anomalyId) {
-    resolve(tenantId, anomalyId, RequestOptions.none());
+  public void resolve(String organizationId, String anomalyId) {
+    resolve(organizationId, anomalyId, RequestOptions.none());
   }
 
   /**
    * Resolve. With per-call settings: see {@link #resolve(String, String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param anomalyId the anomaly's id
    * @param options per-call settings
    */
-  public void resolve(String tenantId, String anomalyId, RequestOptions options) {
+  public void resolve(String organizationId, String anomalyId, RequestOptions options) {
     http.executeVoid(
         ApiRequest.post(
             Paths.of(
-                "/v1/tenants/{tenantId}/audit/anomalies/{anomalyId}/resolve", tenantId, anomalyId)),
+                "/v1/organizations/{organizationId}/audit/anomalies/{anomalyId}/resolve",
+                organizationId,
+                anomalyId)),
         options);
   }
 
   /**
    * Get settings.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the audit anomaly settings
    */
-  public AuditAnomalySettings getSettings(String tenantId) {
-    return getSettings(tenantId, RequestOptions.none());
+  public AuditAnomalySettings getSettings(String organizationId) {
+    return getSettings(organizationId, RequestOptions.none());
   }
 
   /**
    * Get settings. With per-call settings: see {@link #getSettings(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the audit anomaly settings
    */
-  public AuditAnomalySettings getSettings(String tenantId, RequestOptions options) {
+  public AuditAnomalySettings getSettings(String organizationId, RequestOptions options) {
     return http.execute(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/audit/anomaly-settings", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/audit/anomaly-settings", organizationId)),
         options,
         AuditAnomalySettings.class);
   }
@@ -137,27 +143,31 @@ public final class AuditAnomalies {
   /**
    * Update settings.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param settings the settings
    * @return the audit anomaly settings
    */
-  public AuditAnomalySettings updateSettings(String tenantId, AuditAnomalySettings settings) {
-    return updateSettings(tenantId, settings, RequestOptions.none());
+  public AuditAnomalySettings updateSettings(
+      String organizationId, AuditAnomalySettingsUpdateParams settings) {
+    return updateSettings(organizationId, settings, RequestOptions.none());
   }
 
   /**
    * Update settings. With per-call settings: see {@link #updateSettings(String,
-   * AuditAnomalySettings)}.
+   * AuditAnomalySettingsUpdateParams)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param settings the settings
    * @param options per-call settings
    * @return the audit anomaly settings
    */
   public AuditAnomalySettings updateSettings(
-      String tenantId, AuditAnomalySettings settings, RequestOptions options) {
+      String organizationId, AuditAnomalySettingsUpdateParams settings, RequestOptions options) {
     return http.execute(
-        ApiRequest.of("PUT", Paths.of("/v1/tenants/{tenantId}/audit/anomaly-settings", tenantId))
+        ApiRequest.of(
+                "PUT",
+                Paths.of(
+                    "/v1/organizations/{organizationId}/audit/anomaly-settings", organizationId))
             .json(settings),
         options,
         AuditAnomalySettings.class);

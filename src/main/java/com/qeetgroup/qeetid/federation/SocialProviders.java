@@ -7,7 +7,7 @@ import com.qeetgroup.qeetid.internal.Paths;
 import com.qeetgroup.qeetid.internal.Transport;
 
 /**
- * Manages the API key's organisation's social sign-in providers, and linked social accounts.
+ * Manages the API key's organization's social sign-in providers, and linked social accounts.
  *
  * <p>Get it from {@code qeetId.socialProviders()}. Safe for concurrent use.
  */
@@ -26,29 +26,30 @@ public final class SocialProviders {
   /**
    * Lists the social providers.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @return the list
    */
-  public ListResult<SocialProvider> list(String tenantId) {
-    return list(tenantId, RequestOptions.none());
+  public ListResult<SocialProvider> list(String organizationId) {
+    return list(organizationId, RequestOptions.none());
   }
 
   /**
    * Lists the social providers. With per-call settings: see {@link #list(String)}.
    *
-   * @param tenantId the organisation's id
+   * @param organizationId the organization's id
    * @param options per-call settings
    * @return the list
    */
-  public ListResult<SocialProvider> list(String tenantId, RequestOptions options) {
+  public ListResult<SocialProvider> list(String organizationId, RequestOptions options) {
     return http.list(
-        ApiRequest.get(Paths.of("/v1/tenants/{tenantId}/social/providers", tenantId)),
+        ApiRequest.get(
+            Paths.of("/v1/organizations/{organizationId}/social/providers", organizationId)),
         SocialProvider.class,
         options);
   }
 
   /**
-   * Adds a provider, or replaces the settings of one the organisation has.
+   * Adds a provider, or replaces the settings of one the organization has.
    *
    * @param params the parameters
    * @return the social provider
@@ -58,7 +59,7 @@ public final class SocialProviders {
   }
 
   /**
-   * Adds a provider, or replaces the settings of one the organisation has. With per-call settings:
+   * Adds a provider, or replaces the settings of one the organization has. With per-call settings:
    * see {@link #upsert(SocialProviderUpsertParams)}.
    *
    * @param params the parameters

@@ -10,7 +10,7 @@ import org.jspecify.annotations.Nullable;
  * Qeet ID account.
  *
  * @param id its id
- * @param tenantId the organisation's id
+ * @param organizationId the organization's id
  * @param capabilities One of {@code "saml"}, {@code "scim"}, {@code "domain_verification"}; others
  *     may be added
  * @param createdBy the created by
@@ -21,7 +21,7 @@ import org.jspecify.annotations.Nullable;
  */
 public record AdminPortalLink(
     String id,
-    @JsonProperty("tenant_id") String tenantId,
+    @JsonProperty("organization_id") String organizationId,
     List<String> capabilities,
     @JsonProperty("created_by") @Nullable String createdBy,
     @JsonProperty("expires_at") Instant expiresAt,

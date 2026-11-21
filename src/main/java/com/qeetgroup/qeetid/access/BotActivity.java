@@ -7,13 +7,13 @@ import org.jspecify.annotations.Nullable;
 /**
  * Recent bot-detection verdicts, a page at a time, with totals.
  *
- * @param recent the recent
+ * @param items the verdicts on this page, newest first
  * @param nextCursor the next cursor
  * @param total the total
  * @param stats the stats
  */
 public record BotActivity(
-    List<BotEvent> recent,
+    List<BotEvent> items,
     @JsonProperty("next_cursor") @Nullable String nextCursor,
     long total,
     Stats stats) {

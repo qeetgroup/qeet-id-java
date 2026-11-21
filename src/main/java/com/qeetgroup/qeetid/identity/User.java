@@ -17,8 +17,8 @@ import org.jspecify.annotations.Nullable;
  * @param phoneVerifiedAt the phone verified time
  * @param displayName the display name, or null
  * @param avatarUrl the avatar URL
- * @param status One of {@code "active"}, {@code "invited"}, {@code "suspended"}; others may be
- *     added
+ * @param status One of {@code "active"}, {@code "invited"}, {@code "suspended"}, {@code "deleted"}
+ *     (only on a member listed with {@code includeDeleted}); others may be added
  * @param metadata Free-form data. Empty when the user's home is another organization, which keeps
  *     it.
  * @param createdAt when it was created
@@ -31,6 +31,8 @@ import org.jspecify.annotations.Nullable;
  * @param lastSeenIp the last seen IP
  * @param homeOrganizationName The name of the organization that manages the account.
  * @param suspension the suspension
+ * @param deletedAt When the member was deleted; only on a member listed with {@code
+ *     includeDeleted}.
  */
 public record User(
     String id,
@@ -52,7 +54,8 @@ public record User(
     @JsonProperty("last_seen_at") @Nullable Instant lastSeenAt,
     @JsonProperty("last_seen_ip") @Nullable String lastSeenIp,
     @JsonProperty("home_organization_name") @Nullable String homeOrganizationName,
-    @Nullable UserSuspension suspension) {
+    @Nullable UserSuspension suspension,
+    @JsonProperty("deleted_at") @Nullable Instant deletedAt) {
 
   /**
    * The same roles with their ids.

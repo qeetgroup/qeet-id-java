@@ -147,13 +147,14 @@ public final class AuditAnomalies {
    * @param settings the settings
    * @return the audit anomaly settings
    */
-  public AuditAnomalySettings updateSettings(String organizationId, AuditAnomalySettings settings) {
+  public AuditAnomalySettings updateSettings(
+      String organizationId, AuditAnomalySettingsUpdateParams settings) {
     return updateSettings(organizationId, settings, RequestOptions.none());
   }
 
   /**
    * Update settings. With per-call settings: see {@link #updateSettings(String,
-   * AuditAnomalySettings)}.
+   * AuditAnomalySettingsUpdateParams)}.
    *
    * @param organizationId the organization's id
    * @param settings the settings
@@ -161,7 +162,7 @@ public final class AuditAnomalies {
    * @return the audit anomaly settings
    */
   public AuditAnomalySettings updateSettings(
-      String organizationId, AuditAnomalySettings settings, RequestOptions options) {
+      String organizationId, AuditAnomalySettingsUpdateParams settings, RequestOptions options) {
     return http.execute(
         ApiRequest.of(
                 "PUT",

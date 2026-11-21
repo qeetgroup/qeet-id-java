@@ -191,6 +191,7 @@ import com.qeetgroup.qeetid.operations.AnalyticsTrendPoint;
 import com.qeetgroup.qeetid.operations.AuditAnomaly;
 import com.qeetgroup.qeetid.operations.AuditAnomalyListParams;
 import com.qeetgroup.qeetid.operations.AuditAnomalySettings;
+import com.qeetgroup.qeetid.operations.AuditAnomalySettingsUpdateParams;
 import com.qeetgroup.qeetid.operations.AuditAnomalySummary;
 import com.qeetgroup.qeetid.operations.AuditChainVerification;
 import com.qeetgroup.qeetid.operations.AuditLogEntry;
@@ -357,7 +358,7 @@ class ModelsTest {
             List.of()),
         record(
             AuditAnomalySettings.class,
-            "{\"enabled\": true, \"score_threshold\": 0.5, \"min_baseline_events\": 7}",
+            "{\"organization_id\": \"s_organization_id_133\", \"enabled\": true, \"score_threshold\": 0.5, \"min_baseline_events\": 7}",
             List.of()),
         record(
             AuditAnomalySummary.class,
@@ -410,7 +411,7 @@ class ModelsTest {
             List.of()),
         record(
             BotActivity.class,
-            "{\"recent\": [{\"id\": \"s_id_217\", \"ip\": \"s_ip_218\", \"user_agent\": \"s_user_agent_219\", \"score\": 0.5, \"verdict\": \"s_verdict_220\", \"outcome\": \"s_outcome_221\", \"user_id\": \"s_user_id_222\", \"user_email\": \"s_user_email_223\", \"created_at\": \"2026-11-05T10:00:00Z\"}], \"next_cursor\": \"s_next_cursor_224\", \"total\": 7, \"stats\": {\"blocked_24h\": 7, \"challenged_24h\": 7, \"threshold\": 0.5}}",
+            "{\"items\": [{\"id\": \"s_id_217\", \"ip\": \"s_ip_218\", \"user_agent\": \"s_user_agent_219\", \"score\": 0.5, \"verdict\": \"s_verdict_220\", \"outcome\": \"s_outcome_221\", \"user_id\": \"s_user_id_222\", \"user_email\": \"s_user_email_223\", \"created_at\": \"2026-11-05T10:00:00Z\"}], \"next_cursor\": \"s_next_cursor_224\", \"total\": 7, \"stats\": {\"blocked_24h\": 7, \"challenged_24h\": 7, \"threshold\": 0.5}}",
             List.of()),
         record(
             BotEvent.class,
@@ -700,7 +701,7 @@ class ModelsTest {
             List.of("s_value_809")),
         record(
             SecurityPolicy.class,
-            "{\"organization_id\": \"s_organization_id_810\", \"password_min_length\": 7, \"password_complexity\": \"s_password_complexity_811\", \"session_max_age\": \"s_session_max_age_812\", \"session_idle_timeout\": \"s_session_idle_timeout_813\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_814\", \"mfa_enforcement\": \"s_mfa_enforcement_815\", \"mfa_grace_days\": 7, \"mfa_enforced_since\": \"2026-11-05T10:00:00Z\", \"step_up_window\": \"s_step_up_window_816\", \"step_up_methods\": [\"s_step_up_methods_817\"], \"settings\": {\"k\": \"v\"}}",
+            "{\"organization_id\": \"s_organization_id_810\", \"session_max_age\": \"s_session_max_age_812\", \"session_idle_timeout\": \"s_session_idle_timeout_813\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_814\", \"mfa_enforcement\": \"s_mfa_enforcement_815\", \"mfa_grace_days\": 7, \"mfa_enforced_since\": \"2026-11-05T10:00:00Z\", \"step_up_window\": \"s_step_up_window_816\", \"step_up_methods\": [\"s_step_up_methods_817\"], \"settings\": {\"k\": \"v\"}}",
             List.of()),
         record(
             ServicePrincipal.class,
@@ -764,7 +765,7 @@ class ModelsTest {
             List.of()),
         record(
             User.class,
-            "{\"id\": \"s_id_938\", \"organization_id\": \"s_organization_id_939\", \"email\": \"s_email_940\", \"email_verified_at\": \"2026-11-05T10:00:00Z\", \"phone\": \"s_phone_941\", \"phone_verified_at\": \"2026-11-05T10:00:00Z\", \"display_name\": \"s_display_name_942\", \"avatar_url\": \"s_avatar_url_943\", \"status\": \"s_status_944\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"roles\": [\"s_roles_945\"], \"assigned_roles\": [{\"id\": \"s_id_946\", \"name\": \"s_name_947\"}], \"mfa_enabled\": true, \"groups_count\": 7, \"last_seen_at\": \"2026-11-05T10:00:00Z\", \"last_seen_ip\": \"s_last_seen_ip_948\", \"home_organization_name\": \"s_home_organization_name_949\", \"suspension\": {\"reason\": \"s_reason_950\", \"source\": \"s_source_951\", \"suspended_at\": \"2026-11-05T10:00:00Z\", \"suspended_by\": \"s_suspended_by_952\", \"suspended_by_email\": \"s_suspended_by_email_953\"}}",
+            "{\"id\": \"s_id_938\", \"organization_id\": \"s_organization_id_939\", \"email\": \"s_email_940\", \"email_verified_at\": \"2026-11-05T10:00:00Z\", \"phone\": \"s_phone_941\", \"phone_verified_at\": \"2026-11-05T10:00:00Z\", \"display_name\": \"s_display_name_942\", \"avatar_url\": \"s_avatar_url_943\", \"status\": \"s_status_944\", \"metadata\": {\"k\": \"v\"}, \"created_at\": \"2026-11-05T10:00:00Z\", \"updated_at\": \"2026-11-05T10:00:00Z\", \"roles\": [\"s_roles_945\"], \"assigned_roles\": [{\"id\": \"s_id_946\", \"name\": \"s_name_947\"}], \"mfa_enabled\": true, \"groups_count\": 7, \"last_seen_at\": \"2026-11-05T10:00:00Z\", \"last_seen_ip\": \"s_last_seen_ip_948\", \"home_organization_name\": \"s_home_organization_name_949\", \"suspension\": {\"reason\": \"s_reason_950\", \"source\": \"s_source_951\", \"suspended_at\": \"2026-11-05T10:00:00Z\", \"suspended_by\": \"s_suspended_by_952\", \"suspended_by_email\": \"s_suspended_by_email_953\"}, \"deleted_at\": \"2026-11-05T10:00:00Z\"}",
             List.of()),
         record(
             UserAccess.class,
@@ -1434,6 +1435,16 @@ class ModelsTest {
             "{\"deleted_users_enabled\": true, \"deleted_users_days\": 7}",
             List.of()),
         params(
+            "AuditAnomalySettingsUpdateParams",
+            () ->
+                AuditAnomalySettingsUpdateParams.builder()
+                    .enabled(true)
+                    .scoreThreshold(0.5)
+                    .minBaselineEvents(7)
+                    .build(),
+            "{\"enabled\": true, \"score_threshold\": 0.5, \"min_baseline_events\": 7}",
+            List.of()),
+        params(
             "RiskSettingsUpdateParams",
             () ->
                 RiskSettingsUpdateParams.builder()
@@ -1511,8 +1522,9 @@ class ModelsTest {
                     .nameAttribute("s_name_attribute_714")
                     .groupsAttribute("s_groups_attribute_715")
                     .status("s_status_716")
+                    .allowIdpInitiated(true)
                     .build(),
-            "{\"name\": \"s_name_709\", \"idp_entity_id\": \"s_idp_entity_id_710\", \"idp_sso_url\": \"s_idp_sso_url_711\", \"idp_certificate\": \"s_idp_certificate_712\", \"email_attribute\": \"s_email_attribute_713\", \"name_attribute\": \"s_name_attribute_714\", \"groups_attribute\": \"s_groups_attribute_715\", \"status\": \"s_status_716\"}",
+            "{\"name\": \"s_name_709\", \"idp_entity_id\": \"s_idp_entity_id_710\", \"idp_sso_url\": \"s_idp_sso_url_711\", \"idp_certificate\": \"s_idp_certificate_712\", \"email_attribute\": \"s_email_attribute_713\", \"name_attribute\": \"s_name_attribute_714\", \"groups_attribute\": \"s_groups_attribute_715\", \"status\": \"s_status_716\", \"allow_idp_initiated\": true}",
             List.of()),
         params(
             "SamlMetadataParams",
@@ -1540,8 +1552,9 @@ class ModelsTest {
                             new SamlAttributeMapping(
                                 "s_name_746", "s_source_747", "s_name_format_748")))
                     .assignmentRequired(true)
+                    .status("s_status_748")
                     .build(),
-            "{\"name\": \"s_name_740\", \"entity_id\": \"s_entity_id_741\", \"acs_url\": \"s_acs_url_742\", \"name_id_format\": \"s_name_id_format_743\", \"name_id_attribute\": \"s_name_id_attribute_744\", \"certificate\": \"s_certificate_745\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_746\", \"source\": \"s_source_747\", \"name_format\": \"s_name_format_748\"}], \"assignment_required\": true}",
+            "{\"name\": \"s_name_740\", \"entity_id\": \"s_entity_id_741\", \"acs_url\": \"s_acs_url_742\", \"name_id_format\": \"s_name_id_format_743\", \"name_id_attribute\": \"s_name_id_attribute_744\", \"certificate\": \"s_certificate_745\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_746\", \"source\": \"s_source_747\", \"name_format\": \"s_name_format_748\"}], \"assignment_required\": true, \"status\": \"s_status_748\"}",
             List.of()),
         params(
             "SamlServiceProviderUpdateParams",
@@ -1560,8 +1573,9 @@ class ModelsTest {
                             new SamlAttributeMapping(
                                 "s_name_755", "s_source_756", "s_name_format_757")))
                     .assignmentRequired(true)
+                    .status("s_status_757")
                     .build(),
-            "{\"name\": \"s_name_749\", \"entity_id\": \"s_entity_id_750\", \"acs_url\": \"s_acs_url_751\", \"name_id_format\": \"s_name_id_format_752\", \"name_id_attribute\": \"s_name_id_attribute_753\", \"certificate\": \"s_certificate_754\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_755\", \"source\": \"s_source_756\", \"name_format\": \"s_name_format_757\"}], \"assignment_required\": true}",
+            "{\"name\": \"s_name_749\", \"entity_id\": \"s_entity_id_750\", \"acs_url\": \"s_acs_url_751\", \"name_id_format\": \"s_name_id_format_752\", \"name_id_attribute\": \"s_name_id_attribute_753\", \"certificate\": \"s_certificate_754\", \"require_signed_requests\": true, \"encrypt_assertions\": true, \"attributes\": [{\"name\": \"s_name_755\", \"source\": \"s_source_756\", \"name_format\": \"s_name_format_757\"}], \"assignment_required\": true, \"status\": \"s_status_757\"}",
             List.of()),
         params(
             "ScimTokenCreateParams",
@@ -1606,20 +1620,17 @@ class ModelsTest {
             "SecurityPolicyUpdateParams",
             () ->
                 SecurityPolicyUpdateParams.builder()
-                    .passwordMinLength(7)
-                    .passwordComplexity("s_password_complexity_818")
                     .sessionMaxAge("s_session_max_age_819")
                     .sessionIdleTimeout("s_session_idle_timeout_820")
                     .maxSessions(7)
                     .sessionLimitAction("s_session_limit_action_821")
                     .mfaEnforcement("s_mfa_enforcement_822")
                     .mfaGraceDays(7)
-                    .mfaEnforcedSince(Instant.parse("2026-11-05T10:00:00Z"))
                     .stepUpWindow("s_step_up_window_823")
                     .stepUpMethods(List.of("s_step_up_methods_824"))
                     .settings(Map.of("k", "v"))
                     .build(),
-            "{\"password_min_length\": 7, \"password_complexity\": \"s_password_complexity_818\", \"session_max_age\": \"s_session_max_age_819\", \"session_idle_timeout\": \"s_session_idle_timeout_820\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_821\", \"mfa_enforcement\": \"s_mfa_enforcement_822\", \"mfa_grace_days\": 7, \"mfa_enforced_since\": \"2026-11-05T10:00:00Z\", \"step_up_window\": \"s_step_up_window_823\", \"step_up_methods\": [\"s_step_up_methods_824\"], \"settings\": {\"k\": \"v\"}}",
+            "{\"session_max_age\": \"s_session_max_age_819\", \"session_idle_timeout\": \"s_session_idle_timeout_820\", \"max_sessions\": 7, \"session_limit_action\": \"s_session_limit_action_821\", \"mfa_enforcement\": \"s_mfa_enforcement_822\", \"mfa_grace_days\": 7, \"step_up_window\": \"s_step_up_window_823\", \"step_up_methods\": [\"s_step_up_methods_824\"], \"settings\": {\"k\": \"v\"}}",
             List.of()),
         params(
             "ServicePrincipalCreateParams",
@@ -1760,12 +1771,19 @@ class ModelsTest {
                     .q("s_q_977")
                     .role("s_role_978")
                     .department("s_department_979")
-                    .mfa(true)
+                    .mfa("off")
                     .emailVerified(true)
                     .status("s_status_980")
                     .lastSeen("s_last_seen_981")
+                    .adminsWithoutMfa(true)
+                    .inGroup(false)
+                    .ids(List.of("s_id_982"))
+                    .emails(List.of("s_email_983"))
+                    .includeDeleted(true)
+                    .sort("name")
+                    .order("asc")
                     .build(),
-            "{\"limit\": 7, \"cursor\": \"s_cursor_976\", \"q\": \"s_q_977\", \"role\": \"s_role_978\", \"department\": \"s_department_979\", \"mfa\": true, \"email_verified\": true, \"status\": \"s_status_980\", \"last_seen\": \"s_last_seen_981\"}",
+            "{\"limit\": 7, \"cursor\": \"s_cursor_976\", \"q\": \"s_q_977\", \"role\": \"s_role_978\", \"department\": \"s_department_979\", \"mfa\": \"off\", \"email_verified\": true, \"status\": \"s_status_980\", \"last_seen\": \"s_last_seen_981\", \"admins_without_mfa\": true, \"in_group\": false, \"id\": [\"s_id_982\"], \"email\": [\"s_email_983\"], \"include_deleted\": true, \"sort\": \"name\", \"order\": \"asc\"}",
             List.of()),
         params(
             "UserUpdateParams",

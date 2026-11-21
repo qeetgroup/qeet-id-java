@@ -1,7 +1,6 @@
 package com.qeetgroup.qeetid.access;
 
 import com.qeetgroup.qeetid.Params;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.jspecify.annotations.Nullable;
@@ -24,26 +23,6 @@ public final class SecurityPolicyUpdateParams extends Params {
   /** Builds {@link SecurityPolicyUpdateParams}. */
   public static final class Builder extends Params.Builder<SecurityPolicyUpdateParams, Builder> {
     private Builder() {}
-
-    /**
-     * The password min length.
-     *
-     * @param passwordMinLength the value
-     * @return this builder
-     */
-    public Builder passwordMinLength(int passwordMinLength) {
-      return set("password_min_length", passwordMinLength);
-    }
-
-    /**
-     * The password complexity.
-     *
-     * @param passwordComplexity the value
-     * @return this builder
-     */
-    public Builder passwordComplexity(String passwordComplexity) {
-      return set("password_complexity", nonNull(passwordComplexity, "passwordComplexity"));
-    }
 
     /**
      * The session max age.
@@ -103,16 +82,6 @@ public final class SecurityPolicyUpdateParams extends Params {
      */
     public Builder mfaGraceDays(int mfaGraceDays) {
       return set("mfa_grace_days", mfaGraceDays);
-    }
-
-    /**
-     * Whether MFA enforced since. Null sends an explicit null, which clears it.
-     *
-     * @param mfaEnforcedSince the value
-     * @return this builder
-     */
-    public Builder mfaEnforcedSince(@Nullable Instant mfaEnforcedSince) {
-      return set("mfa_enforced_since", mfaEnforcedSince);
     }
 
     /**

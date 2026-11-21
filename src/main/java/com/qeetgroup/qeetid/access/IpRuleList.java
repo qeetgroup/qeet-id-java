@@ -8,5 +8,7 @@ import java.util.List;
  *
  * @param enabled whether the rules are enforced at sign-in
  * @param data the rules
+ * @param truncated whether the API capped the list
  */
-public record IpRuleList(boolean enabled, @JsonProperty("items") List<IpRule> data) {}
+public record IpRuleList(
+    boolean enabled, @JsonProperty("items") List<IpRule> data, boolean truncated) {}

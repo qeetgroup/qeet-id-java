@@ -12,7 +12,8 @@ import org.jspecify.annotations.Nullable;
  * @param organizationId the organization's id
  * @param userId the user's id
  * @param requestedBy the requested by
- * @param status One of {@code "pending"}, {@code "ready"}, {@code "failed"}; others may be added
+ * @param status One of {@code "pending"}, {@code "ready"}, {@code "failed"}, {@code "expired"};
+ *     others may be added
  * @param payload the payload
  * @param error the error
  * @param completedAt the completed time

@@ -11,8 +11,6 @@ import org.jspecify.annotations.Nullable;
  * strings such as {@code "720h"}.
  *
  * @param organizationId the organization's id
- * @param passwordMinLength the password min length
- * @param passwordComplexity the password complexity
  * @param sessionMaxAge the session max age
  * @param sessionIdleTimeout the session idle timeout
  * @param maxSessions null: no limit.
@@ -20,7 +18,8 @@ import org.jspecify.annotations.Nullable;
  * @param mfaEnforcement One of {@code "optional"}, {@code "required"}, {@code "admin_only"}; others
  *     may be added
  * @param mfaGraceDays whether MFA grace days
- * @param mfaEnforcedSince whether MFA enforced since
+ * @param mfaEnforcedSince Read-only: when the current MFA enforcement began, which starts the grace
+ *     period.
  * @param stepUpWindow the step up window
  * @param stepUpMethods One of {@code "totp"}, {@code "recovery_code"}, {@code "otp"}, {@code
  *     "webauthn"}, {@code "push"}; others may be added
@@ -28,8 +27,6 @@ import org.jspecify.annotations.Nullable;
  */
 public record SecurityPolicy(
     @JsonProperty("organization_id") @Nullable String organizationId,
-    @JsonProperty("password_min_length") @Nullable Integer passwordMinLength,
-    @JsonProperty("password_complexity") @Nullable String passwordComplexity,
     @JsonProperty("session_max_age") @Nullable String sessionMaxAge,
     @JsonProperty("session_idle_timeout") @Nullable String sessionIdleTimeout,
     @JsonProperty("max_sessions") @Nullable Integer maxSessions,

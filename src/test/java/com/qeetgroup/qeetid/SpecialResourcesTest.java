@@ -80,6 +80,30 @@ class SpecialResourcesTest {
   }
 
   @Test
+  void filtersMembersAsTheApiReadsThem() {
+    server.enqueue(200, "{\"items\":[]}");
+    qeetId
+        .users()
+        .list(
+            UserListParams.builder()
+                .mfa("off")
+                .ids(List.of("u_1", "u_2"))
+                .includeDeleted(true)
+                .adminsWithoutMfa(false)
+                .sort("last_seen")
+                .order("asc")
+                .build())
+        .data();
+    Map<String, List<String>> query = server.lastRequest().query();
+    assertEquals(List.of("off"), query.get("mfa"));
+    assertEquals(List.of("u_1", "u_2"), query.get("id"));
+    assertEquals(List.of("true"), query.get("include_deleted"));
+    assertEquals(List.of("false"), query.get("admins_without_mfa"));
+    assertEquals(List.of("last_seen"), query.get("sort"));
+    assertEquals(List.of("asc"), query.get("order"));
+  }
+
+  @Test
   void createsAUserIdempotentlyAndReportsFieldErrors() {
     server.enqueue(
         422,
@@ -324,9 +348,10 @@ class SpecialResourcesTest {
   void readsTheAddressRulesAndTheirEnforcement() {
     server.enqueue(
         200,
-        "{\"enabled\":true,\"items\":[{\"id\":\"ip_1\",\"action\":\"deny\",\"cidr\":\"203.0.113.0/24\",\"label\":\"x\"}]}");
+        "{\"enabled\":true,\"items\":[{\"id\":\"ip_1\",\"action\":\"deny\",\"cidr\":\"203.0.113.0/24\",\"label\":\"x\"}],\"truncated\":true}");
     IpRuleList rules = qeetId.ipRules().list("t_1");
     assertTrue(rules.enabled());
+    assertTrue(rules.truncated());
     assertEquals("deny", rules.data().get(0).action());
   }
 

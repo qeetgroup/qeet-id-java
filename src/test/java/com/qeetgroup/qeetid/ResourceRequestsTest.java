@@ -68,7 +68,7 @@ import com.qeetgroup.qeetid.identity.UserListParams;
 import com.qeetgroup.qeetid.identity.UserUpdateParams;
 import com.qeetgroup.qeetid.operations.AnalyticsOverviewParams;
 import com.qeetgroup.qeetid.operations.AuditAnomalyListParams;
-import com.qeetgroup.qeetid.operations.AuditAnomalySettings;
+import com.qeetgroup.qeetid.operations.AuditAnomalySettingsUpdateParams;
 import com.qeetgroup.qeetid.operations.AuditLogListParams;
 import com.qeetgroup.qeetid.operations.BillingProfileUpdateParams;
 import com.qeetgroup.qeetid.operations.CheckoutParams;
@@ -2326,7 +2326,13 @@ class ResourceRequestsTest {
                 qeetId
                     .auditLogs()
                     .anomalies()
-                    .updateSettings("p1", new AuditAnomalySettings(true, 0.5, 1)),
+                    .updateSettings(
+                        "p1",
+                        AuditAnomalySettingsUpdateParams.builder()
+                            .enabled(true)
+                            .scoreThreshold(0.5)
+                            .minBaselineEvents(1)
+                            .build()),
             "PUT",
             "/v1/organizations/p1/audit/anomaly-settings",
             null,

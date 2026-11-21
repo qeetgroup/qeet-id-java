@@ -30,8 +30,7 @@ public record IpRuleCheck(
    * @param allowed whether allowed
    * @param reason the reason
    * @param reasonCode One of {@code "ip.allowed"}, {@code "ip.deny_rule"}, {@code
-   *     "ip.not_in_allow_rules"}, {@code "ip.address_unknown"}, {@code "ip.enforcement_disabled"};
-   *     others may be added
+   *     "ip.not_in_allow_rules"}, {@code "ip.address_unknown"}; others may be added
    * @param reasonParams the reason params
    */
   public record Rules(

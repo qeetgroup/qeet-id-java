@@ -36,6 +36,23 @@ alongside the new ones, so 0.1.0 can't call it: upgrade, then rename in your cod
   `logoUrl`, and its plan may be `starter`.
 - `GroupCreateParams` no longer has `organizationId`: the API takes a new group's organization from the credential and
   documents no such field.
+- Every request body field, query parameter and enum value the SDK sends or expects was compared with the API documents,
+  and these follow them:
+  - `UserListParams.mfa` takes `"on"` or `"off"`: a boolean was sent as `true`/`false`, which the API refuses with 400.
+    It also takes the API's newer filters `adminsWithoutMfa`, `inGroup`, `ids` and `emails` (sent as repeated `id` and
+    `email`), `includeDeleted`, `sort` (`created`, `name`, `last_seen`) and `order` (`asc`, `desc`).
+  - `User` gains `deletedAt`, and its status may be `deleted`, on a member listed with `includeDeleted`.
+  - `AuditAnomalies.updateSettings` takes `AuditAnomalySettingsUpdateParams`, with `enabled`, `scoreThreshold` and
+    `minBaselineEvents` all required (an update replaces all three); `AuditAnomalySettings` gains `organizationId`.
+  - `SecurityPolicyUpdateParams` drops `passwordMinLength` and `passwordComplexity`, which the API retired and ignores,
+    and `mfaEnforcedSince`, which is read-only; `SecurityPolicy` drops the two password fields.
+  - `BotActivity`'s verdicts are `items()`, as the API sends them, not `recent()`.
+  - `IpRuleList` gains `truncated`.
+  - `SamlConnectionUpdateParams` takes `allowIdpInitiated`, and `SamlServiceProviderCreateParams` and
+    `SamlServiceProviderUpdateParams` take `status`.
+  - Enum values the API added (`audit.chain_checkpoint_gone`, `audit.chain_checkpoint_unsigned`, an export's
+    `expired`) are documented, and `ip.enforcement_disabled` is no longer listed for `IpRuleCheck.Rules`, which never
+    answers it.
 
 ### Changed
 
